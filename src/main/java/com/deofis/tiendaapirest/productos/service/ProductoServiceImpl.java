@@ -19,7 +19,6 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public Producto crear(Producto producto) {
-
         Producto nuevoProducto = Producto.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
