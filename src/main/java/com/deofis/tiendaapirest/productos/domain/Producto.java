@@ -26,18 +26,24 @@ public class Producto implements Serializable {
     private Long id;
     @NotNull
     private String nombre;
+    @NotNull
     private String descripcion;
+    private boolean activo;
     @NotNull
     private Double precio;
-    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
-    private String imagen;
-    private Boolean tieneDescuento;
-    private Boolean esDestacado;
+    private String foto;
+    private boolean destacado;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Categoria categoria;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "marca_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Marca marca;
 }

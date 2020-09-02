@@ -6,26 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "categorias")
+@Table(name = "marcas")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Categoria implements Serializable {
+public class Marca implements Serializable {
 
-    private final static long serialVersioUID = 1L;
+    private final static long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
     private String nombre;
-    // Nombre categoria abreviado
-    @NotNull
-    private String codigo;
-
 }
