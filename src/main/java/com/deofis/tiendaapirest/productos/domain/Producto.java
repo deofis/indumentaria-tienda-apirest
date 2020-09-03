@@ -28,13 +28,14 @@ public class Producto implements Serializable {
     private String nombre;
     @NotNull
     private String descripcion;
-    private boolean activo;
     @NotNull
     private Double precio;
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
     private String foto;
+    private boolean activo;
+    private boolean favorito;
     private boolean destacado;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

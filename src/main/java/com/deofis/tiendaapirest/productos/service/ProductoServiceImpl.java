@@ -22,11 +22,12 @@ public class ProductoServiceImpl implements ProductoService {
         Producto nuevoProducto = Producto.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
-                .activo(true)
                 .precio(producto.getPrecio())
                 .fechaCreacion(new Date())
                 .foto(null)
-                .destacado(producto.isDestacado())
+                .activo(true)
+                .destacado(false)
+                .favorito(false)
                 .categoria(producto.getCategoria())
                 .marca(producto.getMarca())
                 .build();
@@ -69,27 +70,47 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public void darDeBaja(Long id) {
-        Producto producto = this.obtenerProducto(id);
+    public void darDeBaja(Producto producto, Long id) {
+        Producto productoActual = this.obtenerProducto(id);
 
-        if (!producto.isActivo()) {
+        if (!productoActual.isActivo()) {
             throw new ProductoException("Este producto ya está dado de baja");
         }
 
-        producto.setActivo(false);
-        this.productoRepository.save(producto);
+        productoActual.setActivo(false);
+        this.productoRepository.save(productoActual);
     }
 
     @Override
     @Transactional
-    public void darDeAlta(Long id) {
-        Producto producto = this.obtenerProducto(id);
+    public void darDeAlta(Producto producto, Long id) {
+        Producto productoActual = this.obtenerProducto(id);
 
-        if (producto.isActivo()) {
+        if (productoActual.isActivo()) {
             throw new ProductoException("Este producto ya está activo");
         }
 
-        producto.setActivo(true);
-        this.productoRepository.save(producto);
+        productoActual.setActivo(true);
+        this.productoRepository.save(productoActual);
     }
+
+    @Override
+    @Transactional
+    public void destacar(Producto producto, Long id) {
+        Producto productoActual = this.obtenerProducto(id);
+
+        productoActual.setDestacado(!producto.isDestacado());
+        this.productoRepository.save(productoActual);
+    }
+
+    @Override
+    @Transactional
+    public void marcarFavorito(Producto producto, Long id) {
+        Producto productoActual = this.obtenerProducto(id);
+
+        productoActual.setFavorito(!producto.isFavorito());
+        this.productoRepository.save(productoActual);
+    }
+
+
 }

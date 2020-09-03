@@ -1,14 +1,12 @@
 package com.deofis.tiendaapirest.productos.controller.producto;
 
+import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.exception.ProductoException;
 import com.deofis.tiendaapirest.productos.service.ProductoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +27,11 @@ public class BajaAltaProductoController {
      * @return ResponseEntity con un mensaje String de la transacción exitosa.
      */
     @PostMapping("/productos/baja/{id}")
-    public ResponseEntity<?> bajaProducto(@PathVariable Long id) {
+    public ResponseEntity<?> bajaProducto(@RequestBody Producto producto, @PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            this.productoService.darDeBaja(id);
+            this.productoService.darDeBaja(producto, id);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al dar de baja al producto");
             response.put("error", e.getMessage());
@@ -53,11 +51,11 @@ public class BajaAltaProductoController {
      * @return ResponseEntity con mensaje String de transacción exitosa.
      */
     @PostMapping("/productos/alta/{id}")
-    public ResponseEntity<?> altaProducto(@PathVariable Long id) {
+    public ResponseEntity<?> altaProducto(@RequestBody Producto producto, @PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            this.productoService.darDeAlta(id);
+            this.productoService.darDeAlta(producto, id);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al dar de alta al producto");
             response.put("error", e.getMessage());

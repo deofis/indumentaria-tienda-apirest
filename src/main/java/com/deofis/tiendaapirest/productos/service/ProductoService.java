@@ -38,11 +38,25 @@ public interface ProductoService {
      * Método para registrar la baja lógica de un producto.
      * @param id Long id del producto a dar de baja.
      */
-    void darDeBaja(Long id);
+    void darDeBaja(Producto producto, Long id);
 
     /**
      * Método para registrar el alta de un producto.
      * @param id Long id del producto a activar.
      */
-    void darDeAlta(Long id);
+    void darDeAlta(Producto producto, Long id);
+
+    /**
+     * Método para destacar/quitar de destacados a un producto.
+     * @param producto Producto a destacar/quitar destacados.
+     * @param id Long del id del producto.
+     */
+    void destacar(Producto producto, Long id);
+
+    /**
+     * Método con fines de prueba. Al avanzar en desarrollo.
+     * @param producto
+     * @param id
+     */
+    void marcarFavorito(Producto producto, Long id);
 }
