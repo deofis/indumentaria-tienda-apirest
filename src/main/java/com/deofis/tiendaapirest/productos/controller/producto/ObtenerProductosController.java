@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.controller.producto;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exception.ProductoException;
 import com.deofis.tiendaapirest.productos.service.ProductoService;
 import lombok.AllArgsConstructor;
@@ -77,5 +78,28 @@ public class ObtenerProductosController {
         }
 
         return new ResponseEntity<>(producto, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene listado de las unidades de medida.
+     * URL: ~/api/productos/unidades-medida
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity con el listado de unidades de medida.
+     */
+    @GetMapping("/productos/unidades-medida")
+    public ResponseEntity<?> obtenerUnidadesMedida() {
+        Map<String, Object> response = new HashMap<>();
+        List<UnidadMedida> unidadesMedida;
+
+        try {
+            unidadesMedida = this.productoService.obtenerUnidadesMedida();
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener las unidades de medida");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(unidadesMedida, HttpStatus.OK);
     }
 }

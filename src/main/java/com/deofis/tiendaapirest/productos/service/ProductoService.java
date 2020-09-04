@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.service;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 
 import java.util.List;
 
@@ -59,4 +60,6 @@ public interface ProductoService {
      * @param id
      */
     void marcarFavorito(Producto producto, Long id);
+
+    List<UnidadMedida> obtenerUnidadesMedida();
 }

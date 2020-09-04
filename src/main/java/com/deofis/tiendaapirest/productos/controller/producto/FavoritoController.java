@@ -22,6 +22,8 @@ public class FavoritoController {
 
     private final ProductoService productoService;
 
+    // API para marcar favorito un producto, sirve de prueba. Version final --> Es responsabilidad
+    // del usuario manejar sus favoritos.
     @PostMapping("/productos/favorito/{id}")
     public ResponseEntity<?> marcarFavorito(@RequestBody Producto producto, @PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();

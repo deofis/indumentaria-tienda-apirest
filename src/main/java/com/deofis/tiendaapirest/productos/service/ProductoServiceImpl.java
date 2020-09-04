@@ -1,8 +1,10 @@
 package com.deofis.tiendaapirest.productos.service;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exception.ProductoException;
 import com.deofis.tiendaapirest.productos.repository.ProductoRepository;
+import com.deofis.tiendaapirest.productos.repository.UnidadMedidaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.util.List;
 public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
+    private final UnidadMedidaRepository unidadMedidaRepository;
 
     /* Issue --> Es mejor buscar objetos en la bd antes que asignarlos directamente, no porque tire
     * error, sino para el manejo de excepciones por si el front intenta seleccionar un objeto
@@ -30,7 +33,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .fechaCreacion(new Date())
                 .foto(null)
                 .activo(true)
-                .destacado(false)
+                .destacado(true)
                 .favorito(false)
                 .categoria(producto.getCategoria())
                 .marca(producto.getMarca())
@@ -122,6 +125,11 @@ public class ProductoServiceImpl implements ProductoService {
 
         productoActual.setFavorito(!producto.isFavorito());
         this.productoRepository.save(productoActual);
+    }
+
+    @Override
+    public List<UnidadMedida> obtenerUnidadesMedida() {
+        return this.unidadMedidaRepository.findAll();
     }
 
 

@@ -10,4 +10,8 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     List<Producto> findAllByOrderByNombreAsc();
+
+    List<Producto> findAllByDestacadoIsTrueAndActivoIsTrue();
+
+    List<Producto> findAllByNombreContainingIgnoringCaseAndActivoIsTrueOrderByNombreAsc(String termino);
 }
