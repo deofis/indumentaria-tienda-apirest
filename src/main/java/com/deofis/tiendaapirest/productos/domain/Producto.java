@@ -47,4 +47,14 @@ public class Producto implements Serializable {
     @JoinColumn(name = "marca_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Marca marca;
+    @NotNull
+    private Integer stock;
+    private String color;
+    private String talle;
+    private String peso;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unidad_medida_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private UnidadMedida unidadMedida;
 }

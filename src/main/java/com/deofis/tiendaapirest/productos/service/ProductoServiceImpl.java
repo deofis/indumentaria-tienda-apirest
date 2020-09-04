@@ -16,6 +16,10 @@ public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
 
+    /* Issue --> Es mejor buscar objetos en la bd antes que asignarlos directamente, no porque tire
+    * error, sino para el manejo de excepciones por si el front intenta seleccionar un objeto
+    * no existente
+    * FIX --> para categoria, marca y unidad de medida, buscar objetos en bd antes de asignarlos*/
     @Override
     @Transactional
     public Producto crear(Producto producto) {
@@ -30,6 +34,11 @@ public class ProductoServiceImpl implements ProductoService {
                 .favorito(false)
                 .categoria(producto.getCategoria())
                 .marca(producto.getMarca())
+                .stock(producto.getStock())
+                .color(producto.getColor())
+                .talle(producto.getTalle())
+                .peso(producto.getPeso())
+                .unidadMedida(producto.getUnidadMedida())
                 .build();
 
         return this.productoRepository.save(nuevoProducto);
@@ -48,8 +57,6 @@ public class ProductoServiceImpl implements ProductoService {
                 .orElseThrow(() -> new ProductoException("Producto no existente con ID: " + id));
     }
 
-    // Issue --> Si no pasas el objeto completo, los atributos que no pases se setean en null.
-    // Fix --> @Valid en controller.
     @Override
     @Transactional
     public Producto actualizar(Producto producto, Long id) {
@@ -64,6 +71,11 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setDestacado(producto.isDestacado());
         productoActual.setCategoria(producto.getCategoria());
         productoActual.setMarca(producto.getMarca());
+        productoActual.setStock(producto.getStock());
+        productoActual.setColor(producto.getColor());
+        productoActual.setTalle(producto.getTalle());
+        productoActual.setPeso(producto.getPeso());
+        productoActual.setUnidadMedida(producto.getUnidadMedida());
 
         return this.productoRepository.save(productoActual);
     }
