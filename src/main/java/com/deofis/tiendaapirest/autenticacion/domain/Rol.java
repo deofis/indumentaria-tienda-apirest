@@ -1,0 +1,23 @@
+package com.deofis.tiendaapirest.autenticacion.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Data
+@Table(name = "perfiles")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Rol {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;
+}
