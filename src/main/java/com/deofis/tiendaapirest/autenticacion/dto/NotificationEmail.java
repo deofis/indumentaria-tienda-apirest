@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistroUsuarioRequest {
+public class NotificationEmail {
 
-    private String username;
-    private String password;
+    private String subject;
+    private String recipient;
+    private String body;
 }
