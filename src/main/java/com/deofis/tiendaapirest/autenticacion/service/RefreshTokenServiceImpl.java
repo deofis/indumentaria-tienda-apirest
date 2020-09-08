@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     @Override
     public RefreshToken generarRefreshToken() {
         RefreshToken refreshToken = new RefreshToken();
@@ -25,12 +27,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return this.refreshTokenRepository.save(refreshToken);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public void validarRefreshToken(String token) {
         this.refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new AutenticacionException("Refresh Token Inválido"));
     }
 
+    @Transactional
     @Override
     public void eliminarRefreshToken(String token) {
         this.refreshTokenRepository.deleteByToken(token);

@@ -7,7 +7,8 @@ import com.deofis.tiendaapirest.autenticacion.dto.RefreshTokenRequest;
 import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
 
 /**
- * Este servicio se encarga de la lógica para: crear un nuevo usuario, iniciar sesión, cerrar sesión.
+ * Este servicio se encarga de la lógica para: crear un nuevo usuario, iniciar sesión,
+ * extender sesión,y cerrar sesión.
  */
 public interface AutenticacionService {
 
@@ -23,7 +24,5 @@ public interface AutenticacionService {
 
     Usuario getUsuarioActual();
 
-    // void cambiarContraseña();
-
-    // void recuperarContraseña()
-;}
+    boolean estaLogueado();
+}

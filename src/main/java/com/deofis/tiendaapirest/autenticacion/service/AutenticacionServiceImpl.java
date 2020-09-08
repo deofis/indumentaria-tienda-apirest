@@ -12,6 +12,7 @@ import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -100,13 +101,18 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
     @Override
     public void cerrarSesion(RefreshTokenRequest refreshTokenRequest) {
-        this.refreshTokenService.eliminarRefreshToken(refreshTokenRequest.getRefreshToken());
+        if (this.estaLogueado()) {
+            this.refreshTokenService.eliminarRefreshToken(refreshTokenRequest.getRefreshToken());
+            SecurityContextHolder.getContext().setAuthentication(null);
+        } else {
+            log.info("NO LOGUEADO");
+            throw new AutenticacionException("Usuario no logueado en el sistema");
+        }
     }
 
     @Override
     public AuthResponse refrescarToken(RefreshTokenRequest refreshTokenRequest) {
         this.refreshTokenService.validarRefreshToken(refreshTokenRequest.getRefreshToken());
-
         String jwt = this.jwtProveedor.generateTokenWithUsername(refreshTokenRequest.getUserEmail());
 
         return AuthResponse.builder()
@@ -117,6 +123,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Usuario getUsuarioActual() {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -124,6 +131,13 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         return this.usuarioRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new AutenticacionException("Usuario no encontrado: " +
                         principal.getUsername()));
+    }
+
+    @Override
+    public boolean estaLogueado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
     /**

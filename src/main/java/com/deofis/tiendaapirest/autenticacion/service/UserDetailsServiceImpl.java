@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.service;
 
+import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
@@ -30,10 +31,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return new User(usuario.getEmail(), usuario.getPassword(), usuario.isEnabled(),
                 true, true, true,
-                getAuthorities(usuario.getRol().getNombre()));
+                getAuthorities(usuario.getRol()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+    private Collection<? extends GrantedAuthority> getAuthorities(Rol rol) {
+        return Collections.singletonList(new SimpleGrantedAuthority(rol.getNombre()));
     }
 }
