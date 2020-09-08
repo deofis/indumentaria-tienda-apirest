@@ -1,7 +1,9 @@
 package com.deofis.tiendaapirest.autenticacion.service;
 
+import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.dto.AuthResponse;
 import com.deofis.tiendaapirest.autenticacion.dto.IniciarSesionRequest;
+import com.deofis.tiendaapirest.autenticacion.dto.RefreshTokenRequest;
 import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
 
 /**
@@ -14,6 +16,12 @@ public interface AutenticacionService {
     void verificarCuenta(String token);
 
     AuthResponse iniciarSesion(IniciarSesionRequest iniciarSesionRequest);
+
+    void cerrarSesion(RefreshTokenRequest refreshTokenRequest);
+
+    AuthResponse refrescarToken(RefreshTokenRequest refreshTokenRequest);
+
+    Usuario getUsuarioActual();
 
     // void cambiarContraseña();
 

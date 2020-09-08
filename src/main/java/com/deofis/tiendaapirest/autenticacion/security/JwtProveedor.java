@@ -45,8 +45,14 @@ public class JwtProveedor {
                 .compact();
     }
 
-    public String generateTokenWithUsername() {
-        return null;
+    // Se necesita generar el token sólo con el nombre de usuario (email) en el caso de que
+    // en lugar de iniciar sesión, se esté extendiendo la sesión mediante el refresh token.
+    public String generateTokenWithUsername(String userEmail) {
+        return Jwts.builder()
+                .setSubject(userEmail)
+                .signWith(getPrivateKey())
+                .setExpiration(new Date(new Date().getTime() + expirationInMillis))
+                .compact();
     }
 
     public boolean validateToken(String jwt) {

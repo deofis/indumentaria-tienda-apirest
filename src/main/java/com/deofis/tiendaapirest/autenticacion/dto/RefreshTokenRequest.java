@@ -1,20 +1,18 @@
 package com.deofis.tiendaapirest.autenticacion.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class AuthResponse {
+public class RefreshTokenRequest {
 
-    private String authToken;
-    private String userEmail;
+    @NotNull
     private String refreshToken;
-    private Date expiraEn;
+    @NotNull
+    private String userEmail;
 }

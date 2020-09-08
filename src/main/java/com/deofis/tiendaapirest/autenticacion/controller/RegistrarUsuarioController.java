@@ -41,12 +41,12 @@ public class RegistrarUsuarioController {
     }
 
     /**
-     * Verifies an account.
+     * Verifica una cuenta y marca al usuario como enabled (Habilitado para usar la cuenta).
      * URL: ~/api/auth/accountVerification/aaaa-bbbb-1111-2222
      * HttpMethod: GET
      * HttpStatus: OK
-     * @param token String token verify account.
-     * @return ResponseEntity String with and success/error message.
+     * @param token String token de activación.
+     * @return ResponseEntity String mensaje de éxito/error.
      */
     @GetMapping("/accountVerification/{token}")
     public ResponseEntity<String> verifyToken(@PathVariable String token) {

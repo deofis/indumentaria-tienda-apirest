@@ -3,21 +3,20 @@ package com.deofis.tiendaapirest.autenticacion.service;
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.domain.VerificationToken;
-import com.deofis.tiendaapirest.autenticacion.dto.AuthResponse;
-import com.deofis.tiendaapirest.autenticacion.dto.IniciarSesionRequest;
-import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
-import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
+import com.deofis.tiendaapirest.autenticacion.dto.*;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.repository.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.VerificationTokenRepository;
 import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AutenticacionServiceImpl implements AutenticacionService {
 
     private final UsuarioRepository usuarioRepository;
@@ -36,6 +36,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProveedor jwtProveedor;
     private final MailService mailService;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     @Override
@@ -91,15 +92,44 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
         return AuthResponse.builder()
                 .authToken(jwtToken)
-                .email(iniciarSesionRequest.getEmail())
+                .userEmail(iniciarSesionRequest.getEmail())
+                .refreshToken(this.refreshTokenService.generarRefreshToken().getToken())
                 .expiraEn(new Date(new Date().getTime() + jwtProveedor.getExpirationInMillis()))
                 .build();
     }
 
+    @Override
+    public void cerrarSesion(RefreshTokenRequest refreshTokenRequest) {
+        this.refreshTokenService.eliminarRefreshToken(refreshTokenRequest.getRefreshToken());
+    }
+
+    @Override
+    public AuthResponse refrescarToken(RefreshTokenRequest refreshTokenRequest) {
+        this.refreshTokenService.validarRefreshToken(refreshTokenRequest.getRefreshToken());
+
+        String jwt = this.jwtProveedor.generateTokenWithUsername(refreshTokenRequest.getUserEmail());
+
+        return AuthResponse.builder()
+                .authToken(jwt)
+                .userEmail(refreshTokenRequest.getUserEmail())
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiraEn(new Date(new Date().getTime() + this.jwtProveedor.getExpirationInMillis()))
+                .build();
+    }
+
+    @Override
+    public Usuario getUsuarioActual() {
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return this.usuarioRepository.findByEmail(principal.getUsername())
+                .orElseThrow(() -> new AutenticacionException("Usuario no encontrado: " +
+                        principal.getUsername()));
+    }
+
     /**
-     * Generates a token for account verification.
-     * @param usuario user signing up.
-     * @return String with the token for acc verification.
+     * Genenra un token para la verificación de cuenta.
+     * @param usuario user que se está registrando.
+     * @return String del token de verificación.
      */
     private String generateVerificationToken(Usuario usuario) {
         String token = UUID.randomUUID().toString();
@@ -116,8 +146,9 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     }
 
     /**
-     * Enables an user account.
-     * @param verificationToken String token matching the username to enable.
+     * Habilita una cuenta de usuario que hace match con el token de verificación.
+     * @param verificationToken VerificationToken objeto token con los datos del usuario y
+     *                          el token de verificación.
      */
     @Transactional
     public void fetchUserAndEnable(VerificationToken verificationToken) {
