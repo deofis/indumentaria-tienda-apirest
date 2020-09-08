@@ -22,15 +22,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 
-        Usuario usuario = this.usuarioRepository.findByUsername(username)
+        Usuario usuario = this.usuarioRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new AutenticacionException("Usuario no encontrado con " +
-                        "username: " + username));
+                        "username: " + userEmail));
 
-        return new User(usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(),
+        return new User(usuario.getEmail(), usuario.getPassword(), usuario.isEnabled(),
                 true, true, true,
-                getAuthorities(usuario.getRole().getNombre()));
+                getAuthorities(usuario.getRol().getNombre()));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {

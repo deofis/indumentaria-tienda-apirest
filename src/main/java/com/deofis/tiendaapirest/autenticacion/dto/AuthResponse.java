@@ -14,6 +14,6 @@ import java.util.Date;
 public class AuthResponse {
 
     private String authToken;
-    private String username;
+    private String email;
     private Date expiraEn;
 }

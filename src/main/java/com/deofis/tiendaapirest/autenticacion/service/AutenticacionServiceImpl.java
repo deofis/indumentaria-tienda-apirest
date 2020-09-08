@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.service;
 
+import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.domain.VerificationToken;
 import com.deofis.tiendaapirest.autenticacion.dto.AuthResponse;
@@ -7,6 +8,7 @@ import com.deofis.tiendaapirest.autenticacion.dto.IniciarSesionRequest;
 import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
 import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
+import com.deofis.tiendaapirest.autenticacion.repository.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.VerificationTokenRepository;
 import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
@@ -28,6 +30,7 @@ import java.util.UUID;
 public class AutenticacionServiceImpl implements AutenticacionService {
 
     private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -39,18 +42,21 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     public void registrarse(SignupRequest signupRequest) {
         // No se puede enviar mail, y crear el usuario luego?
 
+        Rol user = this.rolRepository.findByNombre("ROLE_USER")
+                .orElseThrow(() -> new AutenticacionException("ROLE_USER no cargado."));
+
         Usuario usuario = Usuario.builder()
-                .username(signupRequest.getUsername())
-                .password(passwordEncoder.encode(signupRequest.getPassword()))
                 .email(signupRequest.getEmail())
+                .password(passwordEncoder.encode(signupRequest.getPassword()))
                 .enabled(false)
                 .fechaCreacion(new Date())
+                .rol(user)
                 .build();
 
         try {
             this.usuarioRepository.save(usuario);
         } catch (DataIntegrityViolationException e) {
-            throw new AutenticacionException("Ya existe el usuario: " + signupRequest.getUsername());
+            throw new AutenticacionException("Ya existe el usuario con email: " + signupRequest.getEmail());
         }
 
 
@@ -77,7 +83,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     @Override
     public AuthResponse iniciarSesion(IniciarSesionRequest iniciarSesionRequest) {
         Authentication authenticate = this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(iniciarSesionRequest.getUsername(),
+                new UsernamePasswordAuthenticationToken(iniciarSesionRequest.getEmail(),
                         iniciarSesionRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
@@ -85,7 +91,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
         return AuthResponse.builder()
                 .authToken(jwtToken)
-                .username(iniciarSesionRequest.getUsername())
+                .email(iniciarSesionRequest.getEmail())
                 .expiraEn(new Date(new Date().getTime() + jwtProveedor.getExpirationInMillis()))
                 .build();
     }
@@ -116,10 +122,10 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     @Transactional
     public void fetchUserAndEnable(VerificationToken verificationToken) {
 
-        String username = verificationToken.getUsuario().getUsername();
+        String userEmail = verificationToken.getUsuario().getEmail();
 
-        Usuario usuario = this.usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new AutenticacionException("No se encontro el usuario: " + username));
+        Usuario usuario = this.usuarioRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new AutenticacionException("No se encontro el usuario: " + userEmail));
         usuario.setEnabled(true);
         this.usuarioRepository.save(usuario);
         // Luego de verificar la cuenta, se borra el token para borrar data basura.

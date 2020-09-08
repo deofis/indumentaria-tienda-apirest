@@ -21,16 +21,11 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // No necesario.
-    @NotNull(message = "El nombre de usuario es obligatorio.")
-    @Column(unique = true)
-    private String username;
+    @NotNull(message = "El email es obligatorio.")
+    private String email;
 
     @NotNull(message = "La contraseña es obligatoria.")
     private String password;
-
-    @NotNull(message = "El email es obligatorio.")
-    private String email;
 
     private boolean enabled;
 
@@ -40,5 +35,5 @@ public class Usuario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    private Role role;
+    private Rol rol;
 }

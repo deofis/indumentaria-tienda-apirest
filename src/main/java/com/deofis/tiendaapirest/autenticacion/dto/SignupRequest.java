@@ -11,10 +11,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class SignupRequest {
 
-    @NotNull(message = "Username is required.")
-    private String username;
+    @NotNull(message = "User email is required.")
+    private String email;
     @NotNull(message = "Password is required.")
     private String password;
-    @NotNull(message = "Email is required.")
-    private String email;
 }
