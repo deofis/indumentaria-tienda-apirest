@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.autenticacion.service;
 
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
+import com.deofis.tiendaapirest.autenticacion.domain.VerificationToken;
 import com.deofis.tiendaapirest.autenticacion.dto.CambiarPasswordRequest;
 import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Slf4j
 public class PasswordServiceImpl implements PasswordService {
-    private static final String URL_REDIRIGIR = "http://localhost:4200/recuperar-password";
+    private static final String URL_REDIRIGIR = "http://localhost:4200/recuperar-password/";
 
     private final AutenticacionService autenticacionService;
     private final UsuarioRepository usuarioRepository;
@@ -42,6 +43,21 @@ public class PasswordServiceImpl implements PasswordService {
 
     @Transactional
     @Override
+    public Usuario cambiarPassword(String token, CambiarPasswordRequest cambiarPasswordRequest) {
+        VerificationToken verificationToken = this.verificationTokenService.getVerificationToken(token);
+
+        String usuarioEmail = verificationToken.getUsuario().getEmail();
+        Usuario usuarioCambiarPass = this.usuarioRepository.findByEmail(usuarioEmail)
+                .orElseThrow(() -> new AutenticacionException("No se encontro el usuario: " + usuarioEmail));
+
+        usuarioCambiarPass.setPassword(passwordEncoder.encode(cambiarPasswordRequest.getPassword()));
+        this.verificationTokenService.delete(verificationToken);
+
+        return this.usuarioRepository.save(usuarioCambiarPass);
+    }
+
+    @Transactional
+    @Override
     public void recuperarPassword(String userEmail) {
         Usuario usuario = this.usuarioRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new AutenticacionException("No se encontro el usuario: " + userEmail));
@@ -56,6 +72,7 @@ public class PasswordServiceImpl implements PasswordService {
         notificationEmail.setBody(mailBody);
 
         // En futuro la URL redirige a una página estática del front del dominio.
-        this.mailService.sendEmail(notificationEmail, URL_REDIRIGIR);
+        this.mailService.sendEmail(notificationEmail, URL_REDIRIGIR + token);
     }
+
 }

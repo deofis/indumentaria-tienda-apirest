@@ -39,6 +39,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
                 .orElseThrow(() -> new AutenticacionException("Token inválido."));
     }
 
+    @Transactional
     @Override
     public void delete(VerificationToken verificationToken) {
         this.verificationTokenRepository.delete(verificationToken);

@@ -11,5 +11,7 @@ public interface PasswordService {
      */
     Usuario cambiarPassword(CambiarPasswordRequest passwordRequest);
 
+    Usuario cambiarPassword(String token, CambiarPasswordRequest cambiarPasswordRequest);
+
     void recuperarPassword(String userEmail);
 }
