@@ -21,6 +21,7 @@ public class UnidadMedida implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String nombre;
     private String codigo;
 }

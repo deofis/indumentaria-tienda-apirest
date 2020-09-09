@@ -2,10 +2,12 @@ package com.deofis.tiendaapirest.autenticacion.bootstrap;
 
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
+import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.repository.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -26,14 +28,25 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
             Rol admin = Rol.builder()
                     .nombre("ROLE_ADMIN")
                     .build();
-            this.rolRepository.save(admin);
+            try {
+                this.rolRepository.save(admin);
+            } catch (DataIntegrityViolationException e) {
+                e.getMessage();
+            }
+
         }
 
         if (!this.rolRepository.findByNombre("ROLE_USER").isPresent()) {
             Rol user = Rol.builder()
                     .nombre("ROLE_USER")
                     .build();
-            this.rolRepository.save(user);
+
+            try {
+                this.rolRepository.save(user);
+            } catch (DataIntegrityViolationException e) {
+                e.getMessage();
+            }
+
         }
 
         if (!this.usuarioRepository.findByEmail("ezegavilan95@gmail.com").isPresent()) {
@@ -44,7 +57,13 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
                     .rol(this.rolRepository.findByNombre("ROLE_ADMIN").orElse(null))
                     .password(passwordEncoder.encode("12345"))
                     .build();
-            this.usuarioRepository.save(administrador);
+
+            try {
+                this.usuarioRepository.save(administrador);
+            } catch (DataIntegrityViolationException e) {
+                throw new AutenticacionException(e.getMessage());
+            }
+
         }
 
     }
