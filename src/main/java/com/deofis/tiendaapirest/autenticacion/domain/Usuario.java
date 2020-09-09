@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -26,6 +27,7 @@ public class Usuario {
     private String email;
 
     @NotNull(message = "La contraseña es obligatoria.")
+    @Size(min = 6)
     private String password;
 
     private boolean enabled;

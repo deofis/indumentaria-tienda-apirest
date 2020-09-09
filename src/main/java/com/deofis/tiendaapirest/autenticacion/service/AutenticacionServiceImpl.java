@@ -51,6 +51,10 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                     "Si no activó su cuenta, porfavor revise su bandeja de entradas.");
         }
 
+        if (signupRequest.getPassword().length() <= 6) {
+            throw new AutenticacionException("La contraseña debe tener más de 6 caracteres.");
+        }
+
         Usuario usuario = Usuario.builder()
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
