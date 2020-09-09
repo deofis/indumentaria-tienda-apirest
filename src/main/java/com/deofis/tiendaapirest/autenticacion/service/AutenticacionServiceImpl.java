@@ -51,9 +51,10 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                     "Si no activó su cuenta, porfavor revise su bandeja de entradas.");
         }
 
-        if (signupRequest.getPassword().length() <= 6) {
-            throw new AutenticacionException("La contraseña debe tener más de 6 caracteres.");
+        if (signupRequest.getPassword().length() <= 7) {
+            throw new AutenticacionException("La contraseña debe tener al menos 8 caracteres.");
         }
+
 
         Usuario usuario = Usuario.builder()
                 .email(signupRequest.getEmail())
@@ -71,8 +72,8 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
         String token = this.verificationTokenService.generarVerificationToken(usuario);
         NotificationEmail notificationEmail = new NotificationEmail();
-        String mailBody = "Gracias por registrarse a E-COMMERCE GENÉRICO! Porfavor, verifique su cuenta \" +\n" +
-                "                \"haciendo click en el enlace de aqui abajo:\\n";
+        String mailBody = "Gracias por registrarse a E-COMMERCE GENÉRICO! Porfavor, verifique su cuenta" +
+                "                \"haciendo click en el enlace de aqui abajo:\n";
 
         notificationEmail.setSubject("Porfavor, active su cuenta.");
         notificationEmail.setRecipient(usuario.getEmail());
