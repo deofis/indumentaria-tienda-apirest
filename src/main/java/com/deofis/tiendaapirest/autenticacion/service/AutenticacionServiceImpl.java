@@ -46,6 +46,11 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         Rol user = this.rolRepository.findByNombre("ROLE_USER")
                 .orElseThrow(() -> new AutenticacionException("ROLE_USER no cargado."));
 
+        if (this.usuarioRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
+            throw new AutenticacionException("Ya existe el usuario con el email: " + signupRequest.getEmail() +".\n" +
+                    "Si no activó su cuenta, porfavor revise su bandeja de entradas.");
+        }
+
         Usuario usuario = Usuario.builder()
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
@@ -57,7 +62,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         try {
             this.usuarioRepository.save(usuario);
         } catch (DataIntegrityViolationException e) {
-            throw new AutenticacionException("Ya existe el usuario con email: " + signupRequest.getEmail());
+            throw new AutenticacionException("Excepción al registrar usuario: " + signupRequest.getEmail());
         }
 
         String token = this.verificationTokenService.generarVerificationToken(usuario);
