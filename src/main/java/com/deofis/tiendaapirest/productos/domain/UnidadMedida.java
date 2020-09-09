@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Table(name = "unidades_medida")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UnidadMedida implements Serializable {
 
     private final static long serialVersionUID = 1L;
