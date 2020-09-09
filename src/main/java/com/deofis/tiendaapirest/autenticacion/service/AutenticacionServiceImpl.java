@@ -7,7 +7,6 @@ import com.deofis.tiendaapirest.autenticacion.dto.*;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.repository.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
-import com.deofis.tiendaapirest.autenticacion.repository.VerificationTokenRepository;
 import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -32,7 +30,8 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
-    private final VerificationTokenRepository verificationTokenRepository;
+    //private final VerificationTokenRepository verificationTokenRepository;
+    private final VerificationTokenService verificationTokenService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtProveedor jwtProveedor;
@@ -61,14 +60,14 @@ public class AutenticacionServiceImpl implements AutenticacionService {
             throw new AutenticacionException("Ya existe el usuario con email: " + signupRequest.getEmail());
         }
 
-
-
-        String token = this.generateVerificationToken(usuario);
+        String token = this.verificationTokenService.generarVerificationToken(usuario);
         NotificationEmail notificationEmail = new NotificationEmail();
+        String mailBody = "Gracias por registrarse a E-COMMERCE GENÉRICO! Porfavor, verifique su cuenta \" +\n" +
+                "                \"haciendo click en el enlace de aqui abajo:\\n";
+
         notificationEmail.setSubject("Porfavor, active su cuenta.");
         notificationEmail.setRecipient(usuario.getEmail());
-        notificationEmail.setBody("Gracias por registrarse a E-COMMERCE GENÉRICO! Porfavor, verifique su cuenta " +
-                "haciendo click en el enlace de aqui abajo:\n");
+        notificationEmail.setBody(mailBody);
         this.mailService.sendEmail(notificationEmail, "http://localhost:8080/api/auth/accountVerification/" + token);
     }
 
@@ -76,8 +75,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     // usuario no se dio de alta: Eliminar usuario de la BD.
     @Override
     public void verificarCuenta(String token) {
-        VerificationToken verificationToken = this.verificationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new AutenticacionException("Token inválido."));
+        VerificationToken verificationToken = this.verificationTokenService.getVerificationToken(token);
 
         fetchUserAndEnable(verificationToken);
     }
@@ -140,11 +138,13 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
+
     /**
      * Genenra un token para la verificación de cuenta.
      * @param usuario user que se está registrando.
      * @return String del token de verificación.
      */
+    /*
     private String generateVerificationToken(Usuario usuario) {
         String token = UUID.randomUUID().toString();
 
@@ -158,6 +158,8 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         this.verificationTokenRepository.save(verificationToken);
         return token;
     }
+     */
+
 
     /**
      * Habilita una cuenta de usuario que hace match con el token de verificación.
@@ -174,6 +176,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         usuario.setEnabled(true);
         this.usuarioRepository.save(usuario);
         // Luego de verificar la cuenta, se borra el token para borrar data basura.
-        this.verificationTokenRepository.delete(verificationToken);
+        this.verificationTokenService.delete(verificationToken);
     }
 }

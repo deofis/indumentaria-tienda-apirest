@@ -22,7 +22,7 @@ public class RegistrarUsuarioController {
     private final AutenticacionService autenticacionService;
 
     /**
-     * Takes a request from the client with the data: username, password & email, creates
+     * Takes a request from the client with the data: username, password and email, creates
      * the new user, and send verification email to activate the account.
      * URL: ~/api/auth/signup
      * HttpMethod: POST
