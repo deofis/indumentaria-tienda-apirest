@@ -1,10 +1,10 @@
 package com.deofis.tiendaapirest.productos.bootstrap;
 
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
-import com.deofis.tiendaapirest.productos.exception.ProductoException;
-import com.deofis.tiendaapirest.productos.repository.CategoriaRepository;
-import com.deofis.tiendaapirest.productos.repository.MarcaRepository;
-import com.deofis.tiendaapirest.productos.repository.UnidadMedidaRepository;
+import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
+import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
+import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
+import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataIntegrityViolationException;

@@ -2,9 +2,9 @@ package com.deofis.tiendaapirest.autenticacion.bootstrap;
 
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
-import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
-import com.deofis.tiendaapirest.autenticacion.repository.RolRepository;
-import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
+import com.deofis.tiendaapirest.autenticacion.repositories.RolRepository;
+import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataIntegrityViolationException;

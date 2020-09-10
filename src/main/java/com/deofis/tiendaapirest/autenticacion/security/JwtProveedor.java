@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.security;
 
-import com.deofis.tiendaapirest.autenticacion.exception.TokenException;
+import com.deofis.tiendaapirest.autenticacion.exceptions.TokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
