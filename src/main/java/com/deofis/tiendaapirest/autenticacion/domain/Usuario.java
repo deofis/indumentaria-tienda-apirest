@@ -36,6 +36,7 @@ public class Usuario {
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rol_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

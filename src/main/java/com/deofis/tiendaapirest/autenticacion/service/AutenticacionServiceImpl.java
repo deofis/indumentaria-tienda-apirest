@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.domain.VerificationToken;
 import com.deofis.tiendaapirest.autenticacion.dto.*;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
+import com.deofis.tiendaapirest.autenticacion.exception.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.repository.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repository.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
@@ -52,7 +53,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         }
 
         if (signupRequest.getPassword().length() <= 7) {
-            throw new AutenticacionException("La contraseña debe tener al menos 8 caracteres.");
+            throw new PasswordException("La contraseña debe tener al menos 8 caracteres.");
         }
 
 
@@ -90,11 +91,15 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         fetchUserAndEnable(verificationToken);
     }
 
+    @Transactional
     @Override
     public AuthResponse iniciarSesion(IniciarSesionRequest iniciarSesionRequest) {
         Authentication authenticate = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(iniciarSesionRequest.getEmail(),
                         iniciarSesionRequest.getPassword()));
+
+        Usuario usuario = this.usuarioRepository.findByEmail(iniciarSesionRequest.getEmail())
+                .orElseThrow(() -> new AutenticacionException("Usuario no encontrado"));
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String jwtToken = this.jwtProveedor.generateToken(authenticate);
@@ -103,6 +108,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                 .authToken(jwtToken)
                 .userEmail(iniciarSesionRequest.getEmail())
                 .refreshToken(this.refreshTokenService.generarRefreshToken().getToken())
+                .rol(usuario.getRol().getNombre())
                 .expiraEn(new Date(new Date().getTime() + jwtProveedor.getExpirationInMillis()))
                 .build();
     }
@@ -118,6 +124,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         }
     }
 
+    @Transactional
     @Override
     public AuthResponse refrescarToken(RefreshTokenRequest refreshTokenRequest) {
         this.refreshTokenService.validarRefreshToken(refreshTokenRequest.getRefreshToken());

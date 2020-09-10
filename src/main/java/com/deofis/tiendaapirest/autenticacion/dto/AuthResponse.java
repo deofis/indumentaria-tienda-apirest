@@ -16,5 +16,6 @@ public class AuthResponse {
     private String authToken;
     private String userEmail;
     private String refreshToken;
+    private String rol;
     private Date expiraEn;
 }

@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.autenticacion.controller;
 
 import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
 import com.deofis.tiendaapirest.autenticacion.exception.AutenticacionException;
+import com.deofis.tiendaapirest.autenticacion.exception.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.service.AutenticacionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,9 @@ public class RegistrarUsuarioController {
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRequest) {
         try {
             this.autenticacionService.registrarse(signupRequest);
-            return new ResponseEntity<>("User registration successfuly. Check your email for account verification.", HttpStatus.CREATED);
-        } catch (AutenticacionException e) {
+            return new ResponseEntity<>("Usuario registrado exitosamente." +
+                    "Comprueba tu correo para activar tu cuenta.", HttpStatus.CREATED);
+        } catch (AutenticacionException | PasswordException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
