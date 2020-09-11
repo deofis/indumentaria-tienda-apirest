@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.controllers;
+package com.deofis.tiendaapirest.perfiles.controllers;
 
 import com.deofis.tiendaapirest.autenticacion.domain.CambioHabilitacionUsuarios;
 import com.deofis.tiendaapirest.autenticacion.domain.CambioRol;
@@ -9,7 +9,7 @@ import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.RegistrosException;
-import com.deofis.tiendaapirest.autenticacion.services.UsuarioService;
+import com.deofis.tiendaapirest.perfiles.services.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,11 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * API's dirigadas al panel de administración de usuarios, que será solo accesible a aquellos
+ * usuarios que tengan asignado el rol de administrador: 'ROLE_ADMIN'.
+ */
 
 @RestController
 @RequestMapping("/api")

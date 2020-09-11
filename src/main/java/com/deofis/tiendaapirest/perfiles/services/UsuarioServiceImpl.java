@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.services;
+package com.deofis.tiendaapirest.perfiles.services;
 
 import com.deofis.tiendaapirest.autenticacion.domain.CambioHabilitacionUsuarios;
 import com.deofis.tiendaapirest.autenticacion.domain.CambioRol;
@@ -13,6 +13,7 @@ import com.deofis.tiendaapirest.autenticacion.repositories.CambioHabilitacionRep
 import com.deofis.tiendaapirest.autenticacion.repositories.CambioRolRepository;
 import com.deofis.tiendaapirest.autenticacion.repositories.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
+import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;

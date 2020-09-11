@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.services;
+package com.deofis.tiendaapirest.perfiles.services;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 

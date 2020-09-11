@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.services;
+package com.deofis.tiendaapirest.perfiles.services;
 
 import com.deofis.tiendaapirest.autenticacion.domain.CambioHabilitacionUsuarios;
 import com.deofis.tiendaapirest.autenticacion.domain.CambioRol;
@@ -10,7 +10,9 @@ import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import java.util.List;
 
 /**
- * Servicio para administrar los usuarios registrados en el sistema.
+ * Servicio para administrar los usuarios registrados en el sistema. Esto incluye: listar usuarios,
+ * listar roles, obtener un usuario en concreto, crear un usuario nuevo, cambiar rol, habilitar o
+ * deshabilitar usuarios.
  */
 
 public interface UsuarioService {
@@ -47,7 +49,29 @@ public interface UsuarioService {
      */
     CambioRol cambiarRol(CambioRolRequest cambioRolRequest);
 
+    /**
+     * Como administrador, permite deshabilitar un usuario, registrando la transacción con los
+     * datos: usuario admin que hizo el cambio, usuario al que se deshabilita, mensaje deshabilitacion
+     * y fecha del cambio.
+     * @param usuarioEmail String email del usuario que se deshabilitará.
+     * @return CambioHabilitacionUsuarios registro de los cambios realizados.
+     */
     CambioHabilitacionUsuarios deshabilitar(String usuarioEmail);
 
+    /**
+     * Como administrador, permite habilitar un usuario, registrando la transacción con los
+     * datos: usuario admin que hizo el cambio, usuario al que se habilita, mensaje habilitacion
+     * y fecha del cambio.
+     * @param usuarioEmail String email del usuario que se habilitará.
+     * @return CambioHabilitacionUsuarios registro de los cambios realizados.
+     */
     CambioHabilitacionUsuarios habilitar(String usuarioEmail);
+
+    /* ##### A IMPLEMENTAR #####
+
+    LISTAR REGISTROS DE:
+        - Cambios de rol de usuario.
+        - Cambios en deshabilitación/habilitación de usuarios.
+     */
+
 }
