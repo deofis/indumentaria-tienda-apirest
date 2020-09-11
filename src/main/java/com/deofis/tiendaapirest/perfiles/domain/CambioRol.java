@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.domain;
+package com.deofis.tiendaapirest.perfiles.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

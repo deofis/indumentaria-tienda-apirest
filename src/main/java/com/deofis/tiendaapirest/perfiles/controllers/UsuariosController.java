@@ -1,7 +1,5 @@
 package com.deofis.tiendaapirest.perfiles.controllers;
 
-import com.deofis.tiendaapirest.autenticacion.domain.CambioHabilitacionUsuarios;
-import com.deofis.tiendaapirest.autenticacion.domain.CambioRol;
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.dto.CambioRolRequest;
@@ -9,6 +7,8 @@ import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.RegistrosException;
+import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuarios;
+import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
 import com.deofis.tiendaapirest.perfiles.services.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -208,5 +208,65 @@ public class UsuariosController {
         }
 
         return new ResponseEntity<>(regristro, HttpStatus.CREATED);
+    }
+
+    /**
+     * Como administrador, ver los registros de cambios de rol.
+     * URL: ~/api/usuarios/registros/cambio-rol
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity con el listado de los registros.
+     */
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/usuarios/registros/cambio-rol")
+    public ResponseEntity<?> listarRegistrosCambioRol() {
+        Map<String, Object> response = new HashMap<>();
+        List<CambioRol> registros;
+
+        try {
+            registros = this.usuarioService.listarRegistrosCambioRol();
+        } catch (RegistrosException e) {
+            response.put("mensaje", "Error al listar los registros de cambio de rol");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (registros.size() == 0) {
+            response.put("error", "No existen registros de cambios de rol hasta la fecha");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        response.put("registros", registros);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Como administrador, ver los registros de cambios en la habilitación de usuarios.
+     * URL: ~/api/usuarios/registros/habilitacion
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity con el listado de los registros.
+     */
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/usuarios/registros/habilitacion")
+    public ResponseEntity<?> listarRegistrosCambiosHabilitacionUsuarios() {
+        Map<String, Object> response = new HashMap<>();
+        List<CambioHabilitacionUsuarios> registros;
+
+        try {
+            registros = this.usuarioService.listarRegistrosHabilitacion();
+        } catch (RegistrosException e) {
+            response.put("mensaje", "Error al listar los registros de habilitacion de usuarios");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (registros.size() == 0) {
+            response.put("error", "No existen registros de habilitación de usuarios hasta la fecha");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        response.put("registros", registros);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

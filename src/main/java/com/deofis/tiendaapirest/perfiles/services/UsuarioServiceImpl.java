@@ -1,7 +1,5 @@
 package com.deofis.tiendaapirest.perfiles.services;
 
-import com.deofis.tiendaapirest.autenticacion.domain.CambioHabilitacionUsuarios;
-import com.deofis.tiendaapirest.autenticacion.domain.CambioRol;
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.dto.CambioRolRequest;
@@ -9,11 +7,13 @@ import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.RegistrosException;
-import com.deofis.tiendaapirest.autenticacion.repositories.CambioHabilitacionRepository;
-import com.deofis.tiendaapirest.autenticacion.repositories.CambioRolRepository;
 import com.deofis.tiendaapirest.autenticacion.repositories.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
+import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuarios;
+import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
+import com.deofis.tiendaapirest.perfiles.repositories.CambioHabilitacionRepository;
+import com.deofis.tiendaapirest.perfiles.repositories.CambioRolRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -151,6 +151,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         this.usuarioRepository.save(usuario);
         return registro;
+    }
+
+    @Override
+    public List<CambioRol> listarRegistrosCambioRol() {
+        return this.cambioRolRepository.findAllByOrderByFechaCambioAsc();
+    }
+
+    @Override
+    public List<CambioHabilitacionUsuarios> listarRegistrosHabilitacion() {
+        return this.cambioHabilitacionRepository.findAllByOrderByFechaCambioAsc();
     }
 
     private CambioHabilitacionUsuarios registrarCambioHabilitacion(String admin, String usuario, String accion) {

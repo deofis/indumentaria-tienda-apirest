@@ -1,11 +1,11 @@
 package com.deofis.tiendaapirest.perfiles.services;
 
-import com.deofis.tiendaapirest.autenticacion.domain.CambioHabilitacionUsuarios;
-import com.deofis.tiendaapirest.autenticacion.domain.CambioRol;
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.dto.CambioRolRequest;
 import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
+import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuarios;
+import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
 
 import java.util.List;
 
@@ -74,4 +74,17 @@ public interface UsuarioService {
         - Cambios en deshabilitación/habilitación de usuarios.
      */
 
+    /**
+     * Como administrador, quiero listar todos los registros de los cambios de roles que hayan sucedido,
+     * ordenados de menor a mayor por fecha.
+     * @return List listado de registros de cambio de rol.
+     */
+    List<CambioRol> listarRegistrosCambioRol();
+
+    /**
+     * Como administrador, quiero listar todos los registros de cambios de habilitación de usuarios,
+     * ordenados de menor a mayor por fecha.
+     * @return List listado de registros de habilitación de usuarios.
+     */
+    List<CambioHabilitacionUsuarios> listarRegistrosHabilitacion();
 }
