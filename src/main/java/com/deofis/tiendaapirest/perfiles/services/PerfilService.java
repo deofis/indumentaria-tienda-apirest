@@ -11,5 +11,16 @@ public interface PerfilService {
      */
     PerfilDTO cargarPerfil(Cliente cliente);
 
+    /**
+     * Actualiza los datos de cliente asociados al perfil del usuario logueado.
+     * @param clienteActualizado Cliente datos del cliente actualizado.
+     * @return PerfilDTO datos del perfil luego del cambio.
+     */
     PerfilDTO actualizarPerfil(Cliente clienteActualizado);
+
+    /**
+     * Obtener datos del cliente del usuario logueado.
+     * @return Cliente datos del cliente del usuario logueado.
+     */
+    Cliente obtenerDatosCliente();
 }

@@ -64,6 +64,17 @@ public class PerfilServiceImpl implements PerfilService {
         return this.mapToDTO(this.perfilRepository.save(perfil));
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Cliente obtenerDatosCliente() {
+        Usuario usuario = this.autenticacionService.getUsuarioActual();
+        Perfil perfil = this.perfilRepository.findByUsuario(usuario)
+                .orElseThrow(() -> new PerfilesException("No existe el perfil para el usuario."));
+
+
+        return this.clienteService.obtenerCliente(perfil.getCliente().getId());
+    }
+
     private PerfilDTO mapToDTO(Perfil perfil) {
         return PerfilDTO.builder()
                 .usuario(perfil.getUsuario().getEmail())

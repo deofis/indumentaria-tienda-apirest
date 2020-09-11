@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.clientes.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Entidad para el manejo de las tarjetas de crédito.
@@ -12,7 +13,9 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "tarjetas_credito")
-public class TarjetaCredito {
+public class TarjetaCredito implements Serializable {
+
+    private final static long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

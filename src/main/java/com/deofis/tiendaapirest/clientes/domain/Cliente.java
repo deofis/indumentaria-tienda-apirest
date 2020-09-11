@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.clientes.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,5 +38,6 @@ public class Cliente implements Serializable {
     private String departamento;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TarjetaCredito tarjetaCredito;
 }

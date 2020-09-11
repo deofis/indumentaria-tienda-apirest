@@ -80,4 +80,28 @@ public class PerfilesController {
         response.put("perfil", perfil);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    /**
+     * Obtiene los datos del cliente del usuario logueado.
+     * URL: ~/api/perfiles/cliente
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity Cliente con los datos del cliente.
+     */
+    @GetMapping("/perfiles/cliente")
+    public ResponseEntity<?> obtenerCliente() {
+        Map<String, Object> response = new HashMap<>();
+        Cliente cliente;
+
+        try {
+            cliente = this.perfilService.obtenerDatosCliente();
+        } catch (ClienteException | PerfilesException | AutenticacionException e) {
+            response.put("mensaje", "Error al obtener los datos del cliente para el usuario logueado");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("cliente", cliente);
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
 }
