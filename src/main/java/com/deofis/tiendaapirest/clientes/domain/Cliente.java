@@ -35,5 +35,7 @@ public class Cliente implements Serializable {
     private String numeroCalle;
     private String piso;
     private String departamento;
-    // private Usuario usuario; --> NO: Usuario tiene Cliente!
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "tarjeta_id")
+    private TarjetaCredito tarjetaCredito;
 }

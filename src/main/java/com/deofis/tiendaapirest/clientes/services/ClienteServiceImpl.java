@@ -32,6 +32,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .numeroCalle(cliente.getNumeroCalle())
                 .piso(cliente.getPiso())
                 .departamento(cliente.getDepartamento())
+                .tarjetaCredito(null)
                 .build();
 
         return this.clienteRepository.save(nuevoCliente);

@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.domain;
 
+import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +42,9 @@ public class Usuario {
     @JoinColumn(name = "rol_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Rol rol;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cliente_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Cliente cliente;
 }
