@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.perfiles.controllers;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
+import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
@@ -28,46 +29,47 @@ public class PerfilesController {
     private final PerfilService perfilService;
 
     /**
-     * Como usuario quiero cargar mis datos de cliente. (Carga datos a usuario logueado en el contexto).
+     * Como usuario quiero cargar mis datos de cliente a mi perfil. (Carga datos a usuario logueado
+     * en el contexto).
      * URL:  ~/api/perfiles/cargar-cliente
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param cliente Cliente a cargar.
-     * @return ResponseEntity con los datos del cliente.
+     * @return ResponseEntity Perfil con los datos del cliente.
      */
     @PostMapping("/perfiles/cargar-cliente")
     public ResponseEntity<?> cargarDatos(@Valid @RequestBody Cliente cliente) {
         Map<String, Object> response = new HashMap<>();
-        Cliente clienteGuardado;
+        PerfilDTO perfil;
 
         try {
-            clienteGuardado = this.perfilService.cargarPerfil(cliente);
+            perfil = this.perfilService.cargarPerfil(cliente);
         } catch (ClienteException | AutenticacionException | PerfilesException e) {
             response.put("mensaje", "Error al cargar datos al perfil");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("mensaje", "Datos de cliente cargados exitosamente");
-        response.put("cliente", clienteGuardado);
+        response.put("mensaje", "Datos de cliente cargados exitosamente en el perfil");
+        response.put("perfil", perfil);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
-     * Como usuario, quiero actualizar mis datos de cliente.
+     * Como usuario, quiero actualizar mis datos de cliente en mi perfil.
      * URL: ~/api/perfiles/actualizar-cliente
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param cliente Cliente actualizado.
-     * @return ResponseEntity con los datos del cliente.
+     * @return ResponseEntity Perfil con los datos del cliente actualizados.
      */
     @PutMapping("/perfiles/actualizar-cliente")
     public ResponseEntity<?> actualizarDatos(@RequestBody Cliente cliente) {
         Map<String, Object> response = new HashMap<>();
-        Cliente clienteActualizado;
+        PerfilDTO perfil;
 
         try {
-            clienteActualizado = this.perfilService.actualizarPerfil(cliente);
+            perfil = this.perfilService.actualizarPerfil(cliente);
         } catch (ClienteException | AutenticacionException | PerfilesException e) {
             response.put("mensaje", "Error al actualizar datos del cliente");
             response.put("error", e.getMessage());
@@ -75,7 +77,7 @@ public class PerfilesController {
         }
 
         response.put("mensaje", "Datos actualizados con éxito.");
-        response.put("cliente", clienteActualizado);
+        response.put("perfil", perfil);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

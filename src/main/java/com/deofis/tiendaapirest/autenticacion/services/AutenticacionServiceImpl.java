@@ -63,7 +63,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                 .enabled(false)
                 .fechaCreacion(new Date())
                 .rol(user)
-                .cliente(null)
                 .build();
 
         try {
