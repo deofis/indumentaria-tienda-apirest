@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.clientes.domain;
+package com.deofis.tiendaapirest.pagos.domain;
 
 import lombok.Data;
 

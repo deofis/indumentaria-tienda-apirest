@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
-import javax.validation.constraints.*;
 
 @Entity
 @Data
@@ -24,11 +24,11 @@ public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotNull(message = "El nombre del producto es obligatorio.")
     private String nombre;
-    @NotNull
+    @NotNull(message = "La descripción del producto es obligatoria.")
     private String descripcion;
-    @NotNull
+    @NotNull(message = "El precio del producto es obligatorio.")
     private Double precio;
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha_creacion")
@@ -37,12 +37,12 @@ public class Producto implements Serializable {
     private boolean activo;
     private boolean favorito;
     private boolean destacado;
-    @NotNull
+    @NotNull(message = "La categoría del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Categoria categoria;
-    @NotNull
+    @NotNull(message = "La marca del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marca_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -52,7 +52,7 @@ public class Producto implements Serializable {
     private String color;
     private String talle;
     private String peso;
-    @NotNull
+    @NotNull(message = "La unidad de medida del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unidad_medida_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

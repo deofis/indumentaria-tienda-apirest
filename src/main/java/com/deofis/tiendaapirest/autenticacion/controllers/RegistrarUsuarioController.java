@@ -7,9 +7,14 @@ import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This API works for register a new user into the App.
@@ -32,11 +37,24 @@ public class RegistrarUsuarioController {
      * @return String with success/error message.
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest, BindingResult result) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("error", "Bad Request");
+            response.put("errors", errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
         try {
             this.autenticacionService.registrarse(signupRequest);
-            return new ResponseEntity<>("Usuario registrado exitosamente." +
-                    "Comprueba tu correo para activar tu cuenta.", HttpStatus.CREATED);
+            response.put("mensaje", "Usuario registrado exitosamente. " +
+                    "Comprueba tu correo para activar tu cuenta.");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (AutenticacionException | PasswordException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

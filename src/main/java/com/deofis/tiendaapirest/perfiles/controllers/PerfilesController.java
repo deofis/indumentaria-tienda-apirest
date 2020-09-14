@@ -9,11 +9,14 @@ import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * API dirigida a la administración de perfiles, usuarios y sus datos para transacciones dentro
@@ -38,9 +41,19 @@ public class PerfilesController {
      * @return ResponseEntity Perfil con los datos del cliente.
      */
     @PostMapping("/perfiles/cargar-cliente")
-    public ResponseEntity<?> cargarDatos(@Valid @RequestBody Cliente cliente) {
+    public ResponseEntity<?> cargarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("error", "Bad Request");
+            response.put("errors", errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         try {
             perfil = this.perfilService.cargarPerfil(cliente);
@@ -64,9 +77,19 @@ public class PerfilesController {
      * @return ResponseEntity Perfil con los datos del cliente actualizados.
      */
     @PutMapping("/perfiles/actualizar-cliente")
-    public ResponseEntity<?> actualizarDatos(@RequestBody Cliente cliente) {
+    public ResponseEntity<?> actualizarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("error", "Bad Request");
+            response.put("errors", errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         try {
             perfil = this.perfilService.actualizarPerfil(cliente);

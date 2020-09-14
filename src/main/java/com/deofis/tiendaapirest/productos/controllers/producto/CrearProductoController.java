@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.productos.services.ProductoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controlador que se encarga de recibir un producto y registrarlo.
@@ -34,10 +37,20 @@ public class CrearProductoController {
      * @return ResponseEntity con el Producto guardado.
      */
     @PostMapping("/productos")
-    public ResponseEntity<?> crear(@Valid @RequestBody Producto producto) {
+    public ResponseEntity<?> crear(@Valid @RequestBody Producto producto, BindingResult result) {
 
         Map<String, Object> response = new HashMap<>();
         Producto nuevoProducto;
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("error", "Bad Request");
+            response.put("errors", errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         try {
             nuevoProducto = this.productoService.crear(producto);

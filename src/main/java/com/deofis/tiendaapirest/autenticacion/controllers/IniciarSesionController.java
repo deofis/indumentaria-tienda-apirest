@@ -9,6 +9,7 @@ import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * API que maneja el inicio, extensión y cierre de sesión de los usuarios.
@@ -39,9 +42,19 @@ public class IniciarSesionController {
      * para extender sesión, tiempo de expiración del jwt).
      */
     @PostMapping("/login")
-    public ResponseEntity<?> signin(@Valid @RequestBody IniciarSesionRequest iniciarSesionRequest) {
+    public ResponseEntity<?> signin(@Valid @RequestBody IniciarSesionRequest iniciarSesionRequest, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         AuthResponse authResponse;
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("error", "Bad Request");
+            response.put("errors", errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         try {
             authResponse = this.autenticacionService.iniciarSesion(iniciarSesionRequest);

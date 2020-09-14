@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.productos.services.MarcaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -31,9 +34,19 @@ public class CrearMarcaController {
      * @return Marca registrada.
      */
     @PostMapping("/productos/marcas")
-    public ResponseEntity<?> crear(@Valid @RequestBody Marca marca) {
+    public ResponseEntity<?> crear(@Valid @RequestBody Marca marca, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Marca nuevaMarca;
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("error", "Bad Request");
+            response.put("errors", errors);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         try {
             nuevaMarca = this.marcaService.crear(marca);

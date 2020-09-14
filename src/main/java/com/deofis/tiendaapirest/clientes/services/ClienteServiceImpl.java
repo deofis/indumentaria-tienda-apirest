@@ -27,11 +27,8 @@ public class ClienteServiceImpl implements ClienteService {
                 .nombre(cliente.getNombre())
                 .apellido(cliente.getApellido())
                 .telefono(cliente.getTelefono())
-                .codigoPostal(cliente.getCodigoPostal())
-                .calle(cliente.getCalle())
-                .numeroCalle(cliente.getNumeroCalle())
-                .piso(cliente.getPiso())
-                .departamento(cliente.getDepartamento())
+                // Trabajar luego --> direccion y tarjetas de credito.
+                .direccion(cliente.getDireccion())
                 .tarjetaCredito(null)
                 .build();
 
@@ -46,11 +43,14 @@ public class ClienteServiceImpl implements ClienteService {
         clienteActual.setNombre(clienteActualizado.getNombre());
         clienteActual.setApellido(clienteActualizado.getApellido());
         clienteActual.setTelefono(clienteActualizado.getTelefono());
+        /*
         clienteActual.setCodigoPostal(clienteActualizado.getCodigoPostal());
         clienteActual.setCalle(clienteActualizado.getCalle());
         clienteActual.setNumeroCalle(clienteActualizado.getNumeroCalle());
         clienteActual.setPiso(clienteActualizado.getPiso());
         clienteActual.setDepartamento(clienteActualizado.getDepartamento());
+
+         */
 
         return this.clienteRepository.save(clienteActual);
     }

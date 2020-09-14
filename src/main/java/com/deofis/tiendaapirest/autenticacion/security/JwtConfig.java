@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.security;
 
+@Deprecated
 public class JwtConfig {
 
     public static final String SECRET_KEY = "secret.key.195";
