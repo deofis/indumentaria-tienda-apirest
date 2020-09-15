@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -29,11 +30,13 @@ public class OperacionServiceImpl implements OperacionService {
     @Transactional
     @Override
     public Operacion registrar(Operacion operacion) {
-        Cliente cliente = this.clienteRepository.getOne(operacion.getCliente().getId());
+        Cliente cliente = this.clienteRepository.findById(operacion.getCliente().getId())
+                .orElseThrow(() -> new OperacionException("El cliente seleccionado debe estar cargado " +
+                        "en la base de datos."));
 
         Operacion nuevaOperacion = Operacion.builder()
                 .cliente(cliente)
-                .fechaOperacion(new Date())
+                .fechaOperacion(new Date(new Date().getTime()))
                 .fechaEnviada(null)
                 .fechaRecibida(null)
                 .formaPago(operacion.getFormaPago())
@@ -61,6 +64,12 @@ public class OperacionServiceImpl implements OperacionService {
         }
 
         return this.operacionRepository.save(nuevaOperacion);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Operacion> listarVentas() {
+        return this.operacionRepository.findAllByOrderByFechaOperacionDesc();
     }
 
     private Double calcularTotal(Double total, Double subTotal) {

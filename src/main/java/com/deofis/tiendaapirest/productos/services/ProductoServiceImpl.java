@@ -68,10 +68,7 @@ public class ProductoServiceImpl implements ProductoService {
 
         productoActual.setNombre(producto.getNombre());
         productoActual.setDescripcion(producto.getDescripcion());
-        productoActual.setActivo(producto.isActivo());
         productoActual.setPrecio(producto.getPrecio());
-        productoActual.setFechaCreacion(producto.getFechaCreacion());
-        productoActual.setDestacado(producto.isDestacado());
         productoActual.setCategoria(producto.getCategoria());
         productoActual.setMarca(producto.getMarca());
         productoActual.setStock(producto.getStock());

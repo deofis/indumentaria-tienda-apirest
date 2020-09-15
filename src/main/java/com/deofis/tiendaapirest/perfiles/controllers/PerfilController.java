@@ -3,7 +3,9 @@ package com.deofis.tiendaapirest.perfiles.controllers;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
+import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
+import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class PerfilesController {
+public class PerfilController {
 
     private final PerfilService perfilService;
 
@@ -126,5 +128,53 @@ public class PerfilesController {
 
         response.put("cliente", cliente);
         return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
+    /**
+     * Permite ver el perfil completo del usuario logueado.
+     * URL: ~/api/perfiles/ver
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity PerfilDTO datos del perfil.
+     */
+    @GetMapping("/perfiles/ver")
+    public ResponseEntity<?> verPerfil() {
+        Map<String, Object> response = new HashMap<>();
+        PerfilDTO perfil;
+
+        try {
+            perfil = this.perfilService.obtenerPerfil();
+        } catch (PerfilesException | AutenticacionException e) {
+            response.put("mensaje", "Error al obtener el perfil del usuario logueado");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("perfil", perfil);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Ver el carrito del perfil del usuario actual.
+     * URL: ~/api/perfiles/carrito
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity Carrito del perfil.
+     */
+    @GetMapping("/perfiles/carrito")
+    public ResponseEntity<?> verCarrito() {
+        Map<String, Object> response = new HashMap<>();
+        Carrito carrito;
+
+        try {
+            carrito = this.perfilService.obtenerCarrito();
+        } catch (PerfilesException | CarritoException e) {
+            response.put("mensaje", "Error al obtener el carrito del perfil");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("carrito", carrito);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
