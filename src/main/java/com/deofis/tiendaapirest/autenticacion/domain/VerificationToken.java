@@ -25,6 +25,6 @@ public class VerificationToken {
     @OneToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date expiracion;
 }

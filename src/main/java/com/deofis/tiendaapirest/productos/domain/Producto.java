@@ -24,34 +24,50 @@ public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull(message = "El nombre del producto es obligatorio.")
     private String nombre;
+
     @NotNull(message = "La descripción del producto es obligatoria.")
     private String descripcion;
+
     @NotNull(message = "El precio del producto es obligatorio.")
     private Double precio;
-    @Temporal(TemporalType.DATE)
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
+
     private String foto;
+
     private boolean activo;
+
     private boolean favorito;
+
     private boolean destacado;
+
     @NotNull(message = "La categoría del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
+
     @JoinColumn(name = "categoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Categoria categoria;
+
     @NotNull(message = "La marca del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marca_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Marca marca;
+
     @NotNull
     private Integer stock;
+
     private String color;
+
     private String talle;
+
     private String peso;
+
     @NotNull(message = "La unidad de medida del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unidad_medida_id")

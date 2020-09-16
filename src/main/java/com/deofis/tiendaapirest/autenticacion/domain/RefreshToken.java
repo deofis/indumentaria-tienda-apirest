@@ -22,7 +22,7 @@ public class RefreshToken {
 
     private String token;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 }

@@ -32,7 +32,7 @@ public class Usuario {
 
     private boolean enabled;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 

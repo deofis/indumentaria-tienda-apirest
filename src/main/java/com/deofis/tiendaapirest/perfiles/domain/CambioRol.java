@@ -30,7 +30,7 @@ public class CambioRol {
     private String usuarioCambioRol;
     @Column(name = "nuevo_rol")
     private String nuevoRol;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_cambio")
     private Date fechaCambio;
 }

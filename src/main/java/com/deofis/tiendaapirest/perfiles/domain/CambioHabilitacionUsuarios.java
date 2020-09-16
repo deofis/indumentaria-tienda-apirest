@@ -24,7 +24,7 @@ public class CambioHabilitacionUsuarios {
     @Column(name = "usuario_cambio_habilitacion")
     private String usuarioCambioHabilitacion;
     private String accion;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_cambio")
     private Date fechaCambio;
 }
