@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.perfiles.domain;
 
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.operacion.domain.Operacion;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Data
@@ -39,4 +41,8 @@ public class Perfil implements Serializable {
     @JoinColumn(name = "carrito_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Carrito carrito;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "perfil_id")
+    private List<Operacion> compras;
 }

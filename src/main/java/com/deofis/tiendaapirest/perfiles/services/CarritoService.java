@@ -26,5 +26,8 @@ public interface CarritoService {
      */
     Carrito quitarProducto(Long productoId);
 
+    /**
+     * Vacía el carrito de compras, dejándolo sin items.
+     */
     void vaciar();
 }

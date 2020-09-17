@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,4 +54,29 @@ public class ObtenerVentasController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Como administrador, poder obtener una venta en particular.
+     * URL: ~/api/operaciones/1
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param nroOperacion @PathVariable Long con el numero de operación que se desea ver.
+     * @return ResponseEntity Operacion solicitada.
+     */
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/operaciones/{nroOperacion}")
+    public ResponseEntity<?> obtenerVenta(@PathVariable Long nroOperacion) {
+        Map<String, Object> response = new HashMap<>();
+        Operacion operacion;
+
+        try {
+            operacion = this.operacionService.obtenerVenta(nroOperacion);
+        } catch (OperacionException e) {
+            response.put("mensaje", "Error al obtener la venta");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("operacion", operacion);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

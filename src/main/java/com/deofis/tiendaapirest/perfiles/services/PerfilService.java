@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.perfiles.services;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
+import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 
 public interface PerfilService {
@@ -27,6 +28,12 @@ public interface PerfilService {
     PerfilDTO obtenerPerfil();
 
     /**
+     * Este objeto devuelve el Perfil completo (no el DTO).
+     * @return Perfil completo.
+     */
+    Perfil getPerfil();
+
+    /**
      * Obtener datos del cliente del usuario logueado.
      * @return Cliente datos del cliente del usuario logueado.
      */
@@ -37,4 +44,9 @@ public interface PerfilService {
      * @return Carrito del perfil.
      */
     Carrito obtenerCarrito();
+
+    /**
+     * Llama al carrito service para vaciarlo.
+     */
+    void vaciarCarrito();
 }

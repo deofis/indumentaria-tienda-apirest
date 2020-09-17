@@ -44,14 +44,14 @@ public class Operacion implements Serializable {
     @Column(name = "fecha_recibida")
     private Date fechaRecibida;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoOperacion estado;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
     @NotNull(message = "Datos del cliente obligatorios")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoOperacion estado;
 
     // Luego crear FormaPago con las distintas formas de pago.
     @NotNull(message = "La forma de pago es obligatoria")

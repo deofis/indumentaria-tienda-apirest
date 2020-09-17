@@ -38,7 +38,7 @@ public class RegistrarOperacionController {
         Operacion nuevaOperacion;
 
         try {
-            nuevaOperacion = this.operacionService.registrar(operacion);
+            nuevaOperacion = this.operacionService.registrarNuevaOperacion(operacion);
         } catch (OperacionException | ProductoException e) {
             response.put("mensahe", "Error al registrar la nueva compra");
             response.put("error", e.getMessage());

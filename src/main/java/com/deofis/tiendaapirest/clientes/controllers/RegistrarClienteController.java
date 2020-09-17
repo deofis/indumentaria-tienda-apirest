@@ -15,8 +15,12 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
-// No es responsabilidad del Usuario registrase como CLIENTE ?? --> SI: CREARLO EN CONTROLADOR USUARIOS.
-//                                                                  NO: DEJARLO ACA.
+/**
+ * API que sirve para registrar Clientes NO AUTENTICADOS en la APP al momento de realizar una compra.
+ * El flujo será: Usuario fantasma inicia operación de compra (cargando su carrito guardado en el
+ * localStorage que provee front), inicia el registro de sus datos (cada vez que realice compra), estos
+ * datos de Cliente se guardan en la misma BD de clientes, pero sin un perfil referenciado.
+ */
 
 @RestController
 @RequestMapping("/api")

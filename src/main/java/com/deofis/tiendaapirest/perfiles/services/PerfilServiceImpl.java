@@ -25,9 +25,9 @@ import java.util.Date;
 public class PerfilServiceImpl implements PerfilService {
 
     private final PerfilRepository perfilRepository;
+    private final CarritoRepository carritoRepository;
     private final ClienteService clienteService;
     private final AutenticacionService autenticacionService;
-    private final CarritoRepository carritoRepository;
 
     @Transactional
     @Override
@@ -86,6 +86,13 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Transactional(readOnly = true)
     @Override
+    public Perfil getPerfil() {
+        return this.perfilRepository.findByUsuario(this.autenticacionService.getUsuarioActual())
+                .orElseThrow(() -> new PerfilesException("No existe el perfil para el usuario"));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Cliente obtenerDatosCliente() {
         Usuario usuario = this.getUsuarioActual();
         Perfil perfil = this.perfilRepository.findByUsuario(usuario)
@@ -107,11 +114,51 @@ public class PerfilServiceImpl implements PerfilService {
                 .orElseThrow(() -> new CarritoException("No existe el carrito para el perfil."));
     }
 
+    /*
+    MAL IMPLEMENTADO: La compra y el carrito se combinan en el FRONT, y se registra una sola vez
+    la compra, que es al finalizarla y haber cargado todos sus datos necesarios.
+    @Transactional
+    @Override
+    public Operacion registrarCompra() throws CarritoException, PerfilesException {
+        Carrito carrito = this.obtenerCarrito();
+        Operacion compra = Operacion.builder()
+                .cliente(this.obtenerPerfil().getCliente())
+                .items(new ArrayList<>())
+                .build();
+
+        for (DetalleCarrito detalleCarrito: carrito.getItems()) {
+            DetalleOperacion item = new DetalleOperacion();
+            Producto producto = this.productoRepository.findById(detalleCarrito.getProducto().getId())
+                    .orElseThrow(() -> new ProductoException("Error al obtener producto"));
+            item.setProducto(producto);
+            item.setCantidad(detalleCarrito.getCantidad());
+            compra.getItems().add(item);
+        }
+
+        Operacion compraGuardada = this.operacionService.registrar(compra);
+        Perfil perfil = this.perfilRepository.findByUsuario(this.autenticacionService.getUsuarioActual())
+                .orElseThrow(() -> new PerfilesException("Error al obtener el perfil del usuario."));
+        perfil.getCompras().add(compraGuardada);
+        this.perfilRepository.save(perfil);
+
+        return compraGuardada;
+    }
+
+     */
+
+    @Override
+    public void vaciarCarrito() {
+        Carrito carrito = this.obtenerCarrito();
+
+        carrito.getItems().clear();
+    }
+
     private PerfilDTO mapToDTO(Perfil perfil) {
         return PerfilDTO.builder()
                 .usuario(perfil.getUsuario().getEmail())
                 .cliente(perfil.getCliente())
                 .carrito(perfil.getCarrito())
+                .compras(perfil.getCompras())
                 .build();
     }
 
