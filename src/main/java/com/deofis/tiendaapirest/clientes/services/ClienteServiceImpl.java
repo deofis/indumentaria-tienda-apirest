@@ -27,6 +27,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .nombre(cliente.getNombre())
                 .apellido(cliente.getApellido())
                 .telefono(cliente.getTelefono())
+                .email(cliente.getEmail())
                 // Trabajar luego --> direccion y tarjetas de credito.
                 .direccion(cliente.getDireccion())
                 .tarjetaCredito(null)

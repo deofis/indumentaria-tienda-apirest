@@ -33,6 +33,7 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     public PerfilDTO cargarPerfil(Cliente cliente) {
         Usuario usuario = this.autenticacionService.getUsuarioActual();
+        cliente.setEmail(usuario.getEmail());
         Cliente clienteCargado = this.clienteService.crear(cliente);
         Carrito carrito = Carrito.builder()
                 .fechaCreacion(new Date())

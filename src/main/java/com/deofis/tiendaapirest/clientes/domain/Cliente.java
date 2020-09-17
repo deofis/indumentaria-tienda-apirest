@@ -24,16 +24,23 @@ public class Cliente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull(message = "El nombre es obligatorio.")
     private String nombre;
+
     @NotNull(message = "El apellido es obligatorio.")
     private String apellido;
+
+    private String email;
+
     @NotNull(message = "El numero de teléfono es obligatorio.")
     private String telefono;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "direccion_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Direccion direccion;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

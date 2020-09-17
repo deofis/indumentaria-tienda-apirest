@@ -49,6 +49,15 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UsuarioDTO> obtenerAdministradores() {
+        Rol admin = this.rolRepository.findByNombre("ROLE_ADMIN").orElse(null);
+        return this.usuarioRepository.findAllByRol(admin)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
     @Override
     public UsuarioDTO getUsuario(String usuarioEmail) {

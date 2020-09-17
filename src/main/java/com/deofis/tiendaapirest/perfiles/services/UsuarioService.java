@@ -17,6 +17,10 @@ import java.util.List;
 
 public interface UsuarioService {
 
+    /**
+     * Lista los roles.
+     * @return List con los roles.
+     */
     List<Rol> listarRoles();
 
     /**
@@ -24,6 +28,12 @@ public interface UsuarioService {
      * @return List con los usuarios registrados.
      */
     List<UsuarioDTO> listarUsuarios();
+
+    /**
+     * Obtiene los usuarios que son administradores del sistema.
+     * @return List con los usuarios administradores.
+     */
+    List<UsuarioDTO> obtenerAdministradores();
 
     /**
      * Obtiene un usuario en particular.

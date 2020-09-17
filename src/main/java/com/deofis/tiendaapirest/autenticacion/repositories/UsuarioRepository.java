@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.repositories;
 
+import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     /**
      * Obtiene los usuarios ordenados por fecha de creación de manera descendiente.
-     * @return List usuarios;
+     * @return List usuarios.
      */
     List<Usuario> findAllByOrderByFechaCreacionDesc();
+
+    /**
+     * Obtiene todos los usuarios de un cierto rol.
+     * @param rol Rol de usuarios a obtener.
+     * @return List usuarios.
+     */
+    List<Usuario> findAllByRol(Rol rol);
 }

@@ -1,6 +1,9 @@
 package com.deofis.tiendaapirest.operacion.services;
 
+import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
+import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
+import com.deofis.tiendaapirest.autenticacion.services.MailService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.repositories.ClienteRepository;
 import com.deofis.tiendaapirest.operacion.domain.DetalleOperacion;
@@ -12,6 +15,7 @@ import com.deofis.tiendaapirest.operacion.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
+import com.deofis.tiendaapirest.perfiles.services.UsuarioService;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
@@ -38,6 +42,9 @@ public class OperacionServiceImpl implements OperacionService {
     private final OperacionStateChangeInterceptor operacionStateChangeInterceptor;
 
     private final AutenticacionService autenticacionService;
+    private final UsuarioService usuarioService;
+    private final MailService mailService;
+
     private final OperacionRepository operacionRepository;
     private final ProductoRepository productoRepository;
     private final ClienteRepository clienteRepository;
@@ -97,7 +104,51 @@ public class OperacionServiceImpl implements OperacionService {
             this.perfilRepository.save(perfil);
         }
 
+        this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
+        this.enviarEmailsAdmins(nuevaOperacion);
+
         return nuevaOperacion;
+    }
+
+    private void enviarEmailsAdmins(Operacion operacion) {
+        /*Operacion operacionGuardada = this.operacionRepository.findById(operacion.getNroOperacion())
+                .orElseThrow(() -> new OperacionException("Operación no encontrada con numero: " +
+                        operacion.getNroOperacion()));
+         */
+
+        NotificationEmail notificationEmail = new NotificationEmail();
+        String body = "Se ha registrado una nueva venta en el sistema. Revisar la venta con " +
+                "número de operacion: " + operacion.getNroOperacion() +
+                " para realizar la facturación correspondiente al cliente: " +
+                operacion.getCliente().getNombre() + ", " + operacion.getCliente().getApellido();
+
+        notificationEmail.setBody(body);
+        notificationEmail.setSubject("Nueva venta registrada :: Deofis");
+
+        List<UsuarioDTO> admins = this.usuarioService.obtenerAdministradores();
+
+        for (UsuarioDTO admin: admins) {
+
+            notificationEmail.setRecipient(admin.getEmail());
+            this.mailService.sendEmail(notificationEmail);
+
+            log.info(admin.getEmail());
+        }
+    }
+
+    private void enviarEmailUsuario(Operacion operacion, String emailUsuario) {
+        NotificationEmail notificationEmail = new NotificationEmail();
+        String body = "Gracias por realizar la compra! En la brevedad recibirá a su correo la facturación " +
+                "realizada por la tienda.\n" +
+                "Número de compra: " + operacion.getNroOperacion() + "\n" +
+                "\nPorfavor, revise los datos de la compra en su perfil de usuario!";
+        notificationEmail.setBody(body);
+        notificationEmail.setRecipient(emailUsuario);
+        notificationEmail.setSubject("Nueva compra registrada");
+
+        log.info(emailUsuario);
+
+        this.mailService.sendEmail(notificationEmail);
     }
 
     @Transactional
