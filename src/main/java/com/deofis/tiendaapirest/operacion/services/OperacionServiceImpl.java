@@ -116,18 +116,17 @@ public class OperacionServiceImpl implements OperacionService {
                         operacion.getNroOperacion()));
          */
 
-        NotificationEmail notificationEmail = new NotificationEmail();
-        String body = "Se ha registrado una nueva venta en el sistema. Revisar la venta con " +
-                "número de operacion: " + operacion.getNroOperacion() +
-                " para realizar la facturación correspondiente al cliente: " +
-                operacion.getCliente().getNombre() + ", " + operacion.getCliente().getApellido();
-
-        notificationEmail.setBody(body);
-        notificationEmail.setSubject("Nueva venta registrada :: Deofis");
-
         List<UsuarioDTO> admins = this.usuarioService.obtenerAdministradores();
 
         for (UsuarioDTO admin: admins) {
+            NotificationEmail notificationEmail = new NotificationEmail();
+            String body = "Se ha registrado una nueva venta en el sistema. Revisar la venta con " +
+                    "número de operacion: " + operacion.getNroOperacion() +
+                    " para realizar la facturación correspondiente al cliente: " +
+                    operacion.getCliente().getNombre() + ", " + operacion.getCliente().getApellido();
+
+            notificationEmail.setBody(body);
+            notificationEmail.setSubject("Nueva venta registrada :: Deofis");
 
             notificationEmail.setRecipient(admin.getEmail());
             this.mailService.sendEmail(notificationEmail);
