@@ -22,7 +22,8 @@ public class CarritoController {
     private final CarritoService carritoService;
 
     /**
-     * Añade un nuevo producto al carrito del perfil actual.
+     * Añade un nuevo producto al carrito del perfil actual. Si ya existe en el carrito, agrega
+     * uno a la cantidad.
      * URL: ~/api/carrito/producto/agregar
      * HttpMethod: POST
      * HttpStatus: CREATED

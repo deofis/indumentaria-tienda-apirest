@@ -24,14 +24,14 @@ public class ActualizarProductoController {
 
     /**
      * Modifica un producto seleccionado.
-     * URL: ~/api/productos/1
+     * URL: ~/api/productos/actualizar/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param producto Producto ya modificado.
      * @param id PathVariable Long del producto a modificar.
      * @return ResponseEntity con el producto ya actualizado.
      */
-    @PutMapping("/productos/{id}")
+    @PutMapping("/productos/actualizar/{id}")
     public ResponseEntity<?> actualizar(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Producto productoActualizado;

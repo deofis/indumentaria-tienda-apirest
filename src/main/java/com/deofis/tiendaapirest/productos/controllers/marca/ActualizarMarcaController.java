@@ -24,14 +24,14 @@ public class ActualizarMarcaController {
 
     /**
      * Actualizar una marca.
-     * URL: ~/api/productos/marcas/1
+     * URL: ~/api/productos/marcas/actualizar/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param marca Marca actualizada.
      * @param id PathVariable id de la marca a actualizar.
      * @return ResponseEntity con la marca actualizada.
      */
-    @PutMapping("/productos/marcas/{id}")
+    @PutMapping("/productos/marcas/actualizar/{id}")
     public ResponseEntity<?> actualizar(@Valid @RequestBody Marca marca, @PathVariable Long id, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Marca marcaActualizada;

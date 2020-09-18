@@ -57,13 +57,13 @@ public class ObtenerProductosController {
 
     /**
      * Obtiene un producto específico.
-     * URL: http://localhost:8080/api/productos/1
+     * URL: http://localhost:8080/api/productos/ver/1
      * HttpStatus: OK
      * HttpMethod: GET
      * @param id PathVarible Long con el id solicitado.
      * @return ResponseEntity con el Producto.
      */
-    @GetMapping("/productos/{id}")
+    @GetMapping("/productos/ver/{id}")
     public ResponseEntity<?> obtenerProducto(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();

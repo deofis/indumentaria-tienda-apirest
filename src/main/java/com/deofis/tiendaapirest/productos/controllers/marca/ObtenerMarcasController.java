@@ -52,13 +52,13 @@ public class ObtenerMarcasController {
 
     /**
      * Obtener una marca.
-     * URL: ~/api/productos/marcas/1
+     * URL: ~/api/productos/marcas/ver/1
      * HttpMethod: GET
      * HttpStatus: OK
      * @param id PathVariable Long de la marca a obtener.
      * @return ResponseEntity con la marca.
      */
-    @GetMapping("/productos/marcas/{id}")
+    @GetMapping("/productos/marcas/ver/{id}")
     public ResponseEntity<?> obtenerProducto(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         Marca marca;

@@ -56,14 +56,14 @@ public class ObtenerVentasController {
 
     /**
      * Como administrador, poder obtener una venta en particular.
-     * URL: ~/api/operaciones/1
+     * URL: ~/api/operaciones/ver/1
      * HttpMethod: GET
      * HttpStatus: OK
      * @param nroOperacion @PathVariable Long con el numero de operación que se desea ver.
      * @return ResponseEntity Operacion solicitada.
      */
     @Secured("ROLE_ADMIN")
-    @GetMapping("/operaciones/{nroOperacion}")
+    @GetMapping("/operaciones/ver/{nroOperacion}")
     public ResponseEntity<?> obtenerVenta(@PathVariable Long nroOperacion) {
         Map<String, Object> response = new HashMap<>();
         Operacion operacion;

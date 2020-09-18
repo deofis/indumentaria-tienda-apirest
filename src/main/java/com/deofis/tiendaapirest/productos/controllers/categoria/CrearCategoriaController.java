@@ -29,13 +29,13 @@ public class CrearCategoriaController {
 
     /**
      * Registrar una nueva categoria.
-     * URL: ~/api/productos/categoria
+     * URL: ~/api/productos/categorias/nueva
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param categoria Categoria a guardar.
      * @return Categoria guardada.
      */
-    @PostMapping("/productos/categorias")
+    @PostMapping("/productos/categorias/nueva")
     public ResponseEntity<?> crear(@Valid @RequestBody Categoria categoria, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Categoria nuevaCategoria;

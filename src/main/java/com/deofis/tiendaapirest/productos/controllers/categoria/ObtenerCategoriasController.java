@@ -52,13 +52,13 @@ public class ObtenerCategoriasController {
 
     /**
      * Obtener una categoría específica.
-     * URL: ~/api/productos/categorias/1
+     * URL: ~/api/productos/categorias/ver/1
      * HttpMethod: GET
      * HttpStatus: OK
      * @param id PathVariable Long del id de la categoría a obtener.
      * @return ResponseEntity con la categoría.
      */
-    @GetMapping("/productos/categorias/{id}")
+    @GetMapping("/productos/categorias/ver/{id}")
     public ResponseEntity<?> obtenerCategoria(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         Categoria categoria;

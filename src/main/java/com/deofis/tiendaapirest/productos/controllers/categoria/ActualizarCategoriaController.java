@@ -26,14 +26,14 @@ public class ActualizarCategoriaController {
 
     /**
      * Actualizar una categoría.
-     * URL: ~/api/productos/categorias/1
+     * URL: ~/api/productos/categorias/actualizar/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param categoria Categoría actualizada
      * @param id PathVariable Long id de la categoría a actualizar.
      * @return ResponseEntity con la categoría actualizada.
      */
-    @PutMapping("/productos/categorias/{id}")
+    @PutMapping("/productos/categorias/actualizar/{id}")
     public ResponseEntity<?> actualizar(@Valid @RequestBody Categoria categoria, @PathVariable Long id, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Categoria categoriaActualizada;

@@ -27,13 +27,13 @@ public class CrearMarcaController {
 
     /**
      * Registrar nueva marca.
-     * URL: ~/api/productos/marcas
+     * URL: ~/api/productos/marcas/nueva
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param marca Marca a crear.
      * @return Marca registrada.
      */
-    @PostMapping("/productos/marcas")
+    @PostMapping("/productos/marcas/nueva")
     public ResponseEntity<?> crear(@Valid @RequestBody Marca marca, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Marca nuevaMarca;

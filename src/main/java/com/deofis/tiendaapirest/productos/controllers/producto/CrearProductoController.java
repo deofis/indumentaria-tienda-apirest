@@ -31,12 +31,12 @@ public class CrearProductoController {
 
     /**
      * Registra un nuevo producto.
-     * URL: ~/api/productos
+     * URL: ~/api/productos/nuevo
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @return ResponseEntity con el Producto guardado.
      */
-    @PostMapping("/productos")
+    @PostMapping("/productos/nuevo")
     public ResponseEntity<?> crear(@Valid @RequestBody Producto producto, BindingResult result) {
 
         Map<String, Object> response = new HashMap<>();
