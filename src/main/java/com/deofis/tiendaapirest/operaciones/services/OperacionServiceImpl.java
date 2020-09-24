@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operacion.services;
+package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
 import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
@@ -6,12 +6,12 @@ import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.autenticacion.services.MailService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.repositories.ClienteRepository;
-import com.deofis.tiendaapirest.operacion.domain.DetalleOperacion;
-import com.deofis.tiendaapirest.operacion.domain.EstadoOperacion;
-import com.deofis.tiendaapirest.operacion.domain.EventoOperacion;
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
-import com.deofis.tiendaapirest.operacion.exceptions.OperacionException;
-import com.deofis.tiendaapirest.operacion.repositories.OperacionRepository;
+import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
+import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
@@ -21,11 +21,7 @@ import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
-import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +34,7 @@ import java.util.List;
 public class OperacionServiceImpl implements OperacionService {
     public static final String NRO_OPERACION_HEADER = "nroOperacion";
 
-    private final StateMachineFactory<EstadoOperacion, EventoOperacion> stateMachineFactory;
-    private final OperacionStateChangeInterceptor operacionStateChangeInterceptor;
+    private final StateMachineService stateMachineService;
 
     private final AutenticacionService autenticacionService;
     private final UsuarioService usuarioService;
@@ -155,11 +150,11 @@ public class OperacionServiceImpl implements OperacionService {
     public Operacion registrarEnvio(Long nroOperacion) {
         Operacion operacion = this.operacionRepository.findById(nroOperacion)
                 .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + nroOperacion));
-        StateMachine<EstadoOperacion, EventoOperacion> sm = build(nroOperacion);
+        StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
 
         sm.getExtendedState().getVariables().put("operacion", operacion);
 
-        this.enviarEvento(nroOperacion, sm, EventoOperacion.SEND);
+        this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.SEND);
         return operacion;
     }
 
@@ -168,11 +163,11 @@ public class OperacionServiceImpl implements OperacionService {
     public Operacion registrarRecibo(Long nroOperacion) {
         Operacion operacion = this.operacionRepository.findById(nroOperacion)
                 .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + nroOperacion));
-        StateMachine<EstadoOperacion, EventoOperacion> sm = build(nroOperacion);
+        StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
 
         sm.getExtendedState().getVariables().put("operacion", operacion);
 
-        this.enviarEvento(nroOperacion, sm, EventoOperacion.RECEIVE);
+        this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.RECEIVE);
         return operacion;
     }
 
@@ -181,9 +176,9 @@ public class OperacionServiceImpl implements OperacionService {
     public Operacion cancelar(Long nroOperacion) {
         Operacion operacion = this.operacionRepository.findById(nroOperacion)
                 .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + nroOperacion));
-        StateMachine<EstadoOperacion, EventoOperacion> sm = build(nroOperacion);
+        StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
 
-        this.enviarEvento(nroOperacion, sm, EventoOperacion.CANCEL);
+        this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.CANCEL);
         return operacion;
     }
 
@@ -201,34 +196,5 @@ public class OperacionServiceImpl implements OperacionService {
 
     private Double calcularTotal(Double total, Double subTotal) {
         return total + subTotal;
-    }
-
-    private void enviarEvento(Long nroOperacion, StateMachine<EstadoOperacion, EventoOperacion> sm, EventoOperacion evento) {
-        Message<EventoOperacion> msg = MessageBuilder.withPayload(evento)
-                .setHeader(NRO_OPERACION_HEADER, nroOperacion)
-                .build();
-
-        sm.sendEvent(msg);
-    }
-
-    private StateMachine<EstadoOperacion, EventoOperacion> build (Long nroOperacion) {
-        Operacion operacion = this.operacionRepository.findById(nroOperacion)
-                .orElseThrow(() -> new OperacionException("No existe la operación con id: "
-                + nroOperacion));
-
-        StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineFactory.getStateMachine(Long.toString(operacion.getNroOperacion()));
-
-        sm.stop();
-
-        sm.getStateMachineAccessor()
-                .doWithAllRegions(sma -> {
-                    sma.addStateMachineInterceptor(operacionStateChangeInterceptor);
-                    sma.resetStateMachine(new DefaultStateMachineContext<>(operacion.getEstado()
-                            ,null, null, null));
-                });
-
-        sm.start();
-
-        return sm;
     }
 }

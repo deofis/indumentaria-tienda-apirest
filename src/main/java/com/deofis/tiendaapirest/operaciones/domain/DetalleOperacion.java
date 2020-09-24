@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operacion.domain;
+package com.deofis.tiendaapirest.operaciones.domain;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

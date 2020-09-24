@@ -1,7 +1,7 @@
 package com.deofis.tiendaapirest.perfiles.dto;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

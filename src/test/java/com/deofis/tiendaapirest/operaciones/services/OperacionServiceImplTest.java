@@ -1,11 +1,11 @@
-package com.deofis.tiendaapirest.operacion.services;
+package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.autenticacion.dto.IniciarSesionRequest;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.clientes.repositories.ClienteRepository;
-import com.deofis.tiendaapirest.operacion.domain.DetalleOperacion;
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
-import com.deofis.tiendaapirest.operacion.repositories.OperacionRepository;
+import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.pagos.repositories.FormaPagoRepository;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import org.junit.jupiter.api.BeforeEach;

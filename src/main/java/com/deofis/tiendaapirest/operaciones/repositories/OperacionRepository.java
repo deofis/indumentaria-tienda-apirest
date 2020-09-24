@@ -1,6 +1,6 @@
-package com.deofis.tiendaapirest.operacion.repositories;
+package com.deofis.tiendaapirest.operaciones.repositories;
 
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

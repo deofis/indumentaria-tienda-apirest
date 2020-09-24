@@ -1,6 +1,6 @@
-package com.deofis.tiendaapirest.operacion.services;
+package com.deofis.tiendaapirest.operaciones.services;
 
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 
 import java.util.List;
 

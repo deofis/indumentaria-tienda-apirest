@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operacion.domain;
+package com.deofis.tiendaapirest.operaciones.domain;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.pagos.domain.FormaPago;

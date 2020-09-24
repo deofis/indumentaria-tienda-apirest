@@ -1,8 +1,8 @@
-package com.deofis.tiendaapirest.operacion.services;
+package com.deofis.tiendaapirest.operaciones.services;
 
-import com.deofis.tiendaapirest.operacion.domain.EstadoOperacion;
-import com.deofis.tiendaapirest.operacion.domain.EventoOperacion;
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.StateMachine;

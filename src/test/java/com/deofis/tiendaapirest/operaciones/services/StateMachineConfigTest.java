@@ -1,7 +1,7 @@
-package com.deofis.tiendaapirest.operacion.services;
+package com.deofis.tiendaapirest.operaciones.services;
 
-import com.deofis.tiendaapirest.operacion.domain.EstadoOperacion;
-import com.deofis.tiendaapirest.operacion.domain.EventoOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
+import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

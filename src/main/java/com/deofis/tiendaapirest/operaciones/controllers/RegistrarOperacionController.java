@@ -1,8 +1,8 @@
-package com.deofis.tiendaapirest.operacion.controllers;
+package com.deofis.tiendaapirest.operaciones.controllers;
 
-import com.deofis.tiendaapirest.operacion.domain.Operacion;
-import com.deofis.tiendaapirest.operacion.exceptions.OperacionException;
-import com.deofis.tiendaapirest.operacion.services.OperacionService;
+import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
+import com.deofis.tiendaapirest.operaciones.services.OperacionService;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

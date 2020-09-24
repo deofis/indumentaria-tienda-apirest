@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operacion.exceptions;
+package com.deofis.tiendaapirest.operaciones.exceptions;
 
 public class OperacionException extends RuntimeException {
     public OperacionException(String exMensaje) {
