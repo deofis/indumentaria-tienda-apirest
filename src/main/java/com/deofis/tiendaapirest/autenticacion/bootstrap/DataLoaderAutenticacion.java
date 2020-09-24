@@ -24,7 +24,7 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if (!this.rolRepository.findByNombre("ROLE_ADMIN").isPresent()) {
+        if (this.rolRepository.findByNombre("ROLE_ADMIN").isEmpty()) {
             Rol admin = Rol.builder()
                     .nombre("ROLE_ADMIN")
                     .build();
@@ -36,7 +36,7 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
 
         }
 
-        if (!this.rolRepository.findByNombre("ROLE_USER").isPresent()) {
+        if (this.rolRepository.findByNombre("ROLE_USER").isEmpty()) {
             Rol user = Rol.builder()
                     .nombre("ROLE_USER")
                     .build();
@@ -49,7 +49,7 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
 
         }
 
-        if (!this.usuarioRepository.findByEmail("ezegavilan95@gmail.com").isPresent()) {
+        if (this.usuarioRepository.findByEmail("ezegavilan95@gmail.com").isEmpty()) {
             Usuario administrador = Usuario.builder()
                     .email("ezegavilan95@gmail.com")
                     .enabled(true)

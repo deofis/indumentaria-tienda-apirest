@@ -1,5 +1,9 @@
 package com.deofis.tiendaapirest.productos.bootstrap;
 
+import com.deofis.tiendaapirest.pagos.domain.FormaPago;
+import com.deofis.tiendaapirest.pagos.repositories.FormaPagoRepository;
+import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
@@ -17,11 +21,12 @@ public class DataLoaderProductos implements CommandLineRunner {
     private final UnidadMedidaRepository unidadMedidaRepository;
     private final MarcaRepository marcaRepository;
     private final CategoriaRepository categoriaRepository;
+    private final FormaPagoRepository formaPagoRepository;
 
     @Override
     public void run(String... args) throws Exception {
 
-        if (!this.unidadMedidaRepository.findByNombre("Unidad").isPresent()) {
+        if (this.unidadMedidaRepository.findByNombre("Unidad").isEmpty()) {
             UnidadMedida unidad = UnidadMedida.builder()
                     .nombre("Unidad")
                     .codigo("U")
@@ -34,7 +39,7 @@ public class DataLoaderProductos implements CommandLineRunner {
 
         }
 
-        if (!this.unidadMedidaRepository.findByNombre("Kilo").isPresent()) {
+        if (this.unidadMedidaRepository.findByNombre("Kilo").isEmpty()) {
             UnidadMedida kilo = UnidadMedida.builder()
                     .nombre("Kilo")
                     .codigo("KG")
@@ -48,7 +53,7 @@ public class DataLoaderProductos implements CommandLineRunner {
 
         }
 
-        if (!this.unidadMedidaRepository.findByNombre("Litro").isPresent()) {
+        if (this.unidadMedidaRepository.findByNombre("Litro").isEmpty()) {
             UnidadMedida litro = UnidadMedida.builder()
                     .nombre("Litro")
                     .codigo("L")
@@ -60,6 +65,47 @@ public class DataLoaderProductos implements CommandLineRunner {
                 throw new ProductoException(e.getMessage());
             }
 
+        }
+
+        if (this.categoriaRepository.findByNombre("Celulares").isEmpty()) {
+            Categoria celulares = Categoria.builder()
+                    .nombre("Celulares")
+                    .codigo("CEL")
+                    .build();
+
+            this.categoriaRepository.save(celulares);
+        }
+
+        if (this.categoriaRepository.findByNombre("Termos").isEmpty()) {
+            Categoria termos = Categoria.builder()
+                    .nombre("Termos")
+                    .codigo("TER")
+                    .build();
+
+            this.categoriaRepository.save(termos);
+        }
+
+        if (this.marcaRepository.findByNombre("Samsung").isEmpty()) {
+            Marca samsung = Marca.builder()
+                    .nombre("Samsung")
+                    .build();
+
+            this.marcaRepository.save(samsung);
+        }
+
+        if (this.marcaRepository.findByNombre("Apple").isEmpty()) {
+            Marca apple = Marca.builder()
+                    .nombre("Apple")
+                    .build();
+
+            this.marcaRepository.save(apple);
+        }
+
+        if (this.formaPagoRepository.findByNombre("Efectivo").isEmpty()) {
+            FormaPago efectivo = new FormaPago();
+            efectivo.setNombre("Efectivo");
+
+            this.formaPagoRepository.save(efectivo);
         }
 
     }
