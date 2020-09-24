@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.dto;
+package com.deofis.tiendaapirest.emails.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

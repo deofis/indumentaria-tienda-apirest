@@ -1,11 +1,11 @@
 package com.deofis.tiendaapirest.operaciones.services;
 
-import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
 import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
-import com.deofis.tiendaapirest.autenticacion.services.MailService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.repositories.ClienteRepository;
+import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
+import com.deofis.tiendaapirest.emails.services.MailService;
 import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;

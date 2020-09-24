@@ -1,7 +1,7 @@
-package com.deofis.tiendaapirest.autenticacion.services;
+package com.deofis.tiendaapirest.emails.services;
 
-import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
 import com.deofis.tiendaapirest.autenticacion.exceptions.MailSenderException;
+import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;

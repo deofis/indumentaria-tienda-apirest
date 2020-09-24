@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.autenticacion.services;
+package com.deofis.tiendaapirest.emails.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

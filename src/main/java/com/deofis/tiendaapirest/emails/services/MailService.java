@@ -1,6 +1,6 @@
-package com.deofis.tiendaapirest.autenticacion.services;
+package com.deofis.tiendaapirest.emails.services;
 
-import com.deofis.tiendaapirest.autenticacion.dto.NotificationEmail;
+import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 
 public interface MailService {
 
