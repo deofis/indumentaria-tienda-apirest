@@ -35,7 +35,7 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
             return productos;
 
         } catch (IOException | RuntimeException e) {
-            throw new ProductoException("Error al procesar el archivo CSV. Verifique los datos de su archivo sean correctos.");
+            throw new ProductoException("Error al procesar el archivo CSV." + e.getMessage());
         }
 
     }
