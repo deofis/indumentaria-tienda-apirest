@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -61,5 +62,11 @@ public interface ProductoService {
      */
     void marcarFavorito(Producto producto, Long id);
 
+    /**
+     * Obtiene un listado con todas las unidades de medida disponibles.
+     * @return List unidades medida.
+     */
     List<UnidadMedida> obtenerUnidadesMedida();
+
+    List<Producto> importarDeCSV(MultipartFile archivo);
 }

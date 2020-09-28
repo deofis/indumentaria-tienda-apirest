@@ -1,14 +1,21 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
+import com.deofis.tiendaapirest.productos.dto.ProductoDTO;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
+import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
+import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +25,10 @@ public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
     private final UnidadMedidaRepository unidadMedidaRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final MarcaRepository marcaRepository;
+
+    private final ProductoImportadorService productoImportadorService;
 
     /* Issue --> Es mejor buscar objetos en la bd antes que asignarlos directamente, no porque tire
     * error, sino para el manejo de excepciones por si el front intenta seleccionar un objeto
@@ -124,10 +135,56 @@ public class ProductoServiceImpl implements ProductoService {
         this.productoRepository.save(productoActual);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UnidadMedida> obtenerUnidadesMedida() {
         return this.unidadMedidaRepository.findAll();
     }
 
+    @Transactional
+    @Override
+    public List<Producto> importarDeCSV(MultipartFile archivo) {
+        List<ProductoDTO> dtos = this.productoImportadorService.recibirCsv(archivo);
+        System.out.println(dtos);
+        List<Producto> productos = new ArrayList<>();
 
+        for (ProductoDTO productoDTO: dtos) {
+            productos.add(this.mapProductoDto(productoDTO));
+        }
+
+        return this.productoRepository.saveAll(productos);
+    }
+
+    @Transactional(readOnly = true)
+    public Producto mapProductoDto(ProductoDTO productoDTO) {
+        Categoria categoria = this.categoriaRepository.findById(productoDTO.getCategoriaId())
+                .orElseThrow(() -> new ProductoException("No se encontro la categoría con id: " +
+                        productoDTO.getCategoriaId()));
+
+        Marca marca = this.marcaRepository.findById(productoDTO.getMarcaId())
+                .orElseThrow(() -> new ProductoException("No se encontro la marca con id: " +
+                        productoDTO.getMarcaId()));
+
+        UnidadMedida unidadMedida = this.unidadMedidaRepository.findById(productoDTO.getUnidadMedidaId())
+                .orElseThrow(() -> new ProductoException("No se encontro la unidad de medida con id: " +
+                        productoDTO.getUnidadMedidaId()));
+
+        return Producto.builder()
+                .nombre(productoDTO.getNombre())
+                .descripcion(productoDTO.getDescripcion())
+                .precio(productoDTO.getPrecio())
+                .stock(productoDTO.getStock())
+                .color(productoDTO.getColor())
+                .talle(productoDTO.getTalle())
+                .peso(productoDTO.getPeso())
+                .categoria(categoria)
+                .marca(marca)
+                .unidadMedida(unidadMedida)
+                .activo(true)
+                .fechaCreacion(new Date())
+                .destacado(true)
+                .favorito(false)
+                .foto(null)
+                .build();
+    }
 }
