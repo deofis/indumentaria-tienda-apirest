@@ -143,7 +143,7 @@ public class PerfilController {
         PerfilDTO perfil;
 
         try {
-            perfil = this.perfilService.obtenerPerfil();
+            perfil = this.perfilService.verPerfil();
         } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al obtener el perfil del usuario logueado");
             response.put("error", e.getMessage());

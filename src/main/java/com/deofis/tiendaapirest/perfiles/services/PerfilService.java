@@ -25,13 +25,13 @@ public interface PerfilService {
      * el carrito.
      * @return PerfilDTO el perfil actual.
      */
-    PerfilDTO obtenerPerfil();
+    PerfilDTO verPerfil();
 
     /**
      * Este objeto devuelve el Perfil completo (no el DTO).
      * @return Perfil completo.
      */
-    Perfil getPerfil();
+    Perfil obtenerPerfil();
 
     /**
      * Obtener datos del cliente del usuario logueado.

@@ -52,7 +52,7 @@ public class OperacionServiceImpl implements OperacionService {
         Cliente cliente;
 
         if (this.autenticacionService.estaLogueado()) {
-            cliente = this.perfilService.getPerfil().getCliente();
+            cliente = this.perfilService.obtenerPerfil().getCliente();
         } else {
             cliente = this.clienteRepository.findById(operacion.getCliente().getId())
                     .orElseThrow(() -> new OperacionException("El cliente seleccionado debe estar cargado " +
@@ -92,7 +92,7 @@ public class OperacionServiceImpl implements OperacionService {
 
 
         if (this.autenticacionService.estaLogueado()) {
-            Perfil perfil = this.perfilService.getPerfil();
+            Perfil perfil = this.perfilService.obtenerPerfil();
 
             perfil.getCompras().add(nuevaOperacion);
             this.perfilService.vaciarCarrito();

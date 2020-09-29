@@ -78,7 +78,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Transactional(readOnly = true)
     @Override
-    public PerfilDTO obtenerPerfil() {
+    public PerfilDTO verPerfil() {
         Usuario usuario = this.getUsuarioActual();
         Perfil perfil = this.perfilRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new PerfilesException("No existe el perfil para el usuario."));
@@ -87,7 +87,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Transactional(readOnly = true)
     @Override
-    public Perfil getPerfil() {
+    public Perfil obtenerPerfil() {
         return this.perfilRepository.findByUsuario(this.autenticacionService.getUsuarioActual())
                 .orElseThrow(() -> new PerfilesException("No existe el perfil para el usuario"));
     }
@@ -106,12 +106,12 @@ public class PerfilServiceImpl implements PerfilService {
     @Transactional(readOnly = true)
     @Override
     public Carrito obtenerCarrito() {
-        if (this.obtenerPerfil().getCarrito() == null) {
+        if (this.verPerfil().getCarrito() == null) {
             throw new PerfilesException("Error al cargar el carrito: no se guardo correctamente al crear " +
                     "el perfil");
         }
 
-        return this.carritoRepository.findById(this.obtenerPerfil().getCarrito().getId())
+        return this.carritoRepository.findById(this.verPerfil().getCarrito().getId())
                 .orElseThrow(() -> new CarritoException("No existe el carrito para el perfil."));
     }
 
