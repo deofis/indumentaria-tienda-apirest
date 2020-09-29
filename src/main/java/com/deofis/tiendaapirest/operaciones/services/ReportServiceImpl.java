@@ -6,16 +6,15 @@ import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,42 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public byte[] generarReportEXCEL() throws FileNotFoundException, JRException {
+    public ByteArrayInputStream generarReportEXCEL() throws IOException, JRException {
+        String[] columns = {"N° Operación", "Estado", "Creado En", "Cliente", "Pago", "Total"};
+
+        Workbook workbook = new HSSFWorkbook();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        Sheet sheet = workbook.createSheet("Operaciones");
+        Row row = sheet.createRow(0);
+
+        for (int i=0; i < columns.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(columns[i]);
+        }
+
+        List<OperacionDTO> operaciones = this.operacionRepository.findAllByOrderByFechaOperacionDesc()
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+        int initRow = 1;
+
+        for (OperacionDTO operacion: operaciones) {
+            row = sheet.createRow(initRow);
+            row.createCell(0).setCellValue(operacion.getNroOperacion());
+            row.createCell(1).setCellValue(operacion.getEstado());
+            row.createCell(2).setCellValue(operacion.getFechaOperacion().toString());
+            row.createCell(3).setCellValue(operacion.getCliente());
+            row.createCell(4).setCellValue(operacion.getFormaPago());
+            row.createCell(5).setCellValue("$ " + operacion.getTotal());
+
+            initRow++;
+        }
+
+        workbook.write(stream);
+        workbook.close();
+        return new ByteArrayInputStream(stream.toByteArray());
+        /*
         byte[] bytes = null;
 
         List<OperacionDTO> operaciones = this.operacionRepository.findAllByOrderByFechaOperacionDesc()
@@ -84,6 +118,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         return bytes;
+         */
     }
 
     private OperacionDTO mapToDto(Operacion operacion) {
