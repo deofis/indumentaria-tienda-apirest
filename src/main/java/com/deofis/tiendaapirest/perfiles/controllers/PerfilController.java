@@ -36,13 +36,13 @@ public class PerfilController {
     /**
      * Como usuario quiero cargar mis datos de cliente a mi perfil. (Carga datos a usuario logueado
      * en el contexto).
-     * URL:  ~/api/perfiles/cargar-cliente
+     * URL:  ~/api/perfil/cargar-cliente
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param cliente Cliente a cargar.
      * @return ResponseEntity Perfil con los datos del cliente.
      */
-    @PostMapping("/perfiles/cargar-cliente")
+    @PostMapping("/perfil/cargar-cliente")
     public ResponseEntity<?> cargarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;
@@ -72,13 +72,13 @@ public class PerfilController {
 
     /**
      * Como usuario, quiero actualizar mis datos de cliente en mi perfil.
-     * URL: ~/api/perfiles/actualizar-cliente
+     * URL: ~/api/perfil/actualizar-cliente
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param cliente Cliente actualizado.
      * @return ResponseEntity Perfil con los datos del cliente actualizados.
      */
-    @PutMapping("/perfiles/actualizar-cliente")
+    @PutMapping("/perfil/actualizar-cliente")
     public ResponseEntity<?> actualizarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;
@@ -108,12 +108,12 @@ public class PerfilController {
 
     /**
      * Obtiene los datos del cliente del usuario logueado.
-     * URL: ~/api/perfiles/cliente
+     * URL: ~/api/perfil/cliente
      * HttpMethod: GET
      * HttpStatus: OK
      * @return ResponseEntity Cliente con los datos del cliente.
      */
-    @GetMapping("/perfiles/cliente")
+    @GetMapping("/perfil/cliente")
     public ResponseEntity<?> obtenerCliente() {
         Map<String, Object> response = new HashMap<>();
         Cliente cliente;
@@ -132,12 +132,12 @@ public class PerfilController {
 
     /**
      * Permite ver el perfil completo del usuario logueado.
-     * URL: ~/api/perfiles/ver
+     * URL: ~/api/perfil/ver
      * HttpMethod: GET
      * HttpStatus: OK
      * @return ResponseEntity PerfilDTO datos del perfil.
      */
-    @GetMapping("/perfiles/ver")
+    @GetMapping("/perfil/ver")
     public ResponseEntity<?> verPerfil() {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;
@@ -156,12 +156,12 @@ public class PerfilController {
 
     /**
      * Ver el carrito del perfil del usuario actual.
-     * URL: ~/api/perfiles/carrito
+     * URL: ~/api/perfil/carrito
      * HttpMethod: GET
      * HttpStatus: OK
      * @return ResponseEntity Carrito del perfil.
      */
-    @GetMapping("/perfiles/carrito")
+    @GetMapping("/perfil/carrito")
     public ResponseEntity<?> verCarrito() {
         Map<String, Object> response = new HashMap<>();
         Carrito carrito;

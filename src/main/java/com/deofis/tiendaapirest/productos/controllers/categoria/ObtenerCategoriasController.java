@@ -47,7 +47,8 @@ public class ObtenerCategoriasController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(categorias, HttpStatus.OK);
+        response.put("categorias", categorias);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**

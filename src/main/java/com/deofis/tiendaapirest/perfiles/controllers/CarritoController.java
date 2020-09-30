@@ -49,14 +49,14 @@ public class CarritoController {
 
     /**
      * Actualiza la cantidad de un producto en el carrito.
-     * URL: ~/api/carrito/producto/cantidad
+     * URL: ~/api/carrito/producto/actualizar
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param productoId Long id del producto a actualizar cantidad en carrito.
      * @param cantidad Integer cantidad a agregar (o quitar).
      * @return ResponseEntity con el carrito actualizado.
      */
-    @PutMapping("/carrito/producto/cantidad")
+    @PutMapping("/carrito/producto/actualizar")
     public ResponseEntity<?> actualizarCantidad(@RequestParam Long productoId, @RequestParam Integer cantidad) {
         Map<String, Object> response = new HashMap<>();
         Carrito carritoActualizado;

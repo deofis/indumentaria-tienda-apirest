@@ -52,7 +52,8 @@ public class ObtenerProductosController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(productos, HttpStatus.OK);
+        response.put("productos", productos);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**

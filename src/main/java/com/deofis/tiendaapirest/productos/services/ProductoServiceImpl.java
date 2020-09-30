@@ -45,7 +45,6 @@ public class ProductoServiceImpl implements ProductoService {
                 .foto(null)
                 .activo(true)
                 .destacado(true)
-                .favorito(false)
                 .categoria(producto.getCategoria())
                 .marca(producto.getMarca())
                 .stock(producto.getStock())
@@ -126,15 +125,6 @@ public class ProductoServiceImpl implements ProductoService {
         this.productoRepository.save(productoActual);
     }
 
-    @Override
-    @Transactional
-    public void marcarFavorito(Producto producto, Long id) {
-        Producto productoActual = this.obtenerProducto(id);
-
-        productoActual.setFavorito(!producto.isFavorito());
-        this.productoRepository.save(productoActual);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public List<UnidadMedida> obtenerUnidadesMedida() {
@@ -183,7 +173,6 @@ public class ProductoServiceImpl implements ProductoService {
                 .activo(true)
                 .fechaCreacion(new Date())
                 .destacado(true)
-                .favorito(false)
                 .foto(null)
                 .build();
     }

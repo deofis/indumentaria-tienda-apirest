@@ -10,7 +10,7 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.RegistrosException;
 import com.deofis.tiendaapirest.autenticacion.repositories.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
-import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuarios;
+import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuario;
 import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
 import com.deofis.tiendaapirest.perfiles.repositories.CambioHabilitacionRepository;
 import com.deofis.tiendaapirest.perfiles.repositories.CambioRolRepository;
@@ -128,7 +128,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Transactional
     @Override
-    public CambioHabilitacionUsuarios deshabilitar(String usuarioEmail) {
+    public CambioHabilitacionUsuario deshabilitar(String usuarioEmail) {
         Usuario admin = this.autenticacionService.getUsuarioActual();
         Usuario usuario = this.getUsuarioByEmail(usuarioEmail);
         String accion = "Deshabilitacion";
@@ -139,7 +139,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setEnabled(false);
 
-        CambioHabilitacionUsuarios registro = this.registrarCambioHabilitacion(admin.getEmail(),
+        CambioHabilitacionUsuario registro = this.registrarCambioHabilitacion(admin.getEmail(),
                 usuario.getEmail(), accion);
 
         this.usuarioRepository.save(usuario);
@@ -148,14 +148,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Transactional
     @Override
-    public CambioHabilitacionUsuarios habilitar(String usuarioEmail) {
+    public CambioHabilitacionUsuario habilitar(String usuarioEmail) {
         Usuario admin = this.autenticacionService.getUsuarioActual();
         Usuario usuario = this.getUsuarioByEmail(usuarioEmail);
         String accion = "Habilitacion";
 
         usuario.setEnabled(true);
 
-        CambioHabilitacionUsuarios registro = this.registrarCambioHabilitacion(admin.getEmail(),
+        CambioHabilitacionUsuario registro = this.registrarCambioHabilitacion(admin.getEmail(),
                 usuario.getEmail(), accion);
 
         this.usuarioRepository.save(usuario);
@@ -168,12 +168,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<CambioHabilitacionUsuarios> listarRegistrosHabilitacion() {
+    public List<CambioHabilitacionUsuario> listarRegistrosHabilitacion() {
         return this.cambioHabilitacionRepository.findAllByOrderByFechaCambioAsc();
     }
 
-    private CambioHabilitacionUsuarios registrarCambioHabilitacion(String admin, String usuario, String accion) {
-        return this.cambioHabilitacionRepository.save(CambioHabilitacionUsuarios.builder()
+    private CambioHabilitacionUsuario registrarCambioHabilitacion(String admin, String usuario, String accion) {
+        return this.cambioHabilitacionRepository.save(CambioHabilitacionUsuario.builder()
                 .usuarioAdmin(admin)
                 .usuarioCambioHabilitacion(usuario)
                 .accion(accion)

@@ -24,6 +24,8 @@ public class TarjetaCredito implements Serializable {
     private String apellido;
     private String nombre;
     private String vencimiento;
-    @Column(name = "codigo_seguridad")
-    private Integer codigoSeguridad;
+    private Integer cvc;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "marca_tarjeta_id")
+    private MarcaTarjeta marcaTarjeta;
 }

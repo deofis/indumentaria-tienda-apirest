@@ -7,7 +7,7 @@ import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.RegistrosException;
-import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuarios;
+import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuario;
 import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
 import com.deofis.tiendaapirest.perfiles.services.UsuarioService;
 import lombok.AllArgsConstructor;
@@ -30,8 +30,6 @@ import java.util.Map;
 @RequestMapping("/api")
 @AllArgsConstructor
 public class UsuariosController {
-
-    // ################ IMPORTANTE: SECURIZAR CONTROLADOR PARA ROLE_ADMIN! ###################
 
     private final UsuarioService usuarioService;
 
@@ -56,7 +54,8 @@ public class UsuariosController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        response.put("usuarios", usuarios);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -80,7 +79,8 @@ public class UsuariosController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(roles, HttpStatus.OK);
+        response.put("roles", roles);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -172,7 +172,7 @@ public class UsuariosController {
     @PostMapping("/usuarios/deshabilitar")
     public ResponseEntity<?> deshabilitarUsuario(@RequestParam String usuarioEmail) {
         Map<String, Object> response = new HashMap<>();
-        CambioHabilitacionUsuarios regristro;
+        CambioHabilitacionUsuario regristro;
 
         try {
             regristro = this.usuarioService.deshabilitar(usuarioEmail);
@@ -197,7 +197,7 @@ public class UsuariosController {
     @PostMapping("/usuarios/habilitar")
     public ResponseEntity<?> habilitarUsuario(@RequestParam String usuarioEmail) {
         Map<String, Object> response = new HashMap<>();
-        CambioHabilitacionUsuarios regristro;
+        CambioHabilitacionUsuario regristro;
 
         try {
             regristro = this.usuarioService.habilitar(usuarioEmail);
@@ -251,7 +251,7 @@ public class UsuariosController {
     @GetMapping("/usuarios/registros/habilitacion")
     public ResponseEntity<?> listarRegistrosCambiosHabilitacionUsuarios() {
         Map<String, Object> response = new HashMap<>();
-        List<CambioHabilitacionUsuarios> registros;
+        List<CambioHabilitacionUsuario> registros;
 
         try {
             registros = this.usuarioService.listarRegistrosHabilitacion();

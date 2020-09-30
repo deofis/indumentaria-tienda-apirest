@@ -4,7 +4,7 @@ import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.dto.CambioRolRequest;
 import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
-import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuarios;
+import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuario;
 import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
 
 import java.util.List;
@@ -66,7 +66,7 @@ public interface UsuarioService {
      * @param usuarioEmail String email del usuario que se deshabilitará.
      * @return CambioHabilitacionUsuarios registro de los cambios realizados.
      */
-    CambioHabilitacionUsuarios deshabilitar(String usuarioEmail);
+    CambioHabilitacionUsuario deshabilitar(String usuarioEmail);
 
     /**
      * Como administrador, permite habilitar un usuario, registrando la transacción con los
@@ -75,7 +75,7 @@ public interface UsuarioService {
      * @param usuarioEmail String email del usuario que se habilitará.
      * @return CambioHabilitacionUsuarios registro de los cambios realizados.
      */
-    CambioHabilitacionUsuarios habilitar(String usuarioEmail);
+    CambioHabilitacionUsuario habilitar(String usuarioEmail);
 
     /* ##### A IMPLEMENTAR #####
 
@@ -96,5 +96,5 @@ public interface UsuarioService {
      * ordenados de menor a mayor por fecha.
      * @return List listado de registros de habilitación de usuarios.
      */
-    List<CambioHabilitacionUsuarios> listarRegistrosHabilitacion();
+    List<CambioHabilitacionUsuario> listarRegistrosHabilitacion();
 }

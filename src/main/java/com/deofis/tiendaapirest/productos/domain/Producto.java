@@ -42,8 +42,6 @@ public class Producto implements Serializable {
 
     private boolean activo;
 
-    private boolean favorito;
-
     private boolean destacado;
 
     @NotNull(message = "La categoría del producto es obligatoria.")

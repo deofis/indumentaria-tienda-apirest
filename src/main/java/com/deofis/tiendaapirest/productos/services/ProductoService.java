@@ -56,13 +56,6 @@ public interface ProductoService {
     void destacar(Producto producto, Long id);
 
     /**
-     * Método con fines de prueba. Al avanzar en desarrollo.
-     * @param producto
-     * @param id
-     */
-    void marcarFavorito(Producto producto, Long id);
-
-    /**
      * Obtiene un listado con todas las unidades de medida disponibles.
      * @return List unidades medida.
      */

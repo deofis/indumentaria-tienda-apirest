@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CambioHabilitacionUsuarios {
+public class CambioHabilitacionUsuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

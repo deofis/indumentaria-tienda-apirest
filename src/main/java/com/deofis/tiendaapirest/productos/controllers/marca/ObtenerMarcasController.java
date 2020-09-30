@@ -47,7 +47,8 @@ public class ObtenerMarcasController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(marcas, HttpStatus.OK);
+        response.put("marcas", marcas);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
