@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class ImportarProductosDeCsvController {
+public class ImportarProductosController {
 
     private final ProductoService productoService;
 
@@ -32,6 +32,23 @@ public class ImportarProductosDeCsvController {
             productos = this.productoService.importarDeCSV(archivo);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al importar archivo CSV");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("productos", productos);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/productos/importar-excel")
+    public ResponseEntity<?> importarProductosDeExcel(@RequestParam MultipartFile archivo) {
+        Map<String, Object> response = new HashMap<>();
+        List<Producto> productos;
+
+        try {
+            productos = this.productoService.importarDeExcel(archivo);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al importar archivo Excel");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }

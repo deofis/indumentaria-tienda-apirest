@@ -138,6 +138,20 @@ public class ProductoServiceImpl implements ProductoService {
         System.out.println(dtos);
         List<Producto> productos = new ArrayList<>();
 
+        for (ProductoDTO productoDTO : dtos) {
+            productos.add(this.mapProductoDto(productoDTO));
+        }
+
+        return this.productoRepository.saveAll(productos);
+    }
+
+    @Transactional
+    @Override
+    public List<Producto> importarDeExcel(MultipartFile archivo) {
+        List<ProductoDTO> dtos = this.productoImportadorService.recibirExcel(archivo);
+        System.out.println(dtos);
+        List<Producto> productos = new ArrayList<>();
+
         for (ProductoDTO productoDTO: dtos) {
             productos.add(this.mapProductoDto(productoDTO));
         }

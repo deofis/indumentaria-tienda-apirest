@@ -8,4 +8,6 @@ import java.util.List;
 public interface ProductoImportadorService {
 
     List<ProductoDTO> recibirCsv(MultipartFile archivo);
+
+    List<ProductoDTO> recibirExcel(MultipartFile archivo);
 }

@@ -46,7 +46,6 @@ public class Producto implements Serializable {
 
     @NotNull(message = "La categoría del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
-
     @JoinColumn(name = "categoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Categoria categoria;

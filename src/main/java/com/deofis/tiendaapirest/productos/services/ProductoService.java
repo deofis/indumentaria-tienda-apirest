@@ -61,5 +61,17 @@ public interface ProductoService {
      */
     List<UnidadMedida> obtenerUnidadesMedida();
 
+    /**
+     *  Importa una lista de productos a partir de un archivo .csv.
+     * @param archivo MultipartFile archivo CSV.
+     * @return List listado de productos guardados.
+     */
     List<Producto> importarDeCSV(MultipartFile archivo);
+
+    /**
+     * Importa una lista de productos a partir de un archivo .xlsx.
+     * @param archivo MultipartFile archivo Excel.
+     * @return List listado de productos guardados.
+     */
+    List<Producto> importarDeExcel(MultipartFile archivo);
 }
