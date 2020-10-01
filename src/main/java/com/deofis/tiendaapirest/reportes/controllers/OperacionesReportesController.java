@@ -1,6 +1,6 @@
-package com.deofis.tiendaapirest.operaciones.controllers;
+package com.deofis.tiendaapirest.reportes.controllers;
 
-import com.deofis.tiendaapirest.operaciones.services.ReportService;
+import com.deofis.tiendaapirest.reportes.services.OperacionReportService;
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.core.io.InputStreamResource;
@@ -19,17 +19,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class OperacionesReportsController {
+public class OperacionesReportesController {
 
-    private final ReportService reportService;
+    private final OperacionReportService operacionReportService;
 
-    @GetMapping("/operaciones/reportes/operaciones.pdf")
+    @GetMapping("/reportes/operaciones/operaciones.pdf")
     public ResponseEntity<?> generarReportePDF() {
         Map<String, Object> response = new HashMap<>();
         byte[] bytes;
 
         try {
-            bytes = this.reportService.generarReportPDF();
+            bytes = this.operacionReportService.generarReportPDF();
         } catch (FileNotFoundException | JRException e) {
             response.put("mensaje", "Error al generar el reporte en PDF");
             response.put("error", e.getMessage());
@@ -43,13 +43,13 @@ public class OperacionesReportsController {
                 .body(bytes);
     }
 
-    @GetMapping("/operaciones/reportes/operaciones.excel")
+    @GetMapping("/reportes/operaciones/operaciones.excel")
     public ResponseEntity<?> generarReporteEXCEL() {
         Map<String, Object> response = new HashMap<>();
         ByteArrayInputStream bytes;
 
         try {
-            bytes = this.reportService.generarReportEXCEL();
+            bytes = this.operacionReportService.generarReportEXCEL();
         } catch (IOException | JRException e) {
             response.put("mensaje", "Error al generar el reporte en EXCEL");
             response.put("error", e.getMessage());
@@ -59,7 +59,7 @@ public class OperacionesReportsController {
         return ResponseEntity
                 .ok()
                 .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8")
-                .header("Content-Disposition", "attachment;filename=operaciones.xls")
+                .header("Content-Disposition", "attachment;filename=operaciones.xlsx")
                 .body(new InputStreamResource(bytes));
     }
 

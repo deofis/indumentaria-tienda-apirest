@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operaciones.services;
+package com.deofis.tiendaapirest.reportes.services;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public interface ReportService {
+public interface OperacionReportService {
 
     byte[] generarReportPDF() throws FileNotFoundException, JRException;
 

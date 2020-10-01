@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operaciones.services;
+package com.deofis.tiendaapirest.reportes.services;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.dto.OperacionDTO;
@@ -6,11 +6,11 @@ import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ReportServiceImpl implements ReportService {
+public class OperacionReportServiceImpl implements OperacionReportService {
 
     private final OperacionRepository operacionRepository;
 
@@ -53,7 +53,7 @@ public class ReportServiceImpl implements ReportService {
     public ByteArrayInputStream generarReportEXCEL() throws IOException, JRException {
         String[] columns = {"N° Operación", "Estado", "Creado En", "Cliente", "Pago", "Total"};
 
-        Workbook workbook = new HSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         Sheet sheet = workbook.createSheet("Operaciones");
@@ -86,6 +86,8 @@ public class ReportServiceImpl implements ReportService {
         workbook.close();
         return new ByteArrayInputStream(stream.toByteArray());
         /*
+        ##### Reporte con JASPER
+
         byte[] bytes = null;
 
         List<OperacionDTO> operaciones = this.operacionRepository.findAllByOrderByFechaOperacionDesc()

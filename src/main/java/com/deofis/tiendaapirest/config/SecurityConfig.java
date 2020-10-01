@@ -43,6 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/operaciones/**")
                 .permitAll()
+                // Luego restringir api de reportes a ADMINS logueados.
+                .antMatchers("/api/reportes/**")
+                .permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",

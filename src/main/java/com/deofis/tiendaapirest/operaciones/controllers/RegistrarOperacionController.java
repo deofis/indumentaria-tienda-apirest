@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.operaciones.controllers;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.services.OperacionService;
+import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class RegistrarOperacionController {
 
         try {
             nuevaOperacion = this.operacionService.registrarNuevaOperacion(operacion);
-        } catch (OperacionException | ProductoException e) {
+        } catch (OperacionException | ProductoException | PerfilesException e) {
             response.put("mensahe", "Error al registrar la nueva compra");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
