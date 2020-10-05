@@ -159,6 +159,24 @@ public class ProductoServiceImpl implements ProductoService {
         return this.productoRepository.saveAll(productos);
     }
 
+    @Transactional
+    @Override
+    public List<Producto> actualizarStockDeExcel(MultipartFile archivo) {
+        List<ProductoDTO> dtos = this.productoImportadorService.recibirExcelActualizarStock(archivo);
+        System.out.println(dtos);
+        List<Producto> productosActualizados = new ArrayList<>();
+
+        for (ProductoDTO productoDTO: dtos) {
+            Producto productoBD = this.productoRepository.getOne(productoDTO.getId());
+
+            productoBD.setStock(productoDTO.getStock());
+            Producto productoActuzliado = this.productoRepository.save(productoBD);
+            productosActualizados.add(productoActuzliado);
+        }
+
+        return productosActualizados;
+    }
+
     @Transactional(readOnly = true)
     public Producto mapProductoDto(ProductoDTO productoDTO) {
         Categoria categoria = this.categoriaRepository.findById(productoDTO.getCategoriaId())

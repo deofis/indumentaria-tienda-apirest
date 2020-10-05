@@ -123,6 +123,63 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
 
     }
 
+    @Override
+    public List<ProductoDTO> recibirExcelActualizarStock(MultipartFile archivo) {
+        try {
+            Workbook workbook = new XSSFWorkbook(archivo.getInputStream());
+
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rows = sheet.iterator();
+
+            List<ProductoDTO> productos = new ArrayList<>();
+            int rowNumber = 0;
+
+            while (rows.hasNext()) {
+                Row currentRow = rows.next();
+
+                if (rowNumber == 0) {
+                    rowNumber++;
+                    continue;
+                }
+
+                Iterator<Cell> cellsInRow = currentRow.iterator();
+                ProductoDTO producto = new ProductoDTO();
+
+                int cellIndex = 0;
+
+                while (cellsInRow.hasNext()) {
+                    Cell currentCell = cellsInRow.next();
+
+                    switch (cellIndex) {
+                        case 0:
+                            producto.setId((long) currentCell.getNumericCellValue());
+                            break;
+                        case 1:
+                            producto.setNombre(currentCell.getStringCellValue());
+                            break;
+                        case 2:
+                            producto.setDescripcion(currentCell.getStringCellValue());
+                            break;
+                        case 3:
+                            producto.setStock((int) currentCell.getNumericCellValue());
+                            break;
+                        default:
+                            break;
+                    }
+
+                    cellIndex++;
+                }
+
+                productos.add(producto);
+            }
+
+            workbook.close();
+            return productos;
+        } catch (IOException e) {
+            throw new ProductoException("Error al procesar el archivo Excel.\n " + e.getMessage());
+        }
+    }
+
     private void setearPropiedades(List<ProductoDTO> dtos) {
         for (ProductoDTO producto: dtos) {
             if (producto.getColor().equals(" ")) {

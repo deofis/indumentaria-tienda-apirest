@@ -39,6 +39,13 @@ public interface CatalogoService {
     List<Producto> obtenerProductosDestacados();
 
     /**
+     * Obtiene un producto por id.
+     * @param id Long id del producto.
+     * @return Producto obtenido.
+     */
+    Producto obtenerProducto(Long id);
+
+    /**
      * Obtiene los producots ordenados por precio de menor a mayor.
      * @return List productos ordenados por precio
      */

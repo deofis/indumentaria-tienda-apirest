@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductoDTO {
 
+    private Long id;
+
     @CsvBindByName
     private String nombre;
 

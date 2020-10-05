@@ -47,6 +47,13 @@ public class CatalogoServiceImpl implements CatalogoService {
 
     @Transactional(readOnly = true)
     @Override
+    public Producto obtenerProducto(Long id) {
+        return this.productoRepository.findById(id)
+                .orElseThrow(() -> new ProductoException("No existe el producto con id: " + id));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<Producto> productosPrecioMenorMayor() {
         return this.productoRepository.findAllByOrderByPrecioAsc();
     }

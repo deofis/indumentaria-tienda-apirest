@@ -61,6 +61,31 @@ public class CatalogoController {
     }
 
     /**
+     * Obtiene un producto para ver en detalle por el usuario.
+     * URL: ~/api/catalogo/productos/ver
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId @PathVariable Long id del producto a obtener.
+     * @return ResponseEntity Producto obtenido.
+     */
+    @GetMapping("/catalogo/productos/ver/{productoId}")
+    public ResponseEntity<?> obtenerProducto(@PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        Producto producto;
+
+        try {
+            producto = this.catalogoService.obtenerProducto(productoId);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener el producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", producto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
      * Filtra los productos por categoría.
      * URL: ~/api/catalogo/filtrar/productos-por-categoria/1
      * HttpMethod: GET

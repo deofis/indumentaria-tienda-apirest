@@ -74,4 +74,11 @@ public interface ProductoService {
      * @return List listado de productos guardados.
      */
     List<Producto> importarDeExcel(MultipartFile archivo);
+
+    /**
+     * Actualiza el stock de un listado de productos a partir de un archivo .xlsx.
+     * @param archivo MultipartFile archivo Excel.
+     * @return List listado de productos con stock actuzliado.
+     */
+    List<Producto> actualizarStockDeExcel(MultipartFile archivo);
 }

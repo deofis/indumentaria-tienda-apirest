@@ -10,4 +10,6 @@ public interface ProductoImportadorService {
     List<ProductoDTO> recibirCsv(MultipartFile archivo);
 
     List<ProductoDTO> recibirExcel(MultipartFile archivo);
+
+    List<ProductoDTO> recibirExcelActualizarStock(MultipartFile archivo);
 }
