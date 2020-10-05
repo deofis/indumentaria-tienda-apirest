@@ -62,7 +62,7 @@ public class CatalogoController {
 
     /**
      * Obtiene un producto para ver en detalle por el usuario.
-     * URL: ~/api/catalogo/productos/ver
+     * URL: ~/api/catalogo/productos/ver/1
      * HttpMethod: GET
      * HttpStatus: OK
      * @param productoId @PathVariable Long id del producto a obtener.
