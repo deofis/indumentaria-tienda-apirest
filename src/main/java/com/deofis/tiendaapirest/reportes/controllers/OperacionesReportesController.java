@@ -39,7 +39,7 @@ public class OperacionesReportesController {
         return ResponseEntity
                 .ok()
                 .header("Content-Type", "application/pdf; charset=UTF-8")
-                .header("Content-Disposition", "inline; filename=\"" + "operaciones.pdf\"")
+                .header("Content-Disposition", "attachment; filename=\"" + "operaciones.pdf\"")
                 .body(bytes);
     }
 
