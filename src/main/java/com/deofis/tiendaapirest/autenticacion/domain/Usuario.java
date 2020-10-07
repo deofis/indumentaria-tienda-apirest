@@ -42,11 +42,6 @@ public class Usuario {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Rol rol;
 
-    /* Pasa a ser RESPONSABILIDAD de la clase PERFIL.
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cliente_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Cliente cliente;
-
-     */
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 }
