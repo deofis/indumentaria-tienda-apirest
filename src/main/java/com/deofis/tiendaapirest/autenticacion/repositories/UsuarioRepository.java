@@ -19,6 +19,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
 
     /**
+     * Valida si el usuario ya está registrado en la BD con el email pasado por parámetro.
+     * @param email String email a validar.
+     * @return boolean: true si existe; false si no.
+     */
+    Boolean existsByEmail(String email);
+
+    /**
      * Obtiene los usuarios ordenados por fecha de creación de manera descendiente.
      * @return List usuarios.
      */
