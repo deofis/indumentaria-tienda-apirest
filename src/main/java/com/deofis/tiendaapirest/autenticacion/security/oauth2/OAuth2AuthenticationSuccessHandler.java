@@ -1,11 +1,17 @@
 package com.deofis.tiendaapirest.autenticacion.security.oauth2;
 
+import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.BadRequestException;
+import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
+import com.deofis.tiendaapirest.autenticacion.security.UserPrincipal;
+import com.deofis.tiendaapirest.autenticacion.services.RefreshTokenService;
 import com.deofis.tiendaapirest.autenticacion.util.CookieUtils;
 import com.deofis.tiendaapirest.config.AppProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 import java.util.Optional;
 
 import static com.deofis.tiendaapirest.autenticacion.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -29,6 +36,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final AppProperties appProperties;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    private final RefreshTokenService refreshTokenService;
+
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -53,10 +64,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+
         String token = this.jwtProveedor.generateToken(authentication);
+        String userEmail = this.getUsuarioActual().getEmail();
+        String refreshToken = this.refreshTokenService.generarRefreshToken().getToken();
+        String rol = this.getUsuarioActual().getRol().getNombre();
+        Date expiraEn = new Date(new Date().getTime() + this.jwtProveedor.getExpirationInMillis());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("authToken", token)
+                .queryParam("userEmail", userEmail)
+                .queryParam("refreshToken", refreshToken)
+                .queryParam("rol", rol)
+                .queryParam("expiraEn", expiraEn)
                 .build().toUriString();
     }
 
@@ -76,5 +96,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     return authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) &&
                             authorizedUri.getPort() == clientRedirectUri.getPort();
                 });
+    }
+
+    private Usuario getUsuarioActual() {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return this.usuarioRepository.findByEmail(userPrincipal.getUsername())
+                .orElseThrow(() -> new AutenticacionException("No se encontró al usuario con email: " + userPrincipal.getUsername()));
     }
 }

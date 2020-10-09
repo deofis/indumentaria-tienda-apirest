@@ -106,6 +106,11 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         Usuario usuario = this.usuarioRepository.findByEmail(iniciarSesionRequest.getEmail())
                 .orElseThrow(() -> new AutenticacionException("Usuario no encontrado"));
 
+        if (usuario.getAuthProvider() != AuthProvider.local) {
+            throw new AutenticacionException("El email que estas intentando usar está registrado como una cuenta de: " + usuario.getAuthProvider() +
+                    ".Porfavor, inicie sesión con la cuenta que se registró inicialmente.");
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String jwtToken = this.jwtProveedor.generateToken(authenticate);
 
