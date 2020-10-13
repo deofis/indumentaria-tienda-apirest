@@ -57,7 +57,7 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
             usuario = usuarioOptional.get();
 
             if (!usuario.getAuthProvider().equals(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId()))) {
-                throw new OAuth2AuthenticationProcessingException("Ya%20iniciaste%20sesion%20con%20una%20cuenta%20"
+                throw new OAuth2AuthenticationProcessingException("Tu%20email%20esta%20asociado%20con%20una%20cuenta%20"
                         + usuario.getAuthProvider() + ".Porfavor,%20utiliza%20tus%20credenciales%20" + usuario.getAuthProvider() + "%20para" +
                         "%20inciar%20sesion.");
             }
