@@ -26,7 +26,6 @@ public class Usuario {
     @NotNull(message = "El email es obligatorio.")
     private String email;
 
-    @NotNull(message = "La contraseña es obligatoria.")
     @Size(min = 6)
     private String password;
 
@@ -42,11 +41,9 @@ public class Usuario {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Rol rol;
 
-    /* Pasa a ser RESPONSABILIDAD de la clase PERFIL.
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cliente_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Cliente cliente;
+    @Column(name = "auth_provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
-     */
+    private String providerId;
 }

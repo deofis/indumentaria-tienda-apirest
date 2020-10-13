@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.bootstrap;
 
+import com.deofis.tiendaapirest.autenticacion.domain.AuthProvider;
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
@@ -53,6 +54,8 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
             Usuario administrador = Usuario.builder()
                     .email("ezegavilan95@gmail.com")
                     .enabled(true)
+                    .authProvider(AuthProvider.local)
+                    .providerId("1")
                     .fechaCreacion(new Date())
                     .rol(this.rolRepository.findByNombre("ROLE_ADMIN").orElse(null))
                     .password(passwordEncoder.encode("12345"))

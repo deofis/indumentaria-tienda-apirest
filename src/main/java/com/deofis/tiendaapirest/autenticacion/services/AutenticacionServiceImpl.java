@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.services;
 
+import com.deofis.tiendaapirest.autenticacion.domain.AuthProvider;
 import com.deofis.tiendaapirest.autenticacion.domain.Rol;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.domain.VerificationToken;
@@ -12,6 +13,7 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.repositories.RolRepository;
 import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.security.JwtProveedor;
+import com.deofis.tiendaapirest.autenticacion.security.UserPrincipal;
 import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 import com.deofis.tiendaapirest.emails.services.MailService;
 import lombok.AllArgsConstructor;
@@ -22,7 +24,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
-    //private final VerificationTokenRepository verificationTokenRepository;
     private final VerificationTokenService verificationTokenService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -47,8 +47,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     @Transactional
     @Override
     public void registrarse(SignupRequest signupRequest) {
-        // No se puede enviar mail, y crear el usuario luego?
-
         Rol user = this.rolRepository.findByNombre("ROLE_USER")
                 .orElseThrow(() -> new AutenticacionException("ROLE_USER no cargado."));
 
@@ -66,6 +64,8 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
                 .enabled(false)
+                .authProvider(AuthProvider.local)
+                .providerId("1")
                 .fechaCreacion(new Date())
                 .rol(user)
                 .build();
@@ -105,6 +105,11 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
         Usuario usuario = this.usuarioRepository.findByEmail(iniciarSesionRequest.getEmail())
                 .orElseThrow(() -> new AutenticacionException("Usuario no encontrado"));
+
+        if (usuario.getAuthProvider() != AuthProvider.local) {
+            throw new AutenticacionException("El email que estas intentando usar está registrado como una cuenta de: " + usuario.getAuthProvider() +
+                    ".Porfavor, inicie sesión con la cuenta que se registró inicialmente.");
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String jwtToken = this.jwtProveedor.generateToken(authenticate);
@@ -146,7 +151,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     @Transactional(readOnly = true)
     @Override
     public Usuario getUsuarioActual() {
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return this.usuarioRepository.findByEmail(principal.getUsername())
                 .orElseThrow(() -> new AutenticacionException("Usuario no encontrado: " +
