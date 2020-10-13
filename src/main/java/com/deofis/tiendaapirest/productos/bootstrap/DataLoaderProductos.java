@@ -101,6 +101,14 @@ public class DataLoaderProductos implements CommandLineRunner {
             this.marcaRepository.save(apple);
         }
 
+        if (this.marcaRepository.findByNombre("Stanley").isEmpty()) {
+            Marca stanley = Marca.builder()
+                    .nombre("Stanley")
+                    .build();
+
+            this.marcaRepository.save(stanley);
+        }
+
         if (this.formaPagoRepository.findByNombre("Efectivo").isEmpty()) {
             FormaPago efectivo = new FormaPago();
             efectivo.setNombre("Efectivo");
