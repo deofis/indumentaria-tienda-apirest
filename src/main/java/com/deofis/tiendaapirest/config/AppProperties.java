@@ -1,11 +1,13 @@
 package com.deofis.tiendaapirest.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ConfigurationProperties(prefix = "app")
+@Component
 public class AppProperties {
     private final OAuth2 oAuth2 = new OAuth2();
 

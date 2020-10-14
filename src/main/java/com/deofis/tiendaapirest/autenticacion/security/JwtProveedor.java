@@ -3,7 +3,9 @@ package com.deofis.tiendaapirest.autenticacion.security;
 import com.deofis.tiendaapirest.autenticacion.exceptions.TokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,13 @@ import java.util.Date;
 import static io.jsonwebtoken.Jwts.parser;
 
 @Service
+@ConfigurationProperties(prefix = "jwt")
+@Getter
+@Setter
 public class JwtProveedor {
 
     private KeyStore keyStore;
-    @Value("${jwt.expiration.time}")
+
     private Long expirationInMillis;
 
     @PostConstruct
