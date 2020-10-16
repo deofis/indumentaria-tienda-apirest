@@ -31,7 +31,7 @@ public class ComprasController {
      * HttpStatus OK
      * @return ResponseEntity List con las operaciones del perfil.
      */
-    @GetMapping("/perfiles/compras/ver")
+    @GetMapping("/perfil/compras/historial")
     public ResponseEntity<?> verHistorialCompras() {
         Map<String, Object> response = new HashMap<>();
         List<Operacion> compras;
@@ -61,7 +61,7 @@ public class ComprasController {
      * @param nroOperacion @PathVariable Long numero de operación.
      * @return ResponseEntity Operacion seleccionada.
      */
-    @GetMapping("/perfiles/compras/ver/{nroOperacion}")
+    @GetMapping("/perfil/compras/ver/{nroOperacion}")
     public ResponseEntity<?> verCompra(@PathVariable Long nroOperacion) {
         Map<String, Object> response = new HashMap<>();
         Operacion compra;
