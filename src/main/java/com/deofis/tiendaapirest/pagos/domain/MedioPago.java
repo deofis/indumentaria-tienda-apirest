@@ -9,10 +9,10 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "formas_pago")
+@Table(name = "medio_pago")
 @AllArgsConstructor
 @NoArgsConstructor
-public class FormaPago implements Serializable {
+public class MedioPago implements Serializable {
 
     private final static long serialVersionUID = 1L;
 

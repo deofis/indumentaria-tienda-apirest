@@ -1,7 +1,7 @@
 package com.deofis.tiendaapirest.operaciones.domain;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
-import com.deofis.tiendaapirest.pagos.domain.FormaPago;
+import com.deofis.tiendaapirest.pagos.domain.MedioPago;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,7 +58,7 @@ public class Operacion implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "forma_pago_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private FormaPago formaPago;
+    private MedioPago medioPago;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "operacion_id")

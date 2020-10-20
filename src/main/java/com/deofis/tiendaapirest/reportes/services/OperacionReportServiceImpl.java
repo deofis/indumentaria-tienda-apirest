@@ -131,7 +131,7 @@ public class OperacionReportServiceImpl implements OperacionReportService {
                 .fechaEnviada(operacion.getFechaEnviada())
                 .fechaRecibida(operacion.getFechaRecibida())
                 .cliente(operacion.getCliente().getApellido() + ", " + operacion.getCliente().getNombre())
-                .formaPago(operacion.getFormaPago().getNombre())
+                .formaPago(operacion.getMedioPago().getNombre())
                 .total(operacion.getTotal())
                 .build();
     }

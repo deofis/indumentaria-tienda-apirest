@@ -1,7 +1,7 @@
 package com.deofis.tiendaapirest.productos.bootstrap;
 
-import com.deofis.tiendaapirest.pagos.domain.FormaPago;
-import com.deofis.tiendaapirest.pagos.repositories.FormaPagoRepository;
+import com.deofis.tiendaapirest.pagos.domain.MedioPago;
+import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
 import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
@@ -21,7 +21,7 @@ public class DataLoaderProductos implements CommandLineRunner {
     private final UnidadMedidaRepository unidadMedidaRepository;
     private final MarcaRepository marcaRepository;
     private final CategoriaRepository categoriaRepository;
-    private final FormaPagoRepository formaPagoRepository;
+    private final MedioPagoRepository medioPagoRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -109,11 +109,18 @@ public class DataLoaderProductos implements CommandLineRunner {
             this.marcaRepository.save(stanley);
         }
 
-        if (this.formaPagoRepository.findByNombre("Efectivo").isEmpty()) {
-            FormaPago efectivo = new FormaPago();
+        if (this.medioPagoRepository.findByNombre("Efectivo").isEmpty()) {
+            MedioPago efectivo = new MedioPago();
             efectivo.setNombre("Efectivo");
 
-            this.formaPagoRepository.save(efectivo);
+            this.medioPagoRepository.save(efectivo);
+        }
+
+        if (this.medioPagoRepository.findByNombre("PayPal").isEmpty()) {
+            MedioPago paypal = new MedioPago();
+            paypal.setNombre("PayPal");
+
+            this.medioPagoRepository.save(paypal);
         }
 
     }

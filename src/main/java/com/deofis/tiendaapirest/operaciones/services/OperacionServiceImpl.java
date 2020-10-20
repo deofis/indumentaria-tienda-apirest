@@ -64,7 +64,7 @@ public class OperacionServiceImpl implements OperacionService {
                 .fechaOperacion(new Date(new Date().getTime()))
                 .fechaEnviada(null)
                 .fechaRecibida(null)
-                .formaPago(operacion.getFormaPago())
+                .medioPago(operacion.getMedioPago())
                 .estado(EstadoOperacion.PENDING)
                 .total(0.0)
                 .items(operacion.getItems())

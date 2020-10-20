@@ -1,13 +1,13 @@
 package com.deofis.tiendaapirest.pagos.repositories;
 
-import com.deofis.tiendaapirest.pagos.domain.FormaPago;
+import com.deofis.tiendaapirest.pagos.domain.MedioPago;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface FormaPagoRepository extends JpaRepository<FormaPago, Long> {
+public interface MedioPagoRepository extends JpaRepository<MedioPago, Long> {
 
-    Optional<FormaPago> findByNombre(String formaPago);
+    Optional<MedioPago> findByNombre(String formaPago);
 }
