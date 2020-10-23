@@ -2,9 +2,7 @@ package com.deofis.tiendaapirest.productos.bootstrap;
 
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
 import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
-import com.deofis.tiendaapirest.productos.domain.Categoria;
-import com.deofis.tiendaapirest.productos.domain.Marca;
-import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
+import com.deofis.tiendaapirest.productos.domain.*;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
 import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
@@ -14,14 +12,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 @AllArgsConstructor
 public class DataLoaderProductos implements CommandLineRunner {
 
     private final UnidadMedidaRepository unidadMedidaRepository;
     private final MarcaRepository marcaRepository;
-    private final CategoriaRepository categoriaRepository;
     private final MedioPagoRepository medioPagoRepository;
+
+    private final CategoriaRepository categoriaRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -67,24 +68,6 @@ public class DataLoaderProductos implements CommandLineRunner {
 
         }
 
-        if (this.categoriaRepository.findByNombre("Celulares").isEmpty()) {
-            Categoria celulares = Categoria.builder()
-                    .nombre("Celulares")
-                    .codigo("CEL")
-                    .build();
-
-            this.categoriaRepository.save(celulares);
-        }
-
-        if (this.categoriaRepository.findByNombre("Termos").isEmpty()) {
-            Categoria termos = Categoria.builder()
-                    .nombre("Termos")
-                    .codigo("TER")
-                    .build();
-
-            this.categoriaRepository.save(termos);
-        }
-
         if (this.marcaRepository.findByNombre("Samsung").isEmpty()) {
             Marca samsung = Marca.builder()
                     .nombre("Samsung")
@@ -122,6 +105,57 @@ public class DataLoaderProductos implements CommandLineRunner {
 
             this.medioPagoRepository.save(paypal);
         }
+
+        // CARGA DE CATEGORIAS Y SUBCATEGORIAS
+
+        if (this.categoriaRepository.findByNombre("Tecnología").isEmpty()) {
+            Subcategoria celulares;
+
+            // Propiedad modelo
+            Propiedad modelo;
+            ValorPropiedad s20;
+
+            s20 = ValorPropiedad.builder().valor("Galaxy S20").build();
+
+            modelo = Propiedad.builder().nombre("Modelo").valores(new ArrayList<>()).build();
+            modelo.getValores().add(s20);
+
+            // Propiedad color
+            Propiedad color;
+            ValorPropiedad negro = ValorPropiedad.builder().valor("Negro").build();
+            ValorPropiedad gris = ValorPropiedad.builder().valor("Gris").build();
+            ValorPropiedad dorado = ValorPropiedad.builder().valor("Droado").build();
+
+            color = Propiedad.builder().nombre("Color").valores(new ArrayList<>()).build();
+            color.getValores().add(negro);
+            color.getValores().add(gris);
+            color.getValores().add(dorado);
+
+            celulares = Subcategoria.builder().nombre("Celulares").propiedades(new ArrayList<>()).codigo("CEL").build();
+            celulares.getPropiedades().add(modelo);
+            celulares.getPropiedades().add(color);
+
+            Categoria tecnologia = Categoria.builder()
+                    .nombre("Tecnología")
+                    .subcategorias(new ArrayList<>())
+                    .build();
+
+            tecnologia.getSubcategorias().add(celulares);
+            this.categoriaRepository.save(tecnologia);
+        }
+
+        /*
+        if (this.categoriaRepository.findByNombre("Termos").isEmpty()) {
+            Subcategoria subcategoria;
+
+            Categoria termos = Categoria.builder()
+                    .nombre("Termos")
+                    .codigo("TER")
+                    .build();
+
+            this.categoriaRepository.save(termos);
+        }
+         */
 
     }
 }

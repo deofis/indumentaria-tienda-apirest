@@ -20,7 +20,6 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Categoria crear(Categoria categoria) {
         Categoria categoriaNueva = Categoria.builder()
                 .nombre(categoria.getNombre())
-                .codigo(categoria.getCodigo())
                 .build();
 
         return this.categoriaRepository.save(categoriaNueva);
@@ -45,7 +44,6 @@ public class CategoriaServiceImpl implements CategoriaService {
         Categoria categoriaActual = this.obtenerCategoria(id);
 
         categoriaActual.setNombre(categoria.getNombre());
-        categoriaActual.setCodigo(categoria.getCodigo());
 
         return this.categoriaRepository.save(categoriaActual);
     }

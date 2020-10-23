@@ -24,7 +24,7 @@ public class ProductoDTO {
     private Double precio;
 
     @CsvBindByName
-    private Long categoriaId;
+    private Long subcategoriaId;
 
     @CsvBindByName
     private Long marcaId;
@@ -34,13 +34,4 @@ public class ProductoDTO {
 
     @CsvBindByName
     private Integer stock;
-
-    @CsvBindByName
-    private String color;
-
-    @CsvBindByName
-    private String talle;
-
-    @CsvBindByName
-    private String peso;
 }

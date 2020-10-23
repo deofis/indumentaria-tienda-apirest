@@ -85,7 +85,7 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
                             producto.setPrecio(currentCell.getNumericCellValue());
                             break;
                         case 3:
-                            producto.setCategoriaId((long) currentCell.getNumericCellValue());
+                            producto.setSubcategoriaId((long) currentCell.getNumericCellValue());
                             break;
                         case 4:
                             producto.setMarcaId((long) currentCell.getNumericCellValue());
@@ -95,15 +95,6 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
                             break;
                         case 6:
                             producto.setStock((int) currentCell.getNumericCellValue());
-                            break;
-                        case 7:
-                            producto.setColor(currentCell.getStringCellValue());
-                            break;
-                        case 8:
-                            producto.setTalle(currentCell.getStringCellValue());
-                            break;
-                        case 9:
-                            producto.setPeso(currentCell.getStringCellValue());
                             break;
                         default:
                             break;
@@ -182,6 +173,7 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
 
     private void setearPropiedades(List<ProductoDTO> dtos) {
         for (ProductoDTO producto: dtos) {
+            /*
             if (producto.getColor().equals(" ")) {
                 producto.setColor(null);
             }
@@ -193,6 +185,8 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
             if (producto.getPeso().equals(" ")) {
                 producto.setPeso(null);
             }
+
+             */
         }
     }
 }

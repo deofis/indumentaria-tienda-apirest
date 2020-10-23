@@ -59,10 +59,10 @@ public interface CatalogoService {
 
     /**
      * Obtiene un listado de los productos que pertenecen a una categoría.
-     * @param categoriaId Long id de la categoría.
+     * @param subcategoriaId Long id de la categoría.
      * @return List listado de productos filtrados por categoria.
      */
-    List<Producto> productosPorCategoria(Long categoriaId);
+    List<Producto> productosPorCategoria(Long subcategoriaId);
 
     /**
      * Obtiene un listado de los productos de una marca.
