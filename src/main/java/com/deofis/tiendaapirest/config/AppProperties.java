@@ -13,6 +13,7 @@ import java.util.List;
 public class AppProperties {
     private final OAuth2 oAuth2 = new OAuth2();
 
+    @Data
     public static final class OAuth2 {
         private List<String> authorizedRedirectUris = new ArrayList<>();
 
@@ -20,7 +21,7 @@ public class AppProperties {
             return authorizedRedirectUris;
         }
 
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
+        public OAuth2 setAuthorizedRedirectUris(List<String> authorizedRedirectUris) {
             this.authorizedRedirectUris = authorizedRedirectUris;
             return this;
         }

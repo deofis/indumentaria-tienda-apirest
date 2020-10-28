@@ -1,4 +1,20 @@
 spring:
+  profiles:
+    active: qa
+
+  jackson:
+    time-zone: America/Argentina/Cordoba
+    locale: es_AR
+
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: eb1eece6b19a9c
+    password: ed814f343a2257
+
+  banner:
+    image:
+      location: banner.txt
   security:
     oauth2:
       client:
@@ -22,6 +38,15 @@ spring:
             authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
             tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
             userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+  port: ${PORT:8080}
+
+jwt:
+  expirationInMillis: 900000
 
 app:
   oauth2:
