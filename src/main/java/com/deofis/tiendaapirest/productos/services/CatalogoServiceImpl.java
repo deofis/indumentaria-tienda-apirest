@@ -3,10 +3,12 @@ package com.deofis.tiendaapirest.productos.services;
 import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
 import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
+import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final SubcategoriaRepository subcategoriaRepository;
     private final MarcaRepository marcaRepository;
 
     @Override
@@ -66,11 +69,11 @@ public class CatalogoServiceImpl implements CatalogoService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Producto> productosPorCategoria(Long categoriaId) {
-        Categoria categoria = this.categoriaRepository.findById(categoriaId)
-                .orElseThrow(() -> new ProductoException("No se encontró la categoria con id: " + categoriaId));
+    public List<Producto> productosPorCategoria(Long subcategoriaId) {
+        Subcategoria subcategoria = this.subcategoriaRepository.findById(subcategoriaId)
+                .orElseThrow(() -> new ProductoException("No se encontró la categoria con id: " + subcategoriaId));
 
-        return this.productoRepository.findAllByCategoriaAndActivoIsTrue(categoria);
+        return this.productoRepository.findAllBySubcategoriaAndActivoIsTrue(subcategoria);
     }
 
     @Transactional(readOnly = true)

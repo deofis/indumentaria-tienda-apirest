@@ -11,23 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "subcategorias")
 @Data
-@Table(name = "categorias")
 @AllArgsConstructor
 @Builder
-public class Categoria implements Serializable {
-    private final static long serialVersioUID = 1L;
+public class Subcategoria implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    private String codigo;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "subcategoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<Subcategoria> subcategorias;
+    private List<Propiedad> propiedades;
 
-    public Categoria() {
-        this.subcategorias = new ArrayList<>();
+    public Subcategoria() {
+        this.propiedades = new ArrayList<>();
     }
 }

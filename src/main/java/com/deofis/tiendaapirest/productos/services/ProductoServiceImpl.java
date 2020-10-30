@@ -1,15 +1,12 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.dto.ProductoDTO;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
-import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
-import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
-import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
+import com.deofis.tiendaapirest.productos.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +23,11 @@ public class ProductoServiceImpl implements ProductoService {
     private final ProductoRepository productoRepository;
     private final UnidadMedidaRepository unidadMedidaRepository;
     private final CategoriaRepository categoriaRepository;
+    private final SubcategoriaRepository subcategoriaRepository;
     private final MarcaRepository marcaRepository;
 
     private final ProductoImportadorService productoImportadorService;
 
-    /* Issue --> Es mejor buscar objetos en la bd antes que asignarlos directamente, no porque tire
-    * error, sino para el manejo de excepciones por si el front intenta seleccionar un objeto
-    * no existente
-    * FIX --> para categoria, marca y unidad de medida, buscar objetos en bd antes de asignarlos*/
     @Override
     @Transactional
     public Producto crear(Producto producto) {
@@ -45,12 +39,9 @@ public class ProductoServiceImpl implements ProductoService {
                 .foto(null)
                 .activo(true)
                 .destacado(true)
-                .categoria(producto.getCategoria())
+                .subcategoria(producto.getSubcategoria())
                 .marca(producto.getMarca())
                 .stock(producto.getStock())
-                .color(producto.getColor())
-                .talle(producto.getTalle())
-                .peso(producto.getPeso())
                 .unidadMedida(producto.getUnidadMedida())
                 .build();
 
@@ -79,12 +70,9 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setNombre(producto.getNombre());
         productoActual.setDescripcion(producto.getDescripcion());
         productoActual.setPrecio(producto.getPrecio());
-        productoActual.setCategoria(producto.getCategoria());
+        productoActual.setSubcategoria(producto.getSubcategoria());
         productoActual.setMarca(producto.getMarca());
         productoActual.setStock(producto.getStock());
-        productoActual.setColor(producto.getColor());
-        productoActual.setTalle(producto.getTalle());
-        productoActual.setPeso(producto.getPeso());
         productoActual.setUnidadMedida(producto.getUnidadMedida());
 
         return this.productoRepository.save(productoActual);
@@ -179,9 +167,9 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Transactional(readOnly = true)
     public Producto mapProductoDto(ProductoDTO productoDTO) {
-        Categoria categoria = this.categoriaRepository.findById(productoDTO.getCategoriaId())
+        Subcategoria subcategoria = this.subcategoriaRepository.findById(productoDTO.getSubcategoriaId())
                 .orElseThrow(() -> new ProductoException("No se encontro la categoría con id: " +
-                        productoDTO.getCategoriaId()));
+                        productoDTO.getSubcategoriaId()));
 
         Marca marca = this.marcaRepository.findById(productoDTO.getMarcaId())
                 .orElseThrow(() -> new ProductoException("No se encontro la marca con id: " +
@@ -196,10 +184,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .descripcion(productoDTO.getDescripcion())
                 .precio(productoDTO.getPrecio())
                 .stock(productoDTO.getStock())
-                .color(productoDTO.getColor())
-                .talle(productoDTO.getTalle())
-                .peso(productoDTO.getPeso())
-                .categoria(categoria)
+                .subcategoria(subcategoria)
                 .marca(marca)
                 .unidadMedida(unidadMedida)
                 .activo(true)

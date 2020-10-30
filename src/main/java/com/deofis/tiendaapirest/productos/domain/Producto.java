@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,36 +35,35 @@ public class Producto implements Serializable {
     @NotNull(message = "El precio del producto es obligatorio.")
     private Double precio;
 
+    @NotNull(message = "El stock del producto es obligatorio.")
+    private Integer stock;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
-    private String foto;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Imagen foto;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "producto_id")
+    private List<Imagen> imagenes;
 
     private boolean activo;
 
     private boolean destacado;
 
-    @NotNull(message = "La categoría del producto es obligatoria.")
+    @NotNull(message = "La subcategoria del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "subcategoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Categoria categoria;
+    private Subcategoria subcategoria;
 
     @NotNull(message = "La marca del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marca_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Marca marca;
-
-    @NotNull
-    private Integer stock;
-
-    private String color;
-
-    private String talle;
-
-    private String peso;
 
     @NotNull(message = "La unidad de medida del producto es obligatoria.")
     @ManyToOne(fetch = FetchType.LAZY)
