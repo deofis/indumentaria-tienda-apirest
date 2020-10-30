@@ -6,4 +6,4 @@
                             ██████╔╝███████╗╚██████╔╝██║     ██║███████║
                             ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
 
-                                  :: DEOFIS API :: (v0.0.5-SNAPSHOT)
+                                  ${AnsiBackground.CYAN}:: DEOFIS API :: (v0.1.0-SNAPSHOT)
