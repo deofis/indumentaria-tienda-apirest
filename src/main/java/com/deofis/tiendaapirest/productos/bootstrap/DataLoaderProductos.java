@@ -290,106 +290,94 @@ public class DataLoaderProductos implements CommandLineRunner {
         this.categoriaRepository.saveAll(categorias);
 
         // Carga productos
-        List<Producto> productos = new ArrayList<>();
+        if (this.productoRepository.findAll().size() == 0) {
+            List<Producto> productos = new ArrayList<>();
 
-        Producto samsungJ2 = Producto.builder()
-                .nombre("Samsung J2 Grand Prime")
-                .descripcion("Modelo: J2 GP 16GB de memoria, 1GB de RAM")
-                .precio(25000.00)
-                .stock(107)
-                .activo(true)
-                .destacado(true)
-                .fechaCreacion(new Date())
-                .subcategoria(this.subcategoriaRepository.getOne(1L))
-                .marca(this.marcaRepository.getOne(1L))
-                .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                .build();
-        productos.add(samsungJ2);
-
-        Producto samsungS20 = Producto.builder()
-                .nombre("Samsung Galaxy S20")
-                .descripcion("Modelo: S20 32GB de memoria, 4GB de RAM")
-                .precio(110000.00)
-                .stock(52)
-                .activo(true)
-                .destacado(true)
-                .fechaCreacion(new Date())
-                .subcategoria(this.subcategoriaRepository.getOne(1L))
-                .marca(this.marcaRepository.getOne(1L))
-                .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                .build();
-        productos.add(samsungS20);
-
-        Producto samsungS10 = Producto.builder()
-                .nombre("Samsung Galaxy S10")
-                .descripcion("Modelo: S10 32GB de memoria, 2GB de RAM")
-                .precio(90000.00)
-                .stock(99)
-                .activo(true)
-                .destacado(true)
-                .fechaCreacion(new Date())
-                .subcategoria(this.subcategoriaRepository.getOne(1L))
-                .marca(this.marcaRepository.getOne(1L))
-                .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                .build();
-        productos.add(samsungS10);
-
-        Producto iphone11plus = Producto.builder()
-                .nombre("iPhone 11 Plus")
-                .descripcion("Modelo: 11 Plus 64GB de memoria, 4GB de RAM")
-                .precio(130000.00)
-                .stock(20)
-                .activo(true)
-                .destacado(true)
-                .fechaCreacion(new Date())
-                .subcategoria(this.subcategoriaRepository.getOne(1L))
-                .marca(this.marcaRepository.getOne(2L))
-                .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                .build();
-        productos.add(iphone11plus);
-
-        Producto iphone11 = Producto.builder()
-                .nombre("iPhone 11")
-                .descripcion("Modelo: 11 32GB de memoria, 2GB de RAM")
-                .precio(120000.00)
-                .stock(34)
-                .activo(true)
-                .destacado(true)
-                .fechaCreacion(new Date())
-                .subcategoria(this.subcategoriaRepository.getOne(1L))
-                .marca(this.marcaRepository.getOne(2L))
-                .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                .build();
-        productos.add(iphone11);
-
-        Producto samsungA10 = Producto.builder()
-                .nombre("Samsung Galaxy A10")
-                .descripcion("Modelo: Galaxy A10 32GB de memoria, 2GB de RAM")
-                .precio(40000.00)
-                .stock(95)
-                .activo(true)
-                .destacado(true)
-                .fechaCreacion(new Date())
-                .subcategoria(this.subcategoriaRepository.getOne(1L))
-                .marca(this.marcaRepository.getOne(1L))
-                .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                .build();
-        productos.add(samsungA10);
-
-        this.productoRepository.saveAll(productos);
-
-        /*
-        if (this.categoriaRepository.findByNombre("Termos").isEmpty()) {
-            Subcategoria subcategoria;
-
-            Categoria termos = Categoria.builder()
-                    .nombre("Termos")
-                    .codigo("TER")
+            Producto samsungJ2 = Producto.builder()
+                    .nombre("Samsung J2 Grand Prime")
+                    .descripcion("Modelo: J2 GP 16GB de memoria, 1GB de RAM")
+                    .precio(25000.00)
+                    .stock(107)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
                     .build();
+            productos.add(samsungJ2);
 
-            this.categoriaRepository.save(termos);
+            Producto samsungS20 = Producto.builder()
+                    .nombre("Samsung Galaxy S20")
+                    .descripcion("Modelo: S20 32GB de memoria, 4GB de RAM")
+                    .precio(110000.00)
+                    .stock(52)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .build();
+            productos.add(samsungS20);
+
+            Producto samsungS10 = Producto.builder()
+                    .nombre("Samsung Galaxy S10")
+                    .descripcion("Modelo: S10 32GB de memoria, 2GB de RAM")
+                    .precio(90000.00)
+                    .stock(99)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .build();
+            productos.add(samsungS10);
+
+            Producto iphone11plus = Producto.builder()
+                    .nombre("iPhone 11 Plus")
+                    .descripcion("Modelo: 11 Plus 64GB de memoria, 4GB de RAM")
+                    .precio(130000.00)
+                    .stock(20)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(2L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .build();
+            productos.add(iphone11plus);
+
+            Producto iphone11 = Producto.builder()
+                    .nombre("iPhone 11")
+                    .descripcion("Modelo: 11 32GB de memoria, 2GB de RAM")
+                    .precio(120000.00)
+                    .stock(34)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(2L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .build();
+            productos.add(iphone11);
+
+            Producto samsungA10 = Producto.builder()
+                    .nombre("Samsung Galaxy A10")
+                    .descripcion("Modelo: Galaxy A10 32GB de memoria, 2GB de RAM")
+                    .precio(40000.00)
+                    .stock(95)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .build();
+            productos.add(samsungA10);
+
+            this.productoRepository.saveAll(productos);
         }
-         */
-
     }
 }
