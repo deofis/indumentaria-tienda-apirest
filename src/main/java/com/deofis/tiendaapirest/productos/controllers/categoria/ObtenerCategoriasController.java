@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.controllers.categoria;
 
 import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CategoriaService;
 import lombok.AllArgsConstructor;
@@ -24,12 +25,12 @@ public class ObtenerCategoriasController {
 
     /**
      * Obtener un listado de categorias ordenadas por nombre.
-     * URL: ~/api/productos/categorias
+     * URL: ~/api/categorias
      * HttpMethod: GET
      * HttpStatus: OK
      * @return ResponseEntity con todas las categorias.
      */
-    @GetMapping("/productos/categorias")
+    @GetMapping("/categorias")
     public ResponseEntity<?> obtenerCategorias() {
         Map<String, Object> response = new HashMap<>();
         List<Categoria> categorias;
@@ -53,13 +54,13 @@ public class ObtenerCategoriasController {
 
     /**
      * Obtener una categoría específica.
-     * URL: ~/api/productos/categorias/ver/1
+     * URL: ~/api/categorias/ver/1
      * HttpMethod: GET
      * HttpStatus: OK
      * @param id PathVariable Long del id de la categoría a obtener.
      * @return ResponseEntity con la categoría.
      */
-    @GetMapping("/productos/categorias/ver/{id}")
+    @GetMapping("/categorias/{id}")
     public ResponseEntity<?> obtenerCategoria(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
         Categoria categoria;
@@ -73,6 +74,34 @@ public class ObtenerCategoriasController {
         }
 
         return new ResponseEntity<>(categoria, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene el todas las subcategorias que pertenecen a la categoria solicitada.
+     * URL: ~/api/categorias/1/subcategorias
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param id PathVariable Long con el id de la categoria a consultar sus subcategorias.
+     * @return ResponseEntity con las subcategorias.
+     */
+    @GetMapping("/categorias/{id}/subcategorias")
+    public ResponseEntity<?> obtenerSubcategoriasCategoria(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        String categoria;
+        List<Subcategoria> subcategorias;
+
+        try {
+            categoria = this.categoriaService.obtenerCategoria(id).getNombre();
+            subcategorias = this.categoriaService.obtenerSubcategorias(id);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener las subcategorias de la categoria");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("categoria", categoria);
+        response.put("subcategorias", subcategorias);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 
 import java.util.List;
 
@@ -25,6 +26,13 @@ public interface CategoriaService {
      * @return Categoria.
      */
     Categoria obtenerCategoria(Long id);
+
+    /**
+     * Obtiene un listado con las subcategorias de una categoria.
+     * @param categoriaId Long id de la categoria a listar sus subcategorias.
+     * @return List listado de subcategorias pertenecientes a la categoria requerida.
+     */
+    List<Subcategoria> obtenerSubcategorias(Long categoriaId);
 
     /**
      * Método para actualizar una categoría.

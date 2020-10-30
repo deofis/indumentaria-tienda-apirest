@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,16 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Categoria obtenerCategoria(Long id) {
         return this.categoriaRepository.findById(id)
                 .orElseThrow(() -> new ProductoException("Categoría no existente con id: " + id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Subcategoria> obtenerSubcategorias(Long categoriaId) {
+        Categoria categoria = this.categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new ProductoException("Categoria no existente con id: " + categoriaId));
+
+
+        return categoria.getSubcategorias();
     }
 
     @Override
