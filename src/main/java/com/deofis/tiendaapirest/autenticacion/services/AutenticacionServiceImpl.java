@@ -77,12 +77,16 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         }
 
         String token = this.verificationTokenService.generarVerificationToken(usuario);
+        this.notificarEmail(usuario.getEmail(), token);
+    }
+
+    private void notificarEmail(String useremail, String token) {
         NotificationEmail notificationEmail = new NotificationEmail();
         String mailBody = "Gracias por registrarse a E-COMMERCE GENÉRICO! Porfavor, verifique su cuenta" +
                 "                \"haciendo click en el enlace de aqui abajo:\n";
 
         notificationEmail.setSubject("Porfavor, active su cuenta.");
-        notificationEmail.setRecipient(usuario.getEmail());
+        notificationEmail.setRecipient(useremail);
         notificationEmail.setBody(mailBody);
         this.mailService.sendEmail(notificationEmail, "http://localhost:8080/api/auth/accountVerification/" + token);
     }
@@ -164,29 +168,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
-
-
-    /**
-     * Genenra un token para la verificación de cuenta.
-     * @param usuario user que se está registrando.
-     * @return String del token de verificación.
-     */
-    /*
-    private String generateVerificationToken(Usuario usuario) {
-        String token = UUID.randomUUID().toString();
-
-        VerificationToken verificationToken = VerificationToken.builder()
-                .token(token)
-                .usuario(usuario)
-                .build();
-
-        // Setear expiración.
-
-        this.verificationTokenRepository.save(verificationToken);
-        return token;
-    }
-     */
-
 
     /**
      * Habilita una cuenta de usuario que hace match con el token de verificación.

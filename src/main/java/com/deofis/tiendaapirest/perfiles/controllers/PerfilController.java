@@ -42,6 +42,7 @@ public class PerfilController {
      * @param cliente Cliente a cargar.
      * @return ResponseEntity Perfil con los datos del cliente.
      */
+    /*
     @PostMapping("/perfil/cargar-cliente")
     public ResponseEntity<?> cargarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
@@ -69,6 +70,9 @@ public class PerfilController {
         response.put("perfil", perfil);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+     */
+
 
     /**
      * Como usuario, quiero actualizar mis datos de cliente en mi perfil.

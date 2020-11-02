@@ -9,7 +9,10 @@ import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.security.UserPrincipal;
 import com.deofis.tiendaapirest.autenticacion.security.oauth2.user.OAuth2UserInfo;
 import com.deofis.tiendaapirest.autenticacion.security.oauth2.user.OAuth2UserInfoFactory;
+import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -24,10 +27,12 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final PerfilService perfilService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,6 +54,8 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
         if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email no encontrado por el proovedor");
         }
+
+        log.info(oAuth2UserInfo.getAttributes().toString());
 
         Optional<Usuario> usuarioOptional = this.usuarioRepository.findByEmail(oAuth2UserInfo.getEmail());
         Usuario usuario;
@@ -81,6 +88,16 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
                 .enabled(true)
                 .rol(role_user)
                 .build();
+
+        log.info("First Name: " + userInfo.getFirstName());
+        log.info("Last Name: " + userInfo.getLastName());
+        Cliente cliente = Cliente.builder()
+                .email(userInfo.getEmail())
+                .nombre(userInfo.getFirstName())
+                .apellido(userInfo.getLastName())
+                .build();
+
+        this.perfilService.cargarPerfil(cliente, usuario);
 
         return this.usuarioRepository.save(usuario);
     }

@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.dto;
 
+import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,6 @@ public class SignupRequest {
     private String email;
     @NotNull(message = "La contraseña es obligatoria.")
     private String password;
+    @NotNull(message = "Los datos del cliente son obligatorios")
+    private Cliente cliente;
 }
