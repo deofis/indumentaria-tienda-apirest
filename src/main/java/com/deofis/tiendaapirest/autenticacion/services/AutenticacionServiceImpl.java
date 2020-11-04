@@ -43,6 +43,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     private final JwtProveedor jwtProveedor;
     private final MailService mailService;
     private final RefreshTokenService refreshTokenService;
+    private final String baseUrl;
 
     @Transactional
     @Override
@@ -88,7 +89,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         notificationEmail.setSubject("Porfavor, active su cuenta.");
         notificationEmail.setRecipient(useremail);
         notificationEmail.setBody(mailBody);
-        this.mailService.sendEmail(notificationEmail, "http://localhost:8080/api/auth/accountVerification/" + token);
+        this.mailService.sendEmail(notificationEmail, this.baseUrl.concat("/api/auth/accountVerification/").concat(token));
     }
 
     // Observador para verificar el paso del tiempo --> Si paso el expire date y el

@@ -25,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
+@Deprecated
 public class RegistrarClienteController {
 
     private final ClienteService clienteService;

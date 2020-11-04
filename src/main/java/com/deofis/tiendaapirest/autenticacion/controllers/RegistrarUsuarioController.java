@@ -5,7 +5,6 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
-import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,6 @@ public class RegistrarUsuarioController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
-        PerfilDTO perfil;
 
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -57,14 +55,13 @@ public class RegistrarUsuarioController {
 
         try {
             this.autenticacionService.registrarse(signupRequest);
-            perfil = this.perfilService.cargarPerfil(signupRequest.getCliente(), signupRequest.getEmail());
+            this.perfilService.cargarPerfil(signupRequest.getCliente(), signupRequest.getEmail());
         } catch (AutenticacionException | PasswordException | ClienteException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         response.put("mensaje", "Usuario registrado exitosamente. " +
                 "Comprueba tu correo para activar tu cuenta.");
-        response.put("perfil", perfil);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

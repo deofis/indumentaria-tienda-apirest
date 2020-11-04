@@ -13,9 +13,8 @@ public interface PerfilService {
      * NO actualiza datos de un usuario ya registrado.
      * @param cliente Cliente del nuevo usuario con sus datos.
      * @param usuarioEmail String del email del nuevo usuario.
-     * @return PerfilDTO perfil nuevo.
      */
-    PerfilDTO cargarPerfil(Cliente cliente, String usuarioEmail);
+    void cargarPerfil(Cliente cliente, String usuarioEmail);
 
     /**
      * Se encarga de tomar los datos  del cliente y usuario, asociarlos y crear el nuevo perfil.

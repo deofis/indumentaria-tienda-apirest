@@ -37,7 +37,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Transactional
     @Override
-    public PerfilDTO cargarPerfil(Cliente cliente, String usuarioEmail) {
+    public void cargarPerfil(Cliente cliente, String usuarioEmail) {
         Usuario usuario = this.usuarioRepository.findByEmail(usuarioEmail)
                 .orElseThrow(() -> new PerfilesException("Error al crear el perfil del usuario"));
         cliente.setEmail(usuario.getEmail());
@@ -55,19 +55,13 @@ public class PerfilServiceImpl implements PerfilService {
                 .build();
 
         try {
-            return this.mapToDTO(this.perfilRepository.save(perfil));
+            this.perfilRepository.save(perfil);
         } catch (DataIntegrityViolationException e) {
             throw new PerfilesException("El usuario ya tiene asignado datos de cliente a su perfil");
         }
-        /*
-        if (usuario.getCliente() != null) {
-            throw new PerfilesException("El usuario ya tiene asignado datos de un cliente.");
-        }
-        usuario.setCliente(clienteCargado);
-        this.usuarioRepository.save(usuario);
-         */
     }
 
+    @Transactional
     @Override
     public void cargarPerfil(Cliente cliente, Usuario usuario) {
         Carrito carrito = Carrito.builder()
