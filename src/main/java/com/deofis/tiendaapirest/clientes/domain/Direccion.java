@@ -35,8 +35,6 @@ public class Direccion implements Serializable {
 
     private String piso;
 
-    private String departamento;
-
     @Column(name = "codigo_postal")
     private String codigoPostal;
 }
