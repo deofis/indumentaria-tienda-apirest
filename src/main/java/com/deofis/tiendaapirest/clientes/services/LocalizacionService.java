@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.clientes.services;
 
+import com.deofis.tiendaapirest.clientes.domain.Ciudad;
 import com.deofis.tiendaapirest.clientes.domain.Estado;
 import com.deofis.tiendaapirest.clientes.domain.Pais;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * de datos.
  */
 
-public interface PaisService {
+public interface LocalizacionService {
 
     /**
      * Lista los paises de forma ordenada de menor a mayor por nombre.
@@ -38,4 +39,12 @@ public interface PaisService {
      * @return List de estados del país.
      */
     List<Estado> estadosDePais(String nombrePais);
+
+    /**
+     * Lista las ciudades pertenecientes a un estado de un país.
+     * @param pais String nombre del país.
+     * @param estado String nombre del estado.
+     * @return List listado de ciudades del estado requerido.
+     */
+    List<Ciudad> ciudadesEstado(String pais, String estado);
 }

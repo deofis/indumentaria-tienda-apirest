@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
@@ -14,20 +15,28 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Direccion {
+public class Direccion implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estado_id")
+    @JoinColumn(name = "ciudad_id")
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-    private Estado estado;
+    private Ciudad ciudad;
+
     private String calle;
+
     @Column(name = "numero_calle")
     private String numeroCalle;
+
     private String piso;
+
     private String departamento;
+
     @Column(name = "codigo_postal")
     private String codigoPostal;
 }

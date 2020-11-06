@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.clientes.services;
 
+import com.deofis.tiendaapirest.clientes.domain.Ciudad;
 import com.deofis.tiendaapirest.clientes.domain.Estado;
 import com.deofis.tiendaapirest.clientes.domain.Pais;
 import com.deofis.tiendaapirest.clientes.exceptions.PaisesException;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class PaisServiceImpl implements PaisService {
+public class LocalizacionServiceImpl implements LocalizacionService {
 
     private final PaisRepository paisRepository;
     private final EstadoRepository estadoRepository;
@@ -39,5 +40,10 @@ public class PaisServiceImpl implements PaisService {
         Pais pais = this.obtenerPais(nombrePais);
 
         return pais.getEstados();
+    }
+
+    @Override
+    public List<Ciudad> ciudadesEstado(String pais, String estado) {
+        return null;
     }
 }
