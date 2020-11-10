@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,8 @@ public class RegistrarUsuarioController {
 
     private final AutenticacionService autenticacionService;
     private final PerfilService perfilService;
+
+    private final String clientUrl;
 
     /**
      * Recibe una request para registrar una nueva cuenta de usuario. Crea el usuario correspondiente, crea un nuevo
@@ -71,17 +75,18 @@ public class RegistrarUsuarioController {
      * HttpMethod: GET
      * HttpStatus: OK
      * @param token String token de activación.
-     * @return ResponseEntity String mensaje de éxito/error.
      */
     @GetMapping("/accountVerification/{token}")
-    public ResponseEntity<String> verifyToken(@PathVariable String token) {
+    public ResponseEntity<String> verifyToken(@PathVariable String token, HttpServletResponse response) {
 
         try {
             this.autenticacionService.verificarCuenta(token);
-            return new ResponseEntity<>("Cuenta verificada exitosamente", HttpStatus.OK);
-        } catch (AutenticacionException e) {
+            response.sendRedirect(clientUrl);
+        } catch (AutenticacionException | IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
