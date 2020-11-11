@@ -15,5 +15,5 @@ spring:
       ddl-auto: none
 
 endpoints:
-  baseUrl: http://localhost:8080
+  baseUrl: https://deofis-tienda-apirest.herokuapp.com
   clientUrl: http://localhost:4200
