@@ -81,7 +81,7 @@ public class RegistrarUsuarioController {
 
         try {
             this.autenticacionService.verificarCuenta(token);
-            response.sendRedirect(clientUrl);
+            response.sendRedirect(clientUrl.concat("/verify/redirect"));
         } catch (AutenticacionException | IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
