@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://b91f2b93630081:233cb850@us-cdbr-east-02.cleardb.com:3306/heroku_ff337ed7022a9b9?reconnect=true&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Argentina/Cordoba
-    username: b91f2b93630081
-    password: 233cb850
+    url: jdbc:mysql://tk3mehkfmmrhjg0b.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/guytjzpp2f3u7y7m?reconnect=true&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Argentina/Cordoba
+    username: upjn2kkzdtrhvwgi
+    password: myk6eyzouzao4fil
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     properties:
       hibernate:
