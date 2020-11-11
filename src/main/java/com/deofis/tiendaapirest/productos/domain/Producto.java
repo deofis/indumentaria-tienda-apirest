@@ -42,8 +42,8 @@ public class Producto implements Serializable {
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Imagen foto;
+    @Lob
+    private String foto;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "producto_id")

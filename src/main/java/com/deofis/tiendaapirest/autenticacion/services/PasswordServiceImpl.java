@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Slf4j
 public class PasswordServiceImpl implements PasswordService {
-    private static final String URL_REDIRIGIR = "http://localhost:4200/recuperar-password/";
 
     private final AutenticacionService autenticacionService;
     private final UsuarioRepository usuarioRepository;
     private final VerificationTokenService verificationTokenService;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final String clientUrl;
 
     @Transactional
     @Override
@@ -72,8 +72,7 @@ public class PasswordServiceImpl implements PasswordService {
         notificationEmail.setRecipient(userEmail);
         notificationEmail.setBody(mailBody);
 
-        // En futuro la URL redirige a una página estática del front del dominio.
-        this.mailService.sendEmail(notificationEmail, URL_REDIRIGIR + token);
+        String URL_REDIRIGIR = this.clientUrl.concat("/recuperar-password/");
+        this.mailService.sendEmail(notificationEmail,URL_REDIRIGIR + token);
     }
-
 }

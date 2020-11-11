@@ -50,15 +50,15 @@ public class DataLoaderAutenticacion implements CommandLineRunner {
 
         }
 
-        if (this.usuarioRepository.findByEmail("ezegavilan95@gmail.com").isEmpty()) {
+        if (this.usuarioRepository.findByEmail("admin@deofis.com").isEmpty()) {
             Usuario administrador = Usuario.builder()
-                    .email("ezegavilan95@gmail.com")
+                    .email("admin@deofis.com")
                     .enabled(true)
                     .authProvider(AuthProvider.local)
                     .providerId("1")
                     .fechaCreacion(new Date())
                     .rol(this.rolRepository.findByNombre("ROLE_ADMIN").orElse(null))
-                    .password(passwordEncoder.encode("12345"))
+                    .password(passwordEncoder.encode("1224"))
                     .build();
 
             try {

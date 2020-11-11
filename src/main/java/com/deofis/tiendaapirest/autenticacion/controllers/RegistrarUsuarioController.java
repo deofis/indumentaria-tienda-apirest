@@ -4,13 +4,17 @@ import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
+import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
+import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +30,18 @@ import java.util.stream.Collectors;
 public class RegistrarUsuarioController {
 
     private final AutenticacionService autenticacionService;
+    private final PerfilService perfilService;
+
+    private final String clientUrl;
 
     /**
-     * Takes a request from the client with the data: username, password and email, creates
-     * the new user, and send verification email to activate the account.
+     * Recibe una request para registrar una nueva cuenta de usuario. Crea el usuario correspondiente, crea un nuevo
+     * perfil, y asocia los datos del cliente con el mismo.
      * URL: ~/api/auth/signup
      * HttpMethod: POST
      * HttpStatus: CREATED
-     * @param signupRequest with user credentials.
-     * @return String with success/error message.
+     * @param signupRequest con las credenciales de usuario, y los datos de cliente (Nombre y Apellido).
+     * @return ResponseEntity con mensaje de éxito/error y el Perfil nuevo creado.
      */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest, BindingResult result) {
@@ -52,12 +59,14 @@ public class RegistrarUsuarioController {
 
         try {
             this.autenticacionService.registrarse(signupRequest);
-            response.put("mensaje", "Usuario registrado exitosamente. " +
-                    "Comprueba tu correo para activar tu cuenta.");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (AutenticacionException | PasswordException e) {
+            this.perfilService.cargarPerfil(signupRequest.getCliente(), signupRequest.getEmail());
+        } catch (AutenticacionException | PasswordException | ClienteException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        response.put("mensaje", "Usuario registrado exitosamente. " +
+                "Comprueba tu correo para activar tu cuenta.");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -66,17 +75,18 @@ public class RegistrarUsuarioController {
      * HttpMethod: GET
      * HttpStatus: OK
      * @param token String token de activación.
-     * @return ResponseEntity String mensaje de éxito/error.
      */
     @GetMapping("/accountVerification/{token}")
-    public ResponseEntity<String> verifyToken(@PathVariable String token) {
+    public ResponseEntity<String> verifyToken(@PathVariable String token, HttpServletResponse response) {
 
         try {
             this.autenticacionService.verificarCuenta(token);
-            return new ResponseEntity<>("Cuenta verificada exitosamente", HttpStatus.OK);
-        } catch (AutenticacionException e) {
+            response.sendRedirect(clientUrl);
+        } catch (AutenticacionException | IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -24,19 +24,20 @@ public class PayPalServiceImpl implements PayPalService {
 
     private static final String CURRENCY = "USD";
     private static final String INTENT = "CAPTURE";
-    private static final String CANCEL_URL = "http://localhost:4200/paypal/redirect";
-    private static final String APPROVED_URL = "http://localhost:4200/paypal/redirect";
 
     private final PayPalHttpClient client;
+    private final String clientUrl;
 
     @Override
     public OrderPayload crearOrder(Operacion operacion) {
+        String CANCEL_REDIRECT_URL = this.clientUrl.concat("/paypal/redirect");
+        String APPROVED_REDIRECT_URL = this.clientUrl.concat("/paypal/redirect");
         OrderRequest orderRequest = new OrderRequest();
 
         ApplicationContext context = new ApplicationContext()
                 .landingPage("BILLING")
-                .cancelUrl(CANCEL_URL).userAction("CANCEL")
-                .returnUrl(APPROVED_URL).userAction("CONTINUE");
+                .cancelUrl(CANCEL_REDIRECT_URL).userAction("CANCEL")
+                .returnUrl(APPROVED_REDIRECT_URL).userAction("CONTINUE");
 
         orderRequest.checkoutPaymentIntent(INTENT);
         orderRequest.applicationContext(context);

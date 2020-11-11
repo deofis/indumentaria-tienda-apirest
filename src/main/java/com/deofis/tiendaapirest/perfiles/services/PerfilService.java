@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.perfiles.services;
 
+import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
@@ -8,10 +9,19 @@ import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 public interface PerfilService {
 
     /**
-     * Se encarga de tomar los datos del cliente y asignarlos al usuario logueado.
+     * Se encarga de tomar los datos del cliente y asignarlos al usuario registrado, creando el nuevo perfil.
      * NO actualiza datos de un usuario ya registrado.
+     * @param cliente Cliente del nuevo usuario con sus datos.
+     * @param usuarioEmail String del email del nuevo usuario.
      */
-    PerfilDTO cargarPerfil(Cliente cliente);
+    void cargarPerfil(Cliente cliente, String usuarioEmail);
+
+    /**
+     * Se encarga de tomar los datos  del cliente y usuario, asociarlos y crear el nuevo perfil.
+     * @param cliente Cliente del nuevo usuario con sus datos.
+     * @param usuario Usuario usuario nuevo.
+     */
+    void cargarPerfil(Cliente cliente, Usuario usuario);
 
     /**
      * Actualiza los datos de cliente asociados al perfil del usuario logueado.

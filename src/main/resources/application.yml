@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: qa
+    active: qaheroku
 
   jackson:
     time-zone: America/Argentina/Cordoba
@@ -43,7 +43,7 @@ server:
   error:
     include-message: always
     include-binding-errors: always
-  port: ${PORT:5000}
+  port: ${PORT:8080}
 
 jwt:
   expirationInMillis: 900000
@@ -52,6 +52,7 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:4200/oauth2/redirect
+      - https://tienda-frontend.web.app/oauth2/redirect
 
 paypal:
   clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ

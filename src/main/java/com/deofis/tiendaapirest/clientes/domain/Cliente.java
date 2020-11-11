@@ -33,7 +33,6 @@ public class Cliente implements Serializable {
 
     private String email;
 
-    @NotNull(message = "El numero de teléfono es obligatorio.")
     private String telefono;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
