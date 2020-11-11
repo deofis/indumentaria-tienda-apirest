@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.perfiles.services;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
+import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 
@@ -11,6 +12,7 @@ public interface PerfilService {
     /**
      * Se encarga de tomar los datos del cliente y asignarlos al usuario registrado, creando el nuevo perfil.
      * NO actualiza datos de un usuario ya registrado.
+     * NOTA: Crear el perfil implica: Asignar cliente, usuario, carrito, compras y favoritos.
      * @param cliente Cliente del nuevo usuario con sus datos.
      * @param usuarioEmail String del email del nuevo usuario.
      */
@@ -18,6 +20,7 @@ public interface PerfilService {
 
     /**
      * Se encarga de tomar los datos  del cliente y usuario, asociarlos y crear el nuevo perfil.
+     * NOTA: Crear el perfil implica: Asignar cliente, usuario, carrito, compras y favoritos.
      * @param cliente Cliente del nuevo usuario con sus datos.
      * @param usuario Usuario usuario nuevo.
      */
@@ -59,4 +62,10 @@ public interface PerfilService {
      * Llama al carrito service para vaciarlo.
      */
     void vaciarCarrito();
+
+    /**
+     * Obtiene el objeto Favoritos que pertenece al usuario logueado.
+     * @return Favoritos del perfil.
+     */
+    Favoritos obtenerFavoritos();
 }

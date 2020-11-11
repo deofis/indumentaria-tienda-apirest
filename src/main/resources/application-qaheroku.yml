@@ -16,3 +16,6 @@ spring:
 endpoints:
   baseUrl: http://localhost:8080
   clientUrl: http://localhost:4200
+
+jwt:
+  expirationInMillis: 900000

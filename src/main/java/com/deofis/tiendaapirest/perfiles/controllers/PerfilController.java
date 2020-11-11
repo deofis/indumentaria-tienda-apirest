@@ -4,6 +4,7 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
+import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
@@ -33,15 +34,6 @@ public class PerfilController {
 
     private final PerfilService perfilService;
 
-    /**
-     * Como usuario quiero cargar mis datos de cliente a mi perfil. (Carga datos a usuario logueado
-     * en el contexto).
-     * URL:  ~/api/perfil/cargar-cliente
-     * HttpMethod: POST
-     * HttpStatus: CREATED
-     * @param cliente Cliente a cargar.
-     * @return ResponseEntity Perfil con los datos del cliente.
-     */
     /*
     @PostMapping("/perfil/cargar-cliente")
     public ResponseEntity<?> cargarDatos(@Valid @RequestBody Cliente cliente, BindingResult result) {
@@ -179,6 +171,30 @@ public class PerfilController {
         }
 
         response.put("carrito", carrito);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene el listado de productos favoritos pertenecientes al perfil actual.
+     * URL: ~/api/perfil/favoritos
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @return ResponseEntity Favoritos.
+     */
+    @GetMapping("/perfil/favoritos")
+    public ResponseEntity<?> verFavoritos() {
+        Map<String, Object> response = new HashMap<>();
+        Favoritos favoritos;
+
+        try {
+            favoritos = this.perfilService.obtenerFavoritos();
+        } catch (PerfilesException e) {
+            response.put("mensaje", "Error al obtener los favoritos del perfil");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("favoritos", favoritos);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

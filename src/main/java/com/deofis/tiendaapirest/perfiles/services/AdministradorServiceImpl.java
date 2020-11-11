@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UsuarioServiceImpl implements UsuarioService {
+public class AdministradorServiceImpl implements AdministradorService {
 
     private final AutenticacionService autenticacionService;
     private final UsuarioRepository usuarioRepository;

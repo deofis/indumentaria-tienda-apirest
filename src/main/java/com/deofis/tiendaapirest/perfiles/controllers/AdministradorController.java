@@ -9,7 +9,7 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.RegistrosException;
 import com.deofis.tiendaapirest.perfiles.domain.CambioHabilitacionUsuario;
 import com.deofis.tiendaapirest.perfiles.domain.CambioRol;
-import com.deofis.tiendaapirest.perfiles.services.UsuarioService;
+import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +29,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class UsuariosController {
+public class AdministradorController {
 
-    private final UsuarioService usuarioService;
+    private final AdministradorService administradorService;
 
     /**
      * API para listar todos los usuarios registrados en el sistema.
@@ -47,7 +47,7 @@ public class UsuariosController {
         List<UsuarioDTO> usuarios;
 
         try {
-            usuarios = this.usuarioService.listarUsuarios();
+            usuarios = this.administradorService.listarUsuarios();
         } catch (AutenticacionException e) {
             response.put("mensaje", "Error al obtener el listado de usuarios");
             response.put("error", e.getMessage());
@@ -72,7 +72,7 @@ public class UsuariosController {
         List<Rol> roles;
 
         try {
-            roles = this.usuarioService.listarRoles();
+            roles = this.administradorService.listarRoles();
         } catch (AutenticacionException e) {
             response.put("mensaje", "Error al obtener los roles");
             response.put("error", e.getMessage());
@@ -98,7 +98,7 @@ public class UsuariosController {
         UsuarioDTO usuario;
 
         try {
-            usuario = this.usuarioService.getUsuario(usuarioEmail);
+            usuario = this.administradorService.getUsuario(usuarioEmail);
         } catch (AutenticacionException e) {
             response.put("mensaje", "Error al obtener el usuario");
             response.put("error", e.getMessage());
@@ -123,7 +123,7 @@ public class UsuariosController {
         UsuarioDTO nuevoUsuario;
 
         try {
-            nuevoUsuario = this.usuarioService.crear(usuario);
+            nuevoUsuario = this.administradorService.crear(usuario);
         } catch (AutenticacionException | PasswordException e) {
             response.put("mensaje", "Error al crear el nuevo usuario");
             response.put("error", e.getMessage());
@@ -149,7 +149,7 @@ public class UsuariosController {
         CambioRol registro;
 
         try {
-            registro = this.usuarioService.cambiarRol(cambioRolRequest);
+            registro = this.administradorService.cambiarRol(cambioRolRequest);
         } catch (AutenticacionException | RegistrosException e) {
             response.put("mensaje", "Error al cambiar el rol del usuario");
             response.put("error", e.getMessage());
@@ -175,7 +175,7 @@ public class UsuariosController {
         CambioHabilitacionUsuario regristro;
 
         try {
-            regristro = this.usuarioService.deshabilitar(usuarioEmail);
+            regristro = this.administradorService.deshabilitar(usuarioEmail);
         } catch (AutenticacionException | RegistrosException e) {
             response.put("mensaje", "Error al deshabilitar usuario");
             response.put("error", e.getMessage());
@@ -200,7 +200,7 @@ public class UsuariosController {
         CambioHabilitacionUsuario regristro;
 
         try {
-            regristro = this.usuarioService.habilitar(usuarioEmail);
+            regristro = this.administradorService.habilitar(usuarioEmail);
         } catch (AutenticacionException | RegistrosException e) {
             response.put("mensaje", "Error al habilitar usuario");
             response.put("error", e.getMessage());
@@ -224,7 +224,7 @@ public class UsuariosController {
         List<CambioRol> registros;
 
         try {
-            registros = this.usuarioService.listarRegistrosCambioRol();
+            registros = this.administradorService.listarRegistrosCambioRol();
         } catch (RegistrosException e) {
             response.put("mensaje", "Error al listar los registros de cambio de rol");
             response.put("error", e.getMessage());
@@ -254,7 +254,7 @@ public class UsuariosController {
         List<CambioHabilitacionUsuario> registros;
 
         try {
-            registros = this.usuarioService.listarRegistrosHabilitacion();
+            registros = this.administradorService.listarRegistrosHabilitacion();
         } catch (RegistrosException e) {
             response.put("mensaje", "Error al listar los registros de habilitacion de usuarios");
             response.put("error", e.getMessage());
