@@ -20,7 +20,7 @@ spring:
     password: Deofis1224
     properties:
       mail:
-        smpt:
+        smtp:
           starttls:
             enable: true
             required: true
