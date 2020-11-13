@@ -1,16 +1,10 @@
 spring:
   profiles:
-    active: dev
+    active: qaheroku
 
   jackson:
     time-zone: America/Argentina/Cordoba
     locale: es_AR
-
-  mail:
-    host: smtp.mailtrap.io
-    port: 2525
-    username: eb1eece6b19a9c
-    password: ed814f343a2257
 
   banner:
     image:

@@ -13,7 +13,19 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: none
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: deofis.github@gmail.com
+    password: Deofis1224
+    properties:
+      mail:
+        smpt:
+          starttls:
+            enable: true
+            required: true
+            auth: true
 
 endpoints:
   baseUrl: https://deofis-tienda-apirest.herokuapp.com
-  clientUrl: http://localhost:4200
+  clientUrl: https://wantfrom-tienda.web.app

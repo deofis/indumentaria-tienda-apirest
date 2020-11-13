@@ -12,6 +12,11 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: eb1eece6b19a9c
+    password: ed814f343a2257
 
 endpoints:
   baseUrl: http://localhost:8080
