@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: qaheroku
+    active: dev
 
   jackson:
     time-zone: America/Argentina/Cordoba
@@ -29,7 +29,7 @@ spring:
           facebook:
             clientId: 345672336639969
             clientSecret: b71dcd7364ddb480b0ea89f547dd1598
-            redirectUri: "https://api.deofisdev.online/oauth2/callback/{registrationId}"
+            redirectUri: "https://deofis-tienda-apirest.herokuapp.com/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile
@@ -53,6 +53,7 @@ app:
     authorizedRedirectUris:
       - http://localhost:4200/oauth2/redirect
       - https://tienda-frontend.web.app/oauth2/redirect
+      - https://wantfrom-tienda.web.app/oauth2/redirect
 
 paypal:
   clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
