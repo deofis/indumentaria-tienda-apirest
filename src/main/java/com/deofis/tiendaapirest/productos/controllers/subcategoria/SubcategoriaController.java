@@ -1,8 +1,8 @@
 package com.deofis.tiendaapirest.productos.controllers.subcategoria;
 
-import com.deofis.tiendaapirest.productos.domain.Propiedad;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
-import com.deofis.tiendaapirest.productos.domain.ValorPropiedad;
+import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.SubcategoriaService;
 import lombok.AllArgsConstructor;
@@ -64,16 +64,16 @@ public class SubcategoriaController {
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param subcategoriaId Long id de la subcategoria a agregar la propiedad nueva.
-     * @param propiedad Propiedad nueva.
+     * @param propiedadProducto Propiedad nueva.
      * @return ResponseEntity con la subcategoria actualizada.
      */
     @PostMapping("/subcategorias/{subcategoriaId}/propiedades")
-    public ResponseEntity<?> agregarPropiedad(@PathVariable Long subcategoriaId, @RequestBody Propiedad propiedad) {
+    public ResponseEntity<?> agregarPropiedad(@PathVariable Long subcategoriaId, @RequestBody PropiedadProducto propiedadProducto) {
         Map<String, Object> response = new HashMap<>();
         Subcategoria subcategoriaActualizada;
 
         try {
-            subcategoriaActualizada = this.subcategoriaService.agregarPropiedad(subcategoriaId, propiedad);
+            subcategoriaActualizada = this.subcategoriaService.agregarPropiedad(subcategoriaId, propiedadProducto);
         }  catch (ProductoException e) {
             response.put("mensaje", "Error al agregar la propiedad");
             response.put("error", e.getMessage());
@@ -95,7 +95,7 @@ public class SubcategoriaController {
     @GetMapping("/subcategorias/{subcategoriaId}/propiedades")
     public ResponseEntity<?> obtenerPropiedadesSubcategoria(@PathVariable Long subcategoriaId) {
         Map<String, Object> response = new HashMap<>();
-        List<Propiedad> propiedades;
+        List<PropiedadProducto> propiedades;
         String subcategoria;
 
         try {
@@ -119,20 +119,20 @@ public class SubcategoriaController {
      * HttpStatud: CREATED
      * @param subcategoriaId Long id de la subcategoria requerida.
      * @param propiedadId Long id de la propiedad a agrega el nuevo valor.
-     * @param valorPropiedad ValorPropiedad nueva a agregar.
+     * @param valorPropiedadProducto ValorPropiedad nueva a agregar.
      * @return ResponseEntity con el nombre de la subcategoria y la propiedad actualizada.
      */
     @PostMapping("/subcategorias/{subcategoriaId}/propiedades/{propiedadId}/valores")
     public ResponseEntity<?> agregarValorAPropiedad(@PathVariable Long subcategoriaId,
                                                     @PathVariable Long propiedadId,
-                                                    @RequestBody ValorPropiedad valorPropiedad) {
+                                                    @RequestBody ValorPropiedadProducto valorPropiedadProducto) {
 
         Map<String, Object> response = new HashMap<>();
-        Propiedad propiedadActualizada;
+        PropiedadProducto propiedadProductoActualizada;
         String subcategoria;
 
         try {
-            propiedadActualizada = this.subcategoriaService.agregarValor(subcategoriaId, propiedadId, valorPropiedad);
+            propiedadProductoActualizada = this.subcategoriaService.agregarValor(subcategoriaId, propiedadId, valorPropiedadProducto);
             subcategoria = this.subcategoriaService.obtenerSubcategoria(subcategoriaId).getNombre();
         } catch (ProductoException e) {
             response.put("mensaje", "Error al agregar valor a la propiedad de la subcategoria");
@@ -141,7 +141,7 @@ public class SubcategoriaController {
         }
 
         response.put("subcategoria", subcategoria);
-        response.put("propiedad", propiedadActualizada);
+        response.put("propiedad", propiedadProductoActualizada);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -159,7 +159,7 @@ public class SubcategoriaController {
                                                      @PathVariable Long propiedadId) {
 
         Map<String, Object> response = new HashMap<>();
-        List<ValorPropiedad> valores;
+        List<ValorPropiedadProducto> valores;
         String propiedad;
         String subcategoria;
 

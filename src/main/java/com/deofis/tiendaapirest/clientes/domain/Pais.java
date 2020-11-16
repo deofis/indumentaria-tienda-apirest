@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "paises")
+@Table(name = "countries")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

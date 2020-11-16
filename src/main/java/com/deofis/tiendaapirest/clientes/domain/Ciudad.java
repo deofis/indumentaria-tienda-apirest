@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "ciudades")
+@Table(name = "cities")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

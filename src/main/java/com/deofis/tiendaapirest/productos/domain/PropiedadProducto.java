@@ -4,18 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "propiedades")
+@Table(name = "producto_propiedades")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Propiedad implements Serializable {
+public class PropiedadProducto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -23,11 +24,7 @@ public class Propiedad implements Serializable {
     private Long id;
     private String nombre;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "propiedad_id")
+    @JoinColumn(name = "producto_propiedad_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<ValorPropiedad> valores;
-
-    public Propiedad() {
-        this.valores = new ArrayList<>();
-    }
+    private List<ValorPropiedadProducto> valores;
 }

@@ -1,7 +1,7 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Propiedad;
-import com.deofis.tiendaapirest.productos.domain.ValorPropiedad;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 
 public interface PropiedadService {
 
@@ -11,21 +11,21 @@ public interface PropiedadService {
      * @param propiedadId Long id de la propiedad requerida.
      * @return Propiedad.
      */
-    Propiedad obtenerPropiedad(Long propiedadId);
+    PropiedadProducto obtenerPropiedad(Long propiedadId);
 
     /**
      * Crea una nueva propiedad.
      *
-     * @param propiedad Propiedad nueva a crear.
+     * @param propiedadProducto Propiedad nueva a crear.
      * @return Propeidad creada.
      */
-    Propiedad crearPropiedad(Propiedad propiedad);
+    PropiedadProducto crearPropiedad(PropiedadProducto propiedadProducto);
 
     /**
      * Agrega un nuevo valor a una propiedad requerida.
      * @param propiedadId Long id de la propiedad a la cual agregar el nuevo valor.
-     * @param valorPropiedad ValorPropiedad a agregar.
+     * @param valorPropiedadProducto ValorPropiedad a agregar.
      * @return Propiedad actualizada con el nuevo valor ya agregado.
      */
-    Propiedad agregarValor(Long propiedadId, ValorPropiedad valorPropiedad);
+    PropiedadProducto agregarValor(Long propiedadId, ValorPropiedadProducto valorPropiedadProducto);
 }

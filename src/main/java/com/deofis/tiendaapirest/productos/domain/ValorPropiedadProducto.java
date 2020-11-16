@@ -9,12 +9,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "valores_propiedad")
+@Table(name = "producto_valores_propiedad")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ValorPropiedad implements Serializable {
+public class ValorPropiedadProducto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

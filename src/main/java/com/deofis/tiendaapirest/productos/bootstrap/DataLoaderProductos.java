@@ -29,7 +29,7 @@ public class DataLoaderProductos implements CommandLineRunner {
 
     @Transactional
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         if (this.unidadMedidaRepository.findByNombre("Unidad").isEmpty()) {
             UnidadMedida unidad = UnidadMedida.builder()
@@ -117,21 +117,21 @@ public class DataLoaderProductos implements CommandLineRunner {
             Subcategoria celulares;
 
             // Propiedad modelo
-            Propiedad modelo;
-            ValorPropiedad s20;
+            PropiedadProducto modelo;
+            ValorPropiedadProducto s20;
 
-            s20 = ValorPropiedad.builder().valor("Galaxy S20").build();
+            s20 = ValorPropiedadProducto.builder().valor("Galaxy S20").build();
 
-            modelo = Propiedad.builder().nombre("Modelo").valores(new ArrayList<>()).build();
+            modelo = PropiedadProducto.builder().nombre("Modelo").valores(new ArrayList<>()).build();
             modelo.getValores().add(s20);
 
             // Propiedad color
-            Propiedad color;
-            ValorPropiedad negro = ValorPropiedad.builder().valor("Negro").build();
-            ValorPropiedad gris = ValorPropiedad.builder().valor("Gris").build();
-            ValorPropiedad dorado = ValorPropiedad.builder().valor("Droado").build();
+            PropiedadProducto color;
+            ValorPropiedadProducto negro = ValorPropiedadProducto.builder().valor("Negro").build();
+            ValorPropiedadProducto gris = ValorPropiedadProducto.builder().valor("Gris").build();
+            ValorPropiedadProducto dorado = ValorPropiedadProducto.builder().valor("Droado").build();
 
-            color = Propiedad.builder().nombre("Color").valores(new ArrayList<>()).build();
+            color = PropiedadProducto.builder().nombre("Color").valores(new ArrayList<>()).build();
             color.getValores().add(negro);
             color.getValores().add(gris);
             color.getValores().add(dorado);
@@ -291,90 +291,179 @@ public class DataLoaderProductos implements CommandLineRunner {
 
         // Carga productos
         if (this.productoRepository.findAll().size() == 0) {
+
+            // Creamos propiedades y valores
+            PropiedadProducto color = PropiedadProducto.builder()
+                    .nombre("Color").valores(new ArrayList<>()).build();
+            ValorPropiedadProducto negro = ValorPropiedadProducto.builder()
+                    .valor("Negro").build();
+            ValorPropiedadProducto dorado = ValorPropiedadProducto.builder()
+                    .valor("Dorado").build();
+            color.getValores().add(negro);
+            color.getValores().add(dorado);
+
+            PropiedadProducto memoria = PropiedadProducto.builder()
+                    .nombre("Memoria").valores(new ArrayList<>()).build();
+            ValorPropiedadProducto gb32 = ValorPropiedadProducto.builder()
+                    .valor("32 GB").build();
+            ValorPropiedadProducto gb64 = ValorPropiedadProducto.builder()
+                    .valor("64 GB").build();
+            memoria.getValores().add(gb32);
+            memoria.getValores().add(gb64);
+
+            //Creamos y cargamos los productos con propiedades y Sku por defecto.
             List<Producto> productos = new ArrayList<>();
 
             Producto samsungJ2 = Producto.builder()
                     .nombre("Samsung J2 Grand Prime")
                     .descripcion("Modelo: J2 GP 16GB de memoria, 1GB de RAM")
                     .precio(25000.00)
-                    .stock(107)
+                    .precioOferta(23000.00)
+                    .disponibilidad(107)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
                     .subcategoria(this.subcategoriaRepository.getOne(1L))
                     .marca(this.marcaRepository.getOne(1L))
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>())
                     .build();
+            samsungJ2.getPropiedades().add(color);
+            samsungJ2.getPropiedades().add(memoria);
+            samsungJ2.setDefaultSku(Sku.builder()
+                    .nombre(samsungJ2.getNombre())
+                    .descripcion(samsungJ2.getDescripcion())
+                    .precio(samsungJ2.getPrecio())
+                    .precioOferta(samsungJ2.getPrecioOferta())
+                    .disponibilidad(samsungJ2.getDisponibilidad())
+                    .defaultProducto(samsungJ2).build());
+
             productos.add(samsungJ2);
 
             Producto samsungS20 = Producto.builder()
                     .nombre("Samsung Galaxy S20")
                     .descripcion("Modelo: S20 32GB de memoria, 4GB de RAM")
-                    .precio(110000.00)
-                    .stock(52)
+                    .precio(120000.00)
+                    .disponibilidad(25)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
                     .subcategoria(this.subcategoriaRepository.getOne(1L))
                     .marca(this.marcaRepository.getOne(1L))
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>())
                     .build();
+            samsungS20.getPropiedades().add(color);
+            samsungS20.getPropiedades().add(memoria);
+            samsungS20.setDefaultSku(Sku.builder()
+                    .nombre(samsungS20.getNombre())
+                    .descripcion(samsungS20.getDescripcion())
+                    .precio(samsungS20.getPrecio())
+                    .precioOferta(samsungS20.getPrecioOferta())
+                    .disponibilidad(samsungS20.getDisponibilidad())
+                    .defaultProducto(samsungS20).build());
             productos.add(samsungS20);
 
             Producto samsungS10 = Producto.builder()
                     .nombre("Samsung Galaxy S10")
                     .descripcion("Modelo: S10 32GB de memoria, 2GB de RAM")
                     .precio(90000.00)
-                    .stock(99)
+                    .disponibilidad(20)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
                     .subcategoria(this.subcategoriaRepository.getOne(1L))
                     .marca(this.marcaRepository.getOne(1L))
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>())
                     .build();
+            samsungS10.getPropiedades().add(color);
+            samsungS10.getPropiedades().add(memoria);
+            samsungS10.setDefaultSku(Sku.builder()
+                    .nombre(samsungS10.getNombre())
+                    .descripcion(samsungS10.getDescripcion())
+                    .precio(samsungS10.getPrecio())
+                    .precioOferta(samsungS10.getPrecioOferta())
+                    .disponibilidad(samsungS10.getDisponibilidad())
+                    .defaultProducto(samsungS10).build());
             productos.add(samsungS10);
 
             Producto iphone11plus = Producto.builder()
                     .nombre("iPhone 11 Plus")
                     .descripcion("Modelo: 11 Plus 64GB de memoria, 4GB de RAM")
                     .precio(130000.00)
-                    .stock(20)
-                    .activo(true)
-                    .destacado(true)
-                    .fechaCreacion(new Date())
-                    .subcategoria(this.subcategoriaRepository.getOne(1L))
-                    .marca(this.marcaRepository.getOne(2L))
-                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                    .build();
-            productos.add(iphone11plus);
-
-            Producto iphone11 = Producto.builder()
-                    .nombre("iPhone 11")
-                    .descripcion("Modelo: 11 32GB de memoria, 2GB de RAM")
-                    .precio(120000.00)
-                    .stock(34)
-                    .activo(true)
-                    .destacado(true)
-                    .fechaCreacion(new Date())
-                    .subcategoria(this.subcategoriaRepository.getOne(1L))
-                    .marca(this.marcaRepository.getOne(2L))
-                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
-                    .build();
-            productos.add(iphone11);
-
-            Producto samsungA10 = Producto.builder()
-                    .nombre("Samsung Galaxy A10")
-                    .descripcion("Modelo: Galaxy A10 32GB de memoria, 2GB de RAM")
-                    .precio(40000.00)
-                    .stock(95)
+                    .disponibilidad(11)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
                     .subcategoria(this.subcategoriaRepository.getOne(1L))
                     .marca(this.marcaRepository.getOne(1L))
                     .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>())
                     .build();
+            iphone11plus.getPropiedades().add(color);
+            iphone11plus.getPropiedades().add(memoria);
+            iphone11plus.setDefaultSku(Sku.builder()
+                    .nombre(iphone11plus.getNombre())
+                    .descripcion(iphone11plus.getDescripcion())
+                    .precio(iphone11plus.getPrecio())
+                    .precioOferta(iphone11plus.getPrecioOferta())
+                    .disponibilidad(iphone11plus.getDisponibilidad())
+                    .defaultProducto(iphone11plus).build());
+            productos.add(iphone11plus);
+
+            Producto iphone11 = Producto.builder()
+                    .nombre("iPhone 11")
+                    .descripcion("Modelo: 11 32GB de memoria, 2GB de RAM")
+                    .precio(120000.00)
+                    .disponibilidad(15)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>())
+                    .build();
+            iphone11.getPropiedades().add(color);
+            iphone11.getPropiedades().add(memoria);
+            iphone11.setDefaultSku(Sku.builder()
+                    .nombre(iphone11.getNombre())
+                    .descripcion(iphone11.getDescripcion())
+                    .precio(iphone11.getPrecio())
+                    .precioOferta(iphone11.getPrecioOferta())
+                    .disponibilidad(iphone11.getDisponibilidad())
+                    .defaultProducto(iphone11).build());
+            productos.add(iphone11);
+
+            Producto samsungA10 = Producto.builder()
+                    .nombre("Samsung Galaxy A10")
+                    .descripcion("Modelo: Galaxy A10 32GB de memoria, 2GB de RAM")
+                    .precio(40000.00)
+                    .disponibilidad(95)
+                    .activo(true)
+                    .destacado(true)
+                    .fechaCreacion(new Date())
+                    .subcategoria(this.subcategoriaRepository.getOne(1L))
+                    .marca(this.marcaRepository.getOne(1L))
+                    .unidadMedida(this.unidadMedidaRepository.getOne(1L))
+                    .propiedades(new ArrayList<>())
+                    .skus(new ArrayList<>())
+                    .build();
+            samsungA10.getPropiedades().add(color);
+            samsungA10.getPropiedades().add(memoria);
+            samsungA10.setDefaultSku(Sku.builder()
+                    .nombre(samsungA10.getNombre())
+                    .descripcion(samsungA10.getDescripcion())
+                    .precio(samsungA10.getPrecio())
+                    .precioOferta(samsungA10.getPrecioOferta())
+                    .disponibilidad(samsungA10.getDisponibilidad())
+                    .defaultProducto(samsungA10).build());
             productos.add(samsungA10);
 
             this.productoRepository.saveAll(productos);

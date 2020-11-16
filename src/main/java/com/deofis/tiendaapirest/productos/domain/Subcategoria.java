@@ -26,7 +26,7 @@ public class Subcategoria implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "subcategoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<Propiedad> propiedades;
+    private List<PropiedadProducto> propiedades;
 
     public Subcategoria() {
         this.propiedades = new ArrayList<>();

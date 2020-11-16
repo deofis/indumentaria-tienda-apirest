@@ -33,5 +33,5 @@ public class ProductoDTO {
     private Long unidadMedidaId;
 
     @CsvBindByName
-    private Integer stock;
+    private Integer disponibilidad;
 }

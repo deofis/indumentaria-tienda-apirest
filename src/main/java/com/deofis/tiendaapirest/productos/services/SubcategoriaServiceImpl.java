@@ -1,8 +1,8 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Propiedad;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
-import com.deofis.tiendaapirest.productos.domain.ValorPropiedad;
+import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
 import lombok.AllArgsConstructor;
@@ -30,49 +30,49 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
     }
 
     @Override
-    public Subcategoria agregarPropiedad(Long subcategoriaId, Propiedad propiedad) {
+    public Subcategoria agregarPropiedad(Long subcategoriaId, PropiedadProducto propiedadProducto) {
         Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
 
-        Propiedad nuevaPropiedad = this.propiedadService.crearPropiedad(propiedad);
+        PropiedadProducto nuevaPropiedadProducto = this.propiedadService.crearPropiedad(propiedadProducto);
 
-        subcategoria.getPropiedades().add(nuevaPropiedad);
+        subcategoria.getPropiedades().add(nuevaPropiedadProducto);
         return this.subcategoriaRepository.save(subcategoria);
     }
 
     @Override
-    public Propiedad obtenerPropiedad(Long subcategoriaId, Long propiedadId) {
+    public PropiedadProducto obtenerPropiedad(Long subcategoriaId, Long propiedadId) {
         Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
-        Propiedad propiedad = this.propiedadService.obtenerPropiedad(propiedadId);
+        PropiedadProducto propiedadProducto = this.propiedadService.obtenerPropiedad(propiedadId);
 
-        if (!subcategoria.getPropiedades().contains(propiedad)) {
+        if (!subcategoria.getPropiedades().contains(propiedadProducto)) {
             throw new ProductoException("La propiedad requerida no pertenece a la subcategoria: " +
                     subcategoria.getNombre());
         }
 
-        return propiedad;
+        return propiedadProducto;
     }
 
     @Override
-    public List<Propiedad> obtenerPropiedadesSubcategoria(Long subcategoriaId) {
+    public List<PropiedadProducto> obtenerPropiedadesSubcategoria(Long subcategoriaId) {
         Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
 
         return subcategoria.getPropiedades();
     }
 
     @Override
-    public Propiedad agregarValor(Long subcategoriaId, Long propiedadId, ValorPropiedad valorPropiedad) {
-        Propiedad propiedad = this.obtenerPropiedad(subcategoriaId, propiedadId);
+    public PropiedadProducto agregarValor(Long subcategoriaId, Long propiedadId, ValorPropiedadProducto valorPropiedadProducto) {
+        PropiedadProducto propiedadProducto = this.obtenerPropiedad(subcategoriaId, propiedadId);
 
         // Se hace el llamado a obtener propiedad para verificar si pertenece a la subcategoría, para no repetir codigo
         // de verificación.
 
-        return this.propiedadService.agregarValor(propiedad.getId(), valorPropiedad);
+        return this.propiedadService.agregarValor(propiedadProducto.getId(), valorPropiedadProducto);
     }
 
     @Override
-    public List<ValorPropiedad> obtenerValoresPropiedad(Long subcategoriaId, Long propiedadId) {
-        Propiedad propiedad = this.obtenerPropiedad(subcategoriaId, propiedadId);
+    public List<ValorPropiedadProducto> obtenerValoresPropiedad(Long subcategoriaId, Long propiedadId) {
+        PropiedadProducto propiedadProducto = this.obtenerPropiedad(subcategoriaId, propiedadId);
 
-        return propiedad.getValores();
+        return propiedadProducto.getValores();
     }
 }

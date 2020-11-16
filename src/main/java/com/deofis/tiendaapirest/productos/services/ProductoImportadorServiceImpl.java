@@ -94,7 +94,7 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
                             producto.setUnidadMedidaId((long) currentCell.getNumericCellValue());
                             break;
                         case 6:
-                            producto.setStock((int) currentCell.getNumericCellValue());
+                            producto.setDisponibilidad((int) currentCell.getNumericCellValue());
                             break;
                         default:
                             break;
@@ -152,7 +152,7 @@ public class ProductoImportadorServiceImpl implements ProductoImportadorService 
                             producto.setDescripcion(currentCell.getStringCellValue());
                             break;
                         case 3:
-                            producto.setStock((int) currentCell.getNumericCellValue());
+                            producto.setDisponibilidad((int) currentCell.getNumericCellValue());
                             break;
                         default:
                             break;

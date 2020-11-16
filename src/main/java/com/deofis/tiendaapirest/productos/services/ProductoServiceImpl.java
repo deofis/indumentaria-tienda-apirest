@@ -41,7 +41,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .destacado(true)
                 .subcategoria(producto.getSubcategoria())
                 .marca(producto.getMarca())
-                .stock(producto.getStock())
+                .disponibilidad(producto.getDisponibilidad())
                 .unidadMedida(producto.getUnidadMedida())
                 .build();
 
@@ -72,7 +72,7 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setPrecio(producto.getPrecio());
         productoActual.setSubcategoria(producto.getSubcategoria());
         productoActual.setMarca(producto.getMarca());
-        productoActual.setStock(producto.getStock());
+        productoActual.setDisponibilidad(producto.getDisponibilidad());
         productoActual.setUnidadMedida(producto.getUnidadMedida());
 
         return this.productoRepository.save(productoActual);
@@ -157,7 +157,7 @@ public class ProductoServiceImpl implements ProductoService {
         for (ProductoDTO productoDTO: dtos) {
             Producto productoBD = this.productoRepository.getOne(productoDTO.getId());
 
-            productoBD.setStock(productoDTO.getStock());
+            productoBD.setDisponibilidad(productoDTO.getDisponibilidad());
             Producto productoActuzliado = this.productoRepository.save(productoBD);
             productosActualizados.add(productoActuzliado);
         }
@@ -183,7 +183,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .nombre(productoDTO.getNombre())
                 .descripcion(productoDTO.getDescripcion())
                 .precio(productoDTO.getPrecio())
-                .stock(productoDTO.getStock())
+                .disponibilidad(productoDTO.getDisponibilidad())
                 .subcategoria(subcategoria)
                 .marca(marca)
                 .unidadMedida(unidadMedida)

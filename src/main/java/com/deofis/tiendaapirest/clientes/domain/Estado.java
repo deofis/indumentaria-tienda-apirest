@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "estados")
+@Table(name = "states")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Estado implements Serializable {

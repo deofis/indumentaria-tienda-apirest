@@ -75,13 +75,13 @@ public class OperacionServiceImpl implements OperacionService {
                     .orElseThrow(() -> new ProductoException("Producto no encontrado con id: " +
                             item.getProducto().getId()));
 
-            if (producto.getStock() - item.getCantidad() < 0) {
+            if (producto.getDisponibilidad() - item.getCantidad() < 0) {
                 throw new OperacionException("Error al completar la compra: " +
                         "La cantidad de productos vendidos no puede ser menor al stock actual");
             }
 
             item.setPrecioVenta(producto.getPrecio());
-            producto.setStock(producto.getStock() - item.getCantidad());
+            producto.setDisponibilidad(producto.getDisponibilidad() - item.getCantidad());
             item.setSubTotal(item.getPrecioVenta() * item.getCantidad().doubleValue());
 
             nuevaOperacion.setTotal(this.calcularTotal(nuevaOperacion.getTotal(), item.getSubTotal()));

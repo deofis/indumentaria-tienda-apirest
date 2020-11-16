@@ -35,14 +35,14 @@ public class Producto implements Serializable {
     @NotNull(message = "El precio del producto es obligatorio.")
     private Double precio;
 
-    @NotNull(message = "El stock del producto es obligatorio.")
-    private Integer stock;
+    private Double precioOferta;
 
+    @NotNull(message = "La disponibilidad inicial del producto es obligatorio.")
+    private Integer disponibilidad;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
-    @Lob
     private String foto;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -70,4 +70,21 @@ public class Producto implements Serializable {
     @JoinColumn(name = "unidad_medida_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private UnidadMedida unidadMedida;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinTable(name = "productos_x_propiedades",
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "producto_propiedad_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"producto_id", "producto_propiedad_id"})})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<PropiedadProducto> propiedades;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "default_sku_id")
+    @JsonIgnoreProperties(value = {"producto", "defaultProducto" , "hibernateLazyInitializer", "handler"}, allowSetters = true)
+    private Sku defaultSku;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "producto", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"producto", "defaultProducto", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+    private List<Sku> skus;
 }

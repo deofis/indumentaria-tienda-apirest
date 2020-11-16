@@ -3,7 +3,6 @@ package com.deofis.tiendaapirest.reportes.services;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import lombok.AllArgsConstructor;
-import net.sf.jasperreports.engine.JRException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,7 +22,7 @@ public class ProductoReportServiceImpl implements ProductoReportService {
     private final ProductoRepository productoRepository;
 
     @Override
-    public ByteArrayInputStream generarReporteExcel() throws IOException, JRException {
+    public ByteArrayInputStream generarReporteExcel() throws IOException {
         String[] columns = {"Id", "Nombre", "Descripcion", "Stock"};
 
         Workbook workbook = new XSSFWorkbook();
@@ -45,7 +44,7 @@ public class ProductoReportServiceImpl implements ProductoReportService {
             row.createCell(0).setCellValue(producto.getId());
             row.createCell(1).setCellValue(producto.getNombre());
             row.createCell(2).setCellValue(producto.getDescripcion());
-            row.createCell(3).setCellValue(producto.getStock());
+            row.createCell(3).setCellValue(producto.getDisponibilidad());
 
             initRow++;
         }
