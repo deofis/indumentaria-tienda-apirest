@@ -22,7 +22,8 @@ public interface GeneradorSkus {
     Integer generarSkusProducto(Producto producto);
 
     /**
-     *
+     * Genera TODAS las combinaciones posibles para un Producto, sin tener en cuenta si esta repetida
+     * cierta combinación, o no.
      * @param indexActual indice de la propiedad actual en el listado de propiedades recorridas.
      * @param combinacionActual List de valores de producto (combinacion) actual.
      * @param propiedades List de las propiedades del producto a generar combinaciones.
@@ -48,5 +49,5 @@ public interface GeneradorSkus {
      * @param valores Todas las combinaciones generadas a persistir (List de List)
      * @return Integer con la cantidad de combinaciones generadas.
      */
-    Integer persistirCombinaciones(Producto producto, List<List<ValorPropiedadProducto>> valores);
+    Integer persistirCombinaciones(Producto producto, List<List<ValorPropiedadProducto>> combinaciones);
 }
