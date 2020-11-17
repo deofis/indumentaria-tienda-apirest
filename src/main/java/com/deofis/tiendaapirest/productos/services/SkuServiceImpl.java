@@ -96,9 +96,13 @@ public class SkuServiceImpl implements SkuService {
         return this.skuRepository.save(skuActual);
     }
 
+    @Transactional
     @Override
     public Sku actualizarDisponibilidad(Long skuId, Integer disponibilidad) {
-        return null;
+        Sku skuActual = this.obtenerSku(skuId);
+
+        skuActual.setDisponibilidad(disponibilidad);
+        return this.skuRepository.save(skuActual);
     }
 
     @Transactional
