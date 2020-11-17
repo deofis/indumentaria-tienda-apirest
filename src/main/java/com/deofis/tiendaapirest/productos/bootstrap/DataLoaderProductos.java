@@ -294,7 +294,7 @@ public class DataLoaderProductos implements CommandLineRunner {
 
             // Creamos propiedades y valores
             PropiedadProducto color = PropiedadProducto.builder()
-                    .nombre("Color").valores(new ArrayList<>()).build();
+                    .nombre("Color").variable(true).valores(new ArrayList<>()).build();
             ValorPropiedadProducto negro = ValorPropiedadProducto.builder()
                     .valor("Negro").build();
             ValorPropiedadProducto dorado = ValorPropiedadProducto.builder()
@@ -303,7 +303,7 @@ public class DataLoaderProductos implements CommandLineRunner {
             color.getValores().add(dorado);
 
             PropiedadProducto memoria = PropiedadProducto.builder()
-                    .nombre("Memoria").valores(new ArrayList<>()).build();
+                    .nombre("Memoria").variable(true).valores(new ArrayList<>()).build();
             ValorPropiedadProducto gb32 = ValorPropiedadProducto.builder()
                     .valor("32 GB").build();
             ValorPropiedadProducto gb64 = ValorPropiedadProducto.builder()
