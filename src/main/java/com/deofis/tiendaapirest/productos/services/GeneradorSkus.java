@@ -46,7 +46,7 @@ public interface GeneradorSkus {
      * Persiste las distintas combinaciones de productos, y asigna los Skus generados al producto
      * requerido.
      * @param producto Producto al cual se deben asignar los Skus generados.
-     * @param valores Todas las combinaciones generadas a persistir (List de List)
+     * @param combinaciones Todas las combinaciones generadas a persistir (List de List)
      * @return Integer con la cantidad de combinaciones generadas.
      */
     Integer persistirCombinaciones(Producto producto, List<List<ValorPropiedadProducto>> combinaciones);
