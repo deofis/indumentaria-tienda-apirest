@@ -34,6 +34,13 @@ public interface SkuService {
     Map<String, Object> generarSkusProducto(Producto producto);
 
     /**
+     * Obtiene un SKU a traves de su ID.
+     * @param skuId Long id del Sku requerido.
+     * @return Sku requerido.
+     */
+    Sku obtenerSku(Long skuId);
+
+    /**
      * Actualiza por completo los datos de un SKU.
      * @param skuId Long id del sku a actualizar.
      * @param sku Sku actualizado.
@@ -56,6 +63,14 @@ public interface SkuService {
      * @return Sku actualizado y guardado.
      */
     Sku actualizarPrecio(Long skuId, Double precio);
+
+    /**
+     * Acualiza o establece el precio de oferta de un SKU requerido.
+     * @param skuId Long id del sku a actualizar o establecer precio de oferta.
+     * @param precioOferta Double precio de oferta nuevo.
+     * @return Sku actualizado y guardado.
+     */
+    Sku actualizarPrecioOferta(Long skuId, Double precioOferta);
 
     /**
      * Elimina un SKU requerido.
