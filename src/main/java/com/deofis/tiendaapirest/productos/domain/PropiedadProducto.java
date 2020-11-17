@@ -23,6 +23,11 @@ public class PropiedadProducto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    /**
+     * Este atributo será true si se quiere utilizar la propiedad de producto para
+     * generar combinaciones. Si es false, no se usará para combinaciones, lo que implica
+     * que será solo una propiedad visible, pero no será seleccionable para vender.
+     */
     private boolean variable;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "producto_propiedad_id")
