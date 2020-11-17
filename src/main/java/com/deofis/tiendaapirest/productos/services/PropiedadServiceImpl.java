@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Deprecated
 public class PropiedadServiceImpl implements PropiedadService {
 
     private final PropiedadRepository propiedadRepository;

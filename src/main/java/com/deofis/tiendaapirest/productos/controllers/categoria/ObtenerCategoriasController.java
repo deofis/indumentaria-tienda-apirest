@@ -19,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
+@Deprecated
 public class ObtenerCategoriasController {
 
     private final CategoriaService categoriaService;

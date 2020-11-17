@@ -87,4 +87,8 @@ public class Producto implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "producto", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"producto", "defaultProducto", "hibernateLazyInitializer", "handler"}, allowSetters = true)
     private List<Sku> skus;
+
+    public boolean isVendibleSinPropiedades() {
+        return this.skus.size() == 0;
+    }
 }

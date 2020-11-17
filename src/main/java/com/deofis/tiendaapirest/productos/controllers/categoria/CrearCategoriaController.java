@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 @Validated
 @AllArgsConstructor
+@Deprecated
 public class CrearCategoriaController {
 
     private final CategoriaService categoriaService;

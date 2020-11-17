@@ -2,7 +2,7 @@ package com.deofis.tiendaapirest.productos.controllers.producto;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.services.ProductoService;
+import com.deofis.tiendaapirest.productos.services.ImportadorProductosService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ImportarProductosController {
 
-    private final ProductoService productoService;
+    private final ImportadorProductosService importadorProductosService;
 
     /**
      * Importa un listado de productos nuevos y los guarda en la base de datos a partir de un archivo .csv.
@@ -37,7 +37,7 @@ public class ImportarProductosController {
         List<Producto> productos;
 
         try {
-            productos = this.productoService.importarDeCSV(archivo);
+            productos = this.importadorProductosService.importarDeCSV(archivo);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al importar archivo CSV");
             response.put("error", e.getMessage());
@@ -62,7 +62,7 @@ public class ImportarProductosController {
         List<Producto> productos;
 
         try {
-            productos = this.productoService.importarDeExcel(archivo);
+            productos = this.importadorProductosService.importarDeExcel(archivo);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al importar archivo Excel");
             response.put("error", e.getMessage());
@@ -87,7 +87,7 @@ public class ImportarProductosController {
         List<Producto> productos;
 
         try {
-            productos = this.productoService.actualizarStockDeExcel(archivo);
+            productos = this.importadorProductosService.actualizarStockDeExcel(archivo);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al actualizar los productos a partir del archivo Excel");
             response.put("error", e.getMessage());

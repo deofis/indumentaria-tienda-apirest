@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.productos.services;
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 
+@Deprecated
 public interface PropiedadService {
 
     /**

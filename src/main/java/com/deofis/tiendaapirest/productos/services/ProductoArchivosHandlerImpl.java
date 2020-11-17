@@ -23,7 +23,8 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ProductoImportadorServiceImpl implements ProductoImportadorService {
+@Deprecated
+public class ProductoArchivosHandlerImpl implements ProductoArchivosHandler {
 
     @Override
     public List<ProductoDTO> recibirCsv(MultipartFile archivo) {
