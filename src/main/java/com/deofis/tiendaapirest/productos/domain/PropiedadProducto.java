@@ -23,6 +23,7 @@ public class PropiedadProducto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    private boolean requerida;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "producto_propiedad_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

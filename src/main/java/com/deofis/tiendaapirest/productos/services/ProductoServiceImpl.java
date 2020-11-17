@@ -21,7 +21,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Producto crear(Producto producto) {
+    public Producto crearProducto(Producto producto) {
         Producto nuevoProducto = Producto.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
@@ -54,7 +54,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Producto actualizar(Producto producto, Long id) {
+    public Producto actualizarProducto(Producto producto, Long id) {
 
         Producto productoActual = this.obtenerProducto(id);
 

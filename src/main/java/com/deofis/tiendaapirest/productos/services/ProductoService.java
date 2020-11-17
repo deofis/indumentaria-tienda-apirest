@@ -5,18 +5,25 @@ import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 
 import java.util.List;
 
+/**
+ * Servicio que se encarga de los {@link Producto}. Maneja la creación, actualización y obtención de productos,
+ * asi como la activación/desactivación de los mismos. También es responsable de destacar o quitar de
+ * destacados a un producto requerido.
+ */
+
 public interface ProductoService {
 
     /**
-     * Método que se encarga de registrar un nuevo producto en la BD y devolverlo.
+     * Método que se encarga de registrar un nuevo producto en la BD y devolverlo. También
+     * se encarga de generar el SKU por defecto.
      * @param producto Recibe un producto con datos validos desde el controlador.
      * @return Producto guardado en la Base de Datos.
      */
-    Producto crear(Producto producto);
+    Producto crearProducto(Producto producto);
 
     /**
-     * Método que lista todos los productos en la Base de Datos ordenados por nombre asc.
-     * @return List de Productos ordenados por nombre.
+     * Método que lista todos los productos registrados.
+     * @return List de Productos.
      */
     List<Producto> obtenerProductos();
 
@@ -33,7 +40,7 @@ public interface ProductoService {
      * @param id Long del id del producto a modificar.
      * @return Producto actualizado.
      */
-    Producto actualizar(Producto producto, Long id);
+    Producto actualizarProducto(Producto producto, Long id);
 
     /**
      * Método para registrar la baja lógica de un producto.

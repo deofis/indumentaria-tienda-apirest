@@ -47,7 +47,7 @@ public class ActualizarProductoController {
         }
 
         try {
-            productoActualizado = this.productoService.actualizar(producto, id);
+            productoActualizado = this.productoService.actualizarProducto(producto, id);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al modificar el producto");
             response.put("error", e.getMessage());

@@ -53,7 +53,7 @@ public class CrearProductoController {
         }
 
         try {
-            nuevoProducto = this.productoService.crear(producto);
+            nuevoProducto = this.productoService.crearProducto(producto);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al registrar el nuevo producto");
             response.put("error", e.getMessage());
