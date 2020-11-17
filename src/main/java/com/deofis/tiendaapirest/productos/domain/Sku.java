@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,10 +34,12 @@ public class Sku implements Serializable {
     private List<ValorPropiedadProducto> valores;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "default_producto_id")
+    @JsonIgnoreProperties(value = {"skus", "defaultSku" , "hibernateLazyInitializer", "handler"}, allowSetters = true)
     @ToString.Exclude
     private Producto defaultProducto;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "producto_id")
+    @JsonIgnoreProperties(value = {"skus", "defaultSku" , "hibernateLazyInitializer", "handler"}, allowSetters = true)
     @ToString.Exclude
     private Producto producto;
 }
