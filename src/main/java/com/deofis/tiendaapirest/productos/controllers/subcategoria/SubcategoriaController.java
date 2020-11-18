@@ -2,13 +2,15 @@ package com.deofis.tiendaapirest.productos.controllers.subcategoria;
 
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
-import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.SubcategoriaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,7 @@ public class SubcategoriaController {
      * @param propiedadProducto Propiedad nueva.
      * @return ResponseEntity con la subcategoria actualizada.
      */
+    /*
     @PostMapping("/subcategorias/{subcategoriaId}/propiedades")
     public ResponseEntity<?> agregarPropiedad(@PathVariable Long subcategoriaId, @RequestBody PropiedadProducto propiedadProducto) {
         Map<String, Object> response = new HashMap<>();
@@ -83,6 +86,8 @@ public class SubcategoriaController {
         response.put("subcategoria", subcategoriaActualizada);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+     */
 
     /**
      * Obtiene una lista con todas las propiedades de una subcategoría requerida.
@@ -122,6 +127,7 @@ public class SubcategoriaController {
      * @param valorPropiedadProducto ValorPropiedad nueva a agregar.
      * @return ResponseEntity con el nombre de la subcategoria y la propiedad actualizada.
      */
+    /*
     @PostMapping("/subcategorias/{subcategoriaId}/propiedades/{propiedadId}/valores")
     public ResponseEntity<?> agregarValorAPropiedad(@PathVariable Long subcategoriaId,
                                                     @PathVariable Long propiedadId,
@@ -145,6 +151,8 @@ public class SubcategoriaController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+     */
+
     /**
      * Obtiene los valores de una propiedad que pertenece a una subcategoria requerida.
      * URL: ~/api/subcategorias/1/propiedades/1/valores
@@ -154,6 +162,7 @@ public class SubcategoriaController {
      * @param propiedadId Long id de la propiedad requerida a buscar valores.
      * @return ResponseEntity con el nombre de la subcategoria y propiedad, y lista de los valores de estos.
      */
+    /*
     @GetMapping("/subcategorias/{subcategoriaId}/propiedades/{propiedadId}/valores")
     public ResponseEntity<?> obtenerValoresPropiedad(@PathVariable Long subcategoriaId,
                                                      @PathVariable Long propiedadId) {
@@ -178,4 +187,6 @@ public class SubcategoriaController {
         response.put("valores", valores);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+     */
 }

@@ -4,16 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "subcategorias")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Subcategoria implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -23,12 +24,11 @@ public class Subcategoria implements Serializable {
     private Long id;
     private String nombre;
     private String codigo;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "subcategoria_id")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinTable(name = "subcategorias_x_propiedades",
+            joinColumns = @JoinColumn(name = "subcategoria_id"),
+            inverseJoinColumns = @JoinColumn(name = "producto_propiedad_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"subcategoria_id", "producto_propiedad_id"})})
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<PropiedadProducto> propiedades;
-
-    public Subcategoria() {
-        this.propiedades = new ArrayList<>();
-    }
 }

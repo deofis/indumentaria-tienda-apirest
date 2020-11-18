@@ -110,34 +110,34 @@ public class DataLoaderProductos implements CommandLineRunner {
             this.medioPagoRepository.save(paypal);
         }
 
+        // CARGA DE PROPIEDADES Y VALORES (PREVIO A CARGA SUB Y PROD)
+        PropiedadProducto color = PropiedadProducto.builder()
+                .nombre("Color").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto negro = ValorPropiedadProducto.builder()
+                .valor("Negro").build();
+        ValorPropiedadProducto dorado = ValorPropiedadProducto.builder()
+                .valor("Dorado").build();
+        color.getValores().add(negro);
+        color.getValores().add(dorado);
+
+        PropiedadProducto memoria = PropiedadProducto.builder()
+                .nombre("Memoria").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto gb32 = ValorPropiedadProducto.builder()
+                .valor("32 GB").build();
+        ValorPropiedadProducto gb64 = ValorPropiedadProducto.builder()
+                .valor("64 GB").build();
+        memoria.getValores().add(gb32);
+        memoria.getValores().add(gb64);
+
         // CARGA DE CATEGORIAS Y SUBCATEGORIAS
         List<Categoria> categorias = new ArrayList<>();
 
         if (this.categoriaRepository.findByNombre("Tecnología").isEmpty()) {
             Subcategoria celulares;
 
-            // Propiedad modelo
-            PropiedadProducto modelo;
-            ValorPropiedadProducto s20;
-
-            s20 = ValorPropiedadProducto.builder().valor("Galaxy S20").build();
-
-            modelo = PropiedadProducto.builder().nombre("Modelo").valores(new ArrayList<>()).build();
-            modelo.getValores().add(s20);
-
-            // Propiedad color
-            PropiedadProducto color;
-            ValorPropiedadProducto negro = ValorPropiedadProducto.builder().valor("Negro").build();
-            ValorPropiedadProducto gris = ValorPropiedadProducto.builder().valor("Gris").build();
-            ValorPropiedadProducto dorado = ValorPropiedadProducto.builder().valor("Droado").build();
-
-            color = PropiedadProducto.builder().nombre("Color").valores(new ArrayList<>()).build();
-            color.getValores().add(negro);
-            color.getValores().add(gris);
-            color.getValores().add(dorado);
 
             celulares = Subcategoria.builder().nombre("Celulares").propiedades(new ArrayList<>()).codigo("CEL").build();
-            celulares.getPropiedades().add(modelo);
+            celulares.getPropiedades().add(memoria);
             celulares.getPropiedades().add(color);
 
             Categoria tecnologia = Categoria.builder()
@@ -291,26 +291,6 @@ public class DataLoaderProductos implements CommandLineRunner {
 
         // Carga productos
         if (this.productoRepository.findAll().size() == 0) {
-
-            // Creamos propiedades y valores
-            PropiedadProducto color = PropiedadProducto.builder()
-                    .nombre("Color").variable(true).valores(new ArrayList<>()).build();
-            ValorPropiedadProducto negro = ValorPropiedadProducto.builder()
-                    .valor("Negro").build();
-            ValorPropiedadProducto dorado = ValorPropiedadProducto.builder()
-                    .valor("Dorado").build();
-            color.getValores().add(negro);
-            color.getValores().add(dorado);
-
-            PropiedadProducto memoria = PropiedadProducto.builder()
-                    .nombre("Memoria").variable(true).valores(new ArrayList<>()).build();
-            ValorPropiedadProducto gb32 = ValorPropiedadProducto.builder()
-                    .valor("32 GB").build();
-            ValorPropiedadProducto gb64 = ValorPropiedadProducto.builder()
-                    .valor("64 GB").build();
-            memoria.getValores().add(gb32);
-            memoria.getValores().add(gb64);
-
             //Creamos y cargamos los productos con propiedades y Sku por defecto.
             List<Producto> productos = new ArrayList<>();
 
@@ -319,7 +299,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion("Modelo: J2 GP 16GB de memoria, 1GB de RAM")
                     .precio(25000.00)
                     .precioOferta(23000.00)
-                    .disponibilidad(107)
+                    .disponibilidadGeneral(107)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
@@ -336,7 +316,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(samsungJ2.getDescripcion())
                     .precio(samsungJ2.getPrecio())
                     .precioOferta(samsungJ2.getPrecioOferta())
-                    .disponibilidad(samsungJ2.getDisponibilidad())
+                    .disponibilidad(samsungJ2.getDisponibilidadGeneral())
                     .defaultProducto(samsungJ2).build());
 
             productos.add(samsungJ2);
@@ -345,7 +325,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre("Samsung Galaxy S20")
                     .descripcion("Modelo: S20 32GB de memoria, 4GB de RAM")
                     .precio(120000.00)
-                    .disponibilidad(25)
+                    .disponibilidadGeneral(25)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
@@ -362,7 +342,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(samsungS20.getDescripcion())
                     .precio(samsungS20.getPrecio())
                     .precioOferta(samsungS20.getPrecioOferta())
-                    .disponibilidad(samsungS20.getDisponibilidad())
+                    .disponibilidad(samsungS20.getDisponibilidadGeneral())
                     .defaultProducto(samsungS20).build());
             productos.add(samsungS20);
 
@@ -370,7 +350,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre("Samsung Galaxy S10")
                     .descripcion("Modelo: S10 32GB de memoria, 2GB de RAM")
                     .precio(90000.00)
-                    .disponibilidad(20)
+                    .disponibilidadGeneral(20)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
@@ -387,7 +367,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(samsungS10.getDescripcion())
                     .precio(samsungS10.getPrecio())
                     .precioOferta(samsungS10.getPrecioOferta())
-                    .disponibilidad(samsungS10.getDisponibilidad())
+                    .disponibilidad(samsungS10.getDisponibilidadGeneral())
                     .defaultProducto(samsungS10).build());
             productos.add(samsungS10);
 
@@ -395,7 +375,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre("iPhone 11 Plus")
                     .descripcion("Modelo: 11 Plus 64GB de memoria, 4GB de RAM")
                     .precio(130000.00)
-                    .disponibilidad(11)
+                    .disponibilidadGeneral(11)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
@@ -412,7 +392,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(iphone11plus.getDescripcion())
                     .precio(iphone11plus.getPrecio())
                     .precioOferta(iphone11plus.getPrecioOferta())
-                    .disponibilidad(iphone11plus.getDisponibilidad())
+                    .disponibilidad(iphone11plus.getDisponibilidadGeneral())
                     .defaultProducto(iphone11plus).build());
             productos.add(iphone11plus);
 
@@ -420,7 +400,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre("iPhone 11")
                     .descripcion("Modelo: 11 32GB de memoria, 2GB de RAM")
                     .precio(120000.00)
-                    .disponibilidad(15)
+                    .disponibilidadGeneral(15)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
@@ -437,7 +417,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(iphone11.getDescripcion())
                     .precio(iphone11.getPrecio())
                     .precioOferta(iphone11.getPrecioOferta())
-                    .disponibilidad(iphone11.getDisponibilidad())
+                    .disponibilidad(iphone11.getDisponibilidadGeneral())
                     .defaultProducto(iphone11).build());
             productos.add(iphone11);
 
@@ -445,7 +425,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre("Samsung Galaxy A10")
                     .descripcion("Modelo: Galaxy A10 32GB de memoria, 2GB de RAM")
                     .precio(40000.00)
-                    .disponibilidad(95)
+                    .disponibilidadGeneral(95)
                     .activo(true)
                     .destacado(true)
                     .fechaCreacion(new Date())
@@ -462,7 +442,7 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(samsungA10.getDescripcion())
                     .precio(samsungA10.getPrecio())
                     .precioOferta(samsungA10.getPrecioOferta())
-                    .disponibilidad(samsungA10.getDisponibilidad())
+                    .disponibilidad(samsungA10.getDisponibilidadGeneral())
                     .defaultProducto(samsungA10).build());
             productos.add(samsungA10);
 

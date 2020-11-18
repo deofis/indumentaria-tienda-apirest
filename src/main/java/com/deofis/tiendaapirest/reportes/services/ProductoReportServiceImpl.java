@@ -44,7 +44,7 @@ public class ProductoReportServiceImpl implements ProductoReportService {
             row.createCell(0).setCellValue(producto.getId());
             row.createCell(1).setCellValue(producto.getNombre());
             row.createCell(2).setCellValue(producto.getDescripcion());
-            row.createCell(3).setCellValue(producto.getDisponibilidad());
+            row.createCell(3).setCellValue(producto.getDisponibilidadGeneral());
 
             initRow++;
         }

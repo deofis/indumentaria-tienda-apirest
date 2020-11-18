@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class CrearProductoController {
+@Deprecated
+public class CrearProductoControllerOLD {
 
     private final ProductoService productoService;
 

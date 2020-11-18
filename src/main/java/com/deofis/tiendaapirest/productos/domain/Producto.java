@@ -38,7 +38,8 @@ public class Producto implements Serializable {
     private Double precioOferta;
 
     @NotNull(message = "La disponibilidad inicial del producto es obligatorio.")
-    private Integer disponibilidad;
+    private Integer disponibilidadGeneral;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
@@ -54,7 +55,7 @@ public class Producto implements Serializable {
     private boolean destacado;
 
     @NotNull(message = "La subcategoria del producto es obligatoria.")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "subcategoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Subcategoria subcategoria;

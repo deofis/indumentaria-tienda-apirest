@@ -24,9 +24,25 @@ public class CatalogoServiceImpl implements CatalogoService {
     private final SubcategoriaRepository subcategoriaRepository;
     private final MarcaRepository marcaRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Categoria> listarCategorias() {
         return this.categoriaRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public Categoria obtenerCategoria(Long categoriaId) {
+        return this.categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new ProductoException("No existe la categoría con id: " + categoriaId));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Subcategoria> listarSubcategoriasPorCategoria(Long categoriaId) {
+        Categoria categoria = this.obtenerCategoria(categoriaId);
+
+        return categoria.getSubcategorias();
     }
 
     @Override

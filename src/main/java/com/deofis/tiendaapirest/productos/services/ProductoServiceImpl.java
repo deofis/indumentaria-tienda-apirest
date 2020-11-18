@@ -1,14 +1,18 @@
 package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +26,10 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public Producto crearProducto(Producto producto) {
+        List<PropiedadProducto> propiedades = new ArrayList<>();
+
+        if (CollectionUtils.isNotEmpty(producto.getPropiedades())) propiedades.addAll(producto.getPropiedades());
+
         Producto nuevoProducto = Producto.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
@@ -32,9 +40,22 @@ public class ProductoServiceImpl implements ProductoService {
                 .destacado(true)
                 .subcategoria(producto.getSubcategoria())
                 .marca(producto.getMarca())
-                .disponibilidad(producto.getDisponibilidad())
+                .disponibilidadGeneral(producto.getDisponibilidadGeneral())
                 .unidadMedida(producto.getUnidadMedida())
+                .propiedades(propiedades)
+                .skus(new ArrayList<>())
                 .build();
+
+        nuevoProducto.setDefaultSku(Sku.builder()
+                .nombre(producto.getNombre())
+                .descripcion(producto.getDescripcion())
+                .precio(producto.getPrecio())
+                .precioOferta(producto.getPrecioOferta())
+                .disponibilidad(producto.getDisponibilidadGeneral())
+                .valores(null)
+                .producto(null)
+                .valoresData(null)
+                .defaultProducto(nuevoProducto).build());
 
         return this.productoRepository.save(nuevoProducto);
     }
@@ -63,8 +84,9 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setPrecio(producto.getPrecio());
         productoActual.setSubcategoria(producto.getSubcategoria());
         productoActual.setMarca(producto.getMarca());
-        productoActual.setDisponibilidad(producto.getDisponibilidad());
+        productoActual.setDisponibilidadGeneral(producto.getDisponibilidadGeneral());
         productoActual.setUnidadMedida(producto.getUnidadMedida());
+        productoActual.getDefaultSku().setDisponibilidad(producto.getDisponibilidadGeneral());
 
         return this.productoRepository.save(productoActual);
     }
@@ -108,5 +130,21 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public List<UnidadMedida> obtenerUnidadesMedida() {
         return this.unidadMedidaRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PropiedadProducto> obtenerPropiedadesDeProducto(Long productoId) {
+        Producto producto = this.obtenerProducto(productoId);
+
+        return producto.getPropiedades();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Sku> obtenerSkusProducto(Long productoId) {
+        Producto producto = this.obtenerProducto(productoId);
+
+        return producto.getSkus();
     }
 }

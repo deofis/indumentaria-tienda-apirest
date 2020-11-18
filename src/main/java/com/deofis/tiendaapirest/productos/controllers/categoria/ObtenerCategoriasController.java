@@ -1,7 +1,6 @@
 package com.deofis.tiendaapirest.productos.controllers.categoria;
 
 import com.deofis.tiendaapirest.productos.domain.Categoria;
-import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CategoriaService;
 import lombok.AllArgsConstructor;
@@ -85,6 +84,7 @@ public class ObtenerCategoriasController {
      * @param id PathVariable Long con el id de la categoria a consultar sus subcategorias.
      * @return ResponseEntity con las subcategorias.
      */
+    /*
     @GetMapping("/categorias/{id}/subcategorias")
     public ResponseEntity<?> obtenerSubcategoriasCategoria(@PathVariable Long id) {
         Map<String, Object> response = new HashMap<>();
@@ -104,5 +104,7 @@ public class ObtenerCategoriasController {
         response.put("subcategorias", subcategorias);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+     */
 
 }

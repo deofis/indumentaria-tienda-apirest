@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.productos.controllers.catalogo;
 import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CatalogoService;
 import lombok.AllArgsConstructor;
@@ -235,6 +236,26 @@ public class CatalogoController {
 
         response.put("cantidad", productosPorPrecio.size());
         response.put("productos", productosPorPrecio);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/categorias/{categoriaId}/subcategorias")
+    public ResponseEntity<?> obtenerSubcategoriasDeCategoria(@PathVariable Long categoriaId) {
+        Map<String, Object> response = new HashMap<>();
+        List<Subcategoria> subcategorias;
+        String categoria;
+
+        try {
+            subcategorias = this.catalogoService.listarSubcategoriasPorCategoria(categoriaId);
+            categoria = this.catalogoService.obtenerCategoria(categoriaId).getNombre();
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener las subcategorias de la categoría");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("categoria", categoria);
+        response.put("subcategorias", subcategorias);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

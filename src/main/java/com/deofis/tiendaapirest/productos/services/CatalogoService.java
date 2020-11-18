@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.productos.services;
 import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 
 import java.util.List;
 
@@ -17,6 +18,20 @@ public interface CatalogoService {
      * @return List de categorias.
      */
     List<Categoria> listarCategorias();
+
+    /**
+     * Obtiene una {@link Categoria} requerida a través de su id.
+     * @param categoriaId Long id de la categoría requerida.
+     * @return Categoria.
+     */
+    Categoria obtenerCategoria(Long categoriaId);
+
+    /**
+     * Obtiene un listado de todas las {@link Subcategoria}s que pertenecen a una {@link Categoria}.
+     * @param categoriaId Long id de la categoría a listar sus subcategorias.
+     * @return List listado de las subcategorias.
+     */
+    List<Subcategoria> listarSubcategoriasPorCategoria(Long categoriaId);
 
     /**
      * Obtiene un listado desordenado de todas las marcas.

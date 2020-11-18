@@ -2,11 +2,11 @@ package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
-import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,8 +16,7 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     private final SubcategoriaRepository subcategoriaRepository;
 
-    private final PropiedadService propiedadService;
-
+    @Transactional(readOnly = true)
     @Override
     public List<Subcategoria> listarSubcategorias() {
         return this.subcategoriaRepository.findAll();
@@ -29,22 +28,22 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
                 .orElseThrow(() -> new ProductoException("No existe subcategoria con id: " + subcategoriaId));
     }
 
-    @Override
-    public Subcategoria agregarPropiedad(Long subcategoriaId, PropiedadProducto propiedadProducto) {
-        Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
-
-        PropiedadProducto nuevaPropiedadProducto = this.propiedadService.crearPropiedad(propiedadProducto);
-
-        subcategoria.getPropiedades().add(nuevaPropiedadProducto);
-        return this.subcategoriaRepository.save(subcategoria);
-    }
-
+    @Transactional(readOnly = true)
     @Override
     public PropiedadProducto obtenerPropiedad(Long subcategoriaId, Long propiedadId) {
         Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
-        PropiedadProducto propiedadProducto = this.propiedadService.obtenerPropiedad(propiedadId);
+        PropiedadProducto propiedadProducto = null;
 
-        if (!subcategoria.getPropiedades().contains(propiedadProducto)) {
+        boolean existePropiedad = false;
+        for (PropiedadProducto propiedad: subcategoria.getPropiedades()) {
+            if (propiedad.getId().equals(propiedadId)) {
+                propiedadProducto = propiedad;
+                existePropiedad = true;
+                break;
+            }
+        }
+
+        if (!existePropiedad) {
             throw new ProductoException("La propiedad requerida no pertenece a la subcategoria: " +
                     subcategoria.getNombre());
         }
@@ -52,27 +51,11 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
         return propiedadProducto;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<PropiedadProducto> obtenerPropiedadesSubcategoria(Long subcategoriaId) {
         Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
 
         return subcategoria.getPropiedades();
-    }
-
-    @Override
-    public PropiedadProducto agregarValor(Long subcategoriaId, Long propiedadId, ValorPropiedadProducto valorPropiedadProducto) {
-        PropiedadProducto propiedadProducto = this.obtenerPropiedad(subcategoriaId, propiedadId);
-
-        // Se hace el llamado a obtener propiedad para verificar si pertenece a la subcategoría, para no repetir codigo
-        // de verificación.
-
-        return this.propiedadService.agregarValor(propiedadProducto.getId(), valorPropiedadProducto);
-    }
-
-    @Override
-    public List<ValorPropiedadProducto> obtenerValoresPropiedad(Long subcategoriaId, Long propiedadId) {
-        PropiedadProducto propiedadProducto = this.obtenerPropiedad(subcategoriaId, propiedadId);
-
-        return propiedadProducto.getValores();
     }
 }

@@ -33,6 +33,18 @@ public interface CatalogoAdminService {
     Sku crearSku(Long productoId, Sku sku);
 
     /**
+     * Elimina un {@link Sku} requerido.
+     * @param skuId Long id del SKU a eliminar.
+     */
+    void eliminarSku(Long skuId);
+
+    /**
+     * Elimina todos los SKUs {@link Sku} de un producto requerido.
+     * @param productoId Long id del producto a eliminar sus Skus.
+     */
+    void eliminarSkusProducto(Long productoId);
+
+    /**
      * Crea una nueva {@link PropiedadProducto}.
      * @param propiedad PropiedadProducto nuevo.
      * @return PropiedadProducto creada y guardada.
@@ -41,12 +53,21 @@ public interface CatalogoAdminService {
 
     /**
      * Crea una nueva {@link PropiedadProducto} para un {@link Producto}. Asigna automáticamente
-     * la propiedad al producto requerido.
+     * la propiedad al producto requerido, y, si es necesario, a la subcategoría del mismo.
      * @param productoId Long id del producto a crear la nueva propiedad.
      * @param propiedad PropiedadProducto nueva.
      * @return PropiedadProducto creada, guardada y asignada al producto correspondiente.
      */
     PropiedadProducto crearPropiedadProducto(Long productoId, PropiedadProducto propiedad);
+
+    /**
+     * Crea una nueva {@link PropiedadProducto} para una {@link com.deofis.tiendaapirest.productos.domain.Subcategoria}.
+     * Asigna automáticamente la propiedad a la subcategoría requerida.
+     * @param subcategoriaId Long id de la subcategoría a crear la nueva propiedad.
+     * @param propiedad PropiedadProducto nueva.
+     * @return PropiedadProducto creada, guardada y asignada a la subcategoría correspondiente.
+     */
+    PropiedadProducto crearPropiedadProductoSubcategoria(Long subcategoriaId, PropiedadProducto propiedad);
 
     /**
      * Crea un nuevo {@link ValorPropiedadProducto} que pertenecerá a una {@link PropiedadProducto} requerida.
@@ -65,4 +86,18 @@ public interface CatalogoAdminService {
      * @return Map que contiene la cantidad y combinaciones generadas.
      */
     Map<String, Object> generarSkusProducto(Long productoId);
+
+    /**
+     * Asigna una {@link PropiedadProducto} existente, a un {@link Producto} existente.
+     * @param productoId Long id del producto.
+     * @param propiedadId Long id de la propiedad a asignar.
+     */
+    void asignarPropiedadAProducto(Long productoId, Long propiedadId);
+
+    /**
+     * Asigna una {@link PropiedadProducto} existente, a una {@link com.deofis.tiendaapirest.productos.domain.Subcategoria}
+     * @param subcategoriaId Long id de la subcategoría.
+     * @param propiedadId Long id de la propiedad a asignar.
+     */
+    void asignarPropiedadASubcategoria(Long subcategoriaId, Long propiedadId);
 }

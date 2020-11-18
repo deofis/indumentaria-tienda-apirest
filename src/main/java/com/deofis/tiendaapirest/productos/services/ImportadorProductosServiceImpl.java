@@ -67,7 +67,7 @@ public class ImportadorProductosServiceImpl implements ImportadorProductosServic
         for (ProductoDTO productoDTO: dtos) {
             Producto productoBD = this.productoRepository.getOne(productoDTO.getId());
 
-            productoBD.setDisponibilidad(productoDTO.getDisponibilidad());
+            productoBD.setDisponibilidadGeneral(productoDTO.getDisponibilidad());
             Producto productoActuzliado = this.productoRepository.save(productoBD);
             productosActualizados.add(productoActuzliado);
         }
@@ -92,7 +92,7 @@ public class ImportadorProductosServiceImpl implements ImportadorProductosServic
                 .nombre(productoDTO.getNombre())
                 .descripcion(productoDTO.getDescripcion())
                 .precio(productoDTO.getPrecio())
-                .disponibilidad(productoDTO.getDisponibilidad())
+                .disponibilidadGeneral(productoDTO.getDisponibilidad())
                 .subcategoria(subcategoria)
                 .marca(marca)
                 .unidadMedida(unidadMedida)

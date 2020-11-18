@@ -1,6 +1,8 @@
 package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 
 import java.util.List;
@@ -66,4 +68,18 @@ public interface ProductoService {
      * @return List unidades medida.
      */
     List<UnidadMedida> obtenerUnidadesMedida();
+
+    /**
+     * Obtiene un listado de todas las propiedades asociadas a un producto.
+     * @param productoId Long id del producto requerido a listar sus propiedades.
+     * @return List de las propiedades del producto requerido.
+     */
+    List<PropiedadProducto> obtenerPropiedadesDeProducto(Long productoId);
+
+    /**
+     * Obtiene un listado con todos los SKUs de un producto requerido.
+     * @param productoId Long id del producto a listar sus SKUs.
+     * @return List de SKUs.
+     */
+    List<Sku> obtenerSkusProducto(Long productoId);
 }
