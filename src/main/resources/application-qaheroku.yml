@@ -12,7 +12,7 @@ spring:
     show-sql: false
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
   mail:
     host: smtp.gmail.com
     port: 587
