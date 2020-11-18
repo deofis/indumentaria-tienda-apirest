@@ -26,6 +26,7 @@ public class GenerarSkusProductoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            this.catalogoAdminService.eliminarSkusProducto(productoId);
             response = this.catalogoAdminService.generarSkusProducto(productoId);
         } catch (ProductoException | SkuException e) {
             response.put("mensaje", "Error al generar los SKUs del producto");

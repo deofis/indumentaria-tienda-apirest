@@ -48,9 +48,7 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
     public void eliminarSkusProducto(Long productoId) {
         Producto producto = this.productoService.obtenerProducto(productoId);
 
-        for (Sku sku: producto.getSkus()) {
-            this.skuService.eliminarSku(sku.getId());
-        }
+        producto.getSkus().clear();
 
         this.productoRepository.save(producto);
     }
@@ -96,9 +94,6 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
     @Override
     public Map<String, Object> generarSkusProducto(Long productoId) {
         Producto producto = this.productoService.obtenerProducto(productoId);
-
-        this.eliminarSkusProducto(productoId);
-
         return this.skuService.generarSkusProducto(producto);
     }
 
