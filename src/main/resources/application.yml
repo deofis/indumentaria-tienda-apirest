@@ -23,7 +23,7 @@ spring:
           facebook:
             clientId: 345672336639969
             clientSecret: b71dcd7364ddb480b0ea89f547dd1598
-            redirectUri: "https://deofis-tienda-apirest.herokuapp.com/oauth2/callback/{registrationId}"
+            redirectUri: "https://api.deofisdev.online/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile
