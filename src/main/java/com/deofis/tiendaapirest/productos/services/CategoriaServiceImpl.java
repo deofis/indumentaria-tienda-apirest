@@ -27,6 +27,16 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    @Transactional
+    public Categoria actualizar(Categoria categoria, Long id) {
+        Categoria categoriaActual = this.obtenerCategoria(id);
+
+        categoriaActual.setNombre(categoria.getNombre());
+
+        return this.categoriaRepository.save(categoriaActual);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Categoria> obtenerCategorias() {
         return this.categoriaRepository.findAllByOrderByNombreAsc();
@@ -50,12 +60,22 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    @Transactional
-    public Categoria actualizar(Categoria categoria, Long id) {
-        Categoria categoriaActual = this.obtenerCategoria(id);
+    @Transactional(readOnly = true)
+    public Subcategoria obtenerSubcategoriaDeCategoria(Long categoriaId, Long subcategoriaId) {
+        Categoria categoria = this.obtenerCategoria(categoriaId);
+        Subcategoria subcategoria = null;
 
-        categoriaActual.setNombre(categoria.getNombre());
+        boolean existeSub = false;
+        for (Subcategoria sub: categoria.getSubcategorias()) {
+            if (sub.getId().equals(subcategoriaId)) {
+                existeSub = true;
+                subcategoria = sub;
+                break;
+            }
+        }
 
-        return this.categoriaRepository.save(categoriaActual);
+        if (!existeSub) throw new ProductoException("La subcategoría no pertenece a la categoría: ".concat(categoria.getNombre()));
+
+        return subcategoria;
     }
 }

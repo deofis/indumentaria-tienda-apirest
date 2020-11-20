@@ -1,13 +1,12 @@
-package com.deofis.tiendaapirest.productos.controllers.categoria;
+package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
 
-import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.services.CategoriaService;
+import com.deofis.tiendaapirest.productos.services.ProductoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,26 +17,24 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@Validated
 @AllArgsConstructor
-@Deprecated
-public class ActualizarCategoriaController {
+public class ActualizarProductoController {
 
-    private final CategoriaService categoriaService;
+    private final ProductoService productoService;
 
     /**
-     * Actualizar una categoría.
-     * URL: ~/api/productos/categorias/actualizar/1
+     * Modifica un producto seleccionado.
+     * URL: ~/api/productos/actualizar/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
-     * @param categoria Categoría actualizada
-     * @param id PathVariable Long id de la categoría a actualizar.
-     * @return ResponseEntity con la categoría actualizada.
+     * @param producto Producto ya modificado.
+     * @param id PathVariable Long del producto a modificar.
+     * @return ResponseEntity con el producto ya actualizado.
      */
-    @PutMapping("/productos/categorias/actualizar/{id}")
-    public ResponseEntity<?> actualizar(@Valid @RequestBody Categoria categoria, @PathVariable Long id, BindingResult result) {
+    @PutMapping("/productos/actualizar/{id}")
+    public ResponseEntity<?> actualizar(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
-        Categoria categoriaActualizada;
+        Producto productoActualizado;
 
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -50,14 +47,13 @@ public class ActualizarCategoriaController {
         }
 
         try {
-            categoriaActualizada = this.categoriaService.actualizar(categoria, id);
+            productoActualizado = this.productoService.actualizarProducto(producto, id);
         } catch (ProductoException e) {
-            response.put("mensaje", "Error al actualizar la categoría");
+            response.put("mensaje", "Error al modificar el producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(categoriaActualizada, HttpStatus.CREATED);
+        return new ResponseEntity<>(productoActualizado, HttpStatus.CREATED);
     }
-
 }

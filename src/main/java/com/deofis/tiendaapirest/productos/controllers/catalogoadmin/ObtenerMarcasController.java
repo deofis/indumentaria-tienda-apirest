@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.productos.controllers.marca;
+package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
 
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;

@@ -53,6 +53,15 @@ public class CrearPropiedadProductoController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * Crea una nueva propiedad para una subcategoria requerida.
+     * URL: ~/api/subcategorias/1/propiedades
+     * HttpMethod: POST
+     * HttpStatus: CREATED
+     * @param subcategoriaId Long id de la subcategoria a agregar la propiedad nueva.
+     * @param propiedadProducto Propiedad nueva.
+     * @return ResponseEntity con la subcategoria actualizada.
+     */
     @PostMapping("/subcategorias/{subcategoriaId}/propiedades")
     public ResponseEntity<?> crearPropiedadProductoSubcategoria(@PathVariable Long subcategoriaId,
                                                                 @RequestBody PropiedadProducto propiedadProducto) {

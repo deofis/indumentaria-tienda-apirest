@@ -1,13 +1,16 @@
-package com.deofis.tiendaapirest.productos.controllers.producto;
+package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
 
-import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.services.ProductoService;
+import com.deofis.tiendaapirest.productos.services.MarcaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -18,23 +21,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class ActualizarProductoController {
+public class CrearMarcaController {
 
-    private final ProductoService productoService;
+    private final MarcaService marcaService;
 
     /**
-     * Modifica un producto seleccionado.
-     * URL: ~/api/productos/actualizar/1
-     * HttpMethod: PUT
+     * Registrar nueva marca.
+     * URL: ~/api/productos/marcas/nueva
+     * HttpMethod: POST
      * HttpStatus: CREATED
-     * @param producto Producto ya modificado.
-     * @param id PathVariable Long del producto a modificar.
-     * @return ResponseEntity con el producto ya actualizado.
+     * @param marca Marca a crear.
+     * @return Marca registrada.
      */
-    @PutMapping("/productos/actualizar/{id}")
-    public ResponseEntity<?> actualizar(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
+    @PostMapping("/productos/marcas/nueva")
+    public ResponseEntity<?> crear(@Valid @RequestBody Marca marca, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
-        Producto productoActualizado;
+        Marca nuevaMarca;
 
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -47,13 +49,14 @@ public class ActualizarProductoController {
         }
 
         try {
-            productoActualizado = this.productoService.actualizarProducto(producto, id);
+            nuevaMarca = this.marcaService.crear(marca);
         } catch (ProductoException e) {
-            response.put("mensaje", "Error al modificar el producto");
+            response.put("mensaje", "Error al registrar la nueva marca");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(productoActualizado, HttpStatus.CREATED);
+        return new ResponseEntity<>(nuevaMarca, HttpStatus.CREATED);
     }
+
 }

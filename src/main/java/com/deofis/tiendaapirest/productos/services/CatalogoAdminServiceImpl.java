@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -121,6 +122,24 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
 
         subcategoria.getPropiedades().add(propiedad);
         this.subcategoriaRepository.save(subcategoria);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PropiedadProducto> obtenerPropiedadesProducto() {
+        return this.propiedadProductoService.obtenerPropiedadesProducto();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PropiedadProducto obtenerPropiedadProducto(Long propiedadId) {
+        return this.propiedadProductoService.obtenerPropiedadProducto(propiedadId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ValorPropiedadProducto> obtenerValoresDePropiedad(Long propiedadId) {
+        return this.propiedadProductoService.obtenerValoresDePropiedad(propiedadId);
     }
 
     private boolean validarPropiedad(Subcategoria subcategoria, PropiedadProducto propiedad) {

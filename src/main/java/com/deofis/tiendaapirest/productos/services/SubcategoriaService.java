@@ -6,11 +6,12 @@ import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import java.util.List;
 
 public interface SubcategoriaService {
+
     /**
      * Obtiene la lista con todas las subcategorias.
      * @return List con subcategorias.
      */
-    List<Subcategoria> listarSubcategorias();
+    List<Subcategoria> obtenerSubcategorias();
 
     /**
      * Obtiene una subcategoria a través de su id.
@@ -20,7 +21,8 @@ public interface SubcategoriaService {
     Subcategoria obtenerSubcategoria(Long subcategoriaId);
 
     /**
-     * Obtiene una propiedad a través de su id, que pertenezca a la lista de propiedades de una subcategoria específica.
+     * Obtiene una propiedad a través de su id, que pertenezca a la lista de propiedades de una subcategoria
+     * específica.
      * @param subcategoriaId Long id de la subcategoria a la que pertenece la propiedad requerida.
      * @param propiedadId Long id de la propiedad requerida.
      * @return Propiedad.
@@ -33,4 +35,6 @@ public interface SubcategoriaService {
      * @return List de las propiedades de la subcategoria.
      */
     List<PropiedadProducto> obtenerPropiedadesSubcategoria(Long subcategoriaId);
+
+    // todo: Catalogo --> obtener productos de subcategoría: lista todos los productos de una subcategoría.
 }

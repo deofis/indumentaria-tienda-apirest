@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,4 +101,24 @@ public interface CatalogoAdminService {
      * @param propiedadId Long id de la propiedad a asignar.
      */
     void asignarPropiedadASubcategoria(Long subcategoriaId, Long propiedadId);
+
+    /**
+     * Obtiene un listado con todas las {@link PropiedadProducto}.
+     * @return List propiedades.
+     */
+    List<PropiedadProducto> obtenerPropiedadesProducto();
+
+    /**
+     * Obtiene una {@link PropiedadProducto} requerida a través de su id.
+     * @param propiedadId Long id de la propiedad.
+     * @return PropiedadProducto
+     */
+    PropiedadProducto obtenerPropiedadProducto(Long propiedadId);
+
+    /**
+     * Obtiene los {@link ValorPropiedadProducto} de una {@link PropiedadProducto}
+     * @param propiedadId Long id de la propiedad a obtener sus valores.
+     * @return List listado de los valores de la propiedad.
+     */
+    List<ValorPropiedadProducto> obtenerValoresDePropiedad(Long propiedadId);
 }
