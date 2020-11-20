@@ -1,11 +1,9 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
 import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
@@ -20,30 +18,8 @@ import java.util.List;
 public class CatalogoServiceImpl implements CatalogoService {
 
     private final ProductoRepository productoRepository;
-    private final CategoriaRepository categoriaRepository;
     private final SubcategoriaRepository subcategoriaRepository;
     private final MarcaRepository marcaRepository;
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Categoria> listarCategorias() {
-        return this.categoriaRepository.findAll();
-    }
-
-    @Transactional
-    @Override
-    public Categoria obtenerCategoria(Long categoriaId) {
-        return this.categoriaRepository.findById(categoriaId)
-                .orElseThrow(() -> new ProductoException("No existe la categoría con id: " + categoriaId));
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Subcategoria> listarSubcategoriasPorCategoria(Long categoriaId) {
-        Categoria categoria = this.obtenerCategoria(categoriaId);
-
-        return categoria.getSubcategorias();
-    }
 
     @Override
     public List<Marca> listarMarcas() {
@@ -85,7 +61,7 @@ public class CatalogoServiceImpl implements CatalogoService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Producto> productosPorCategoria(Long subcategoriaId) {
+    public List<Producto> productosPorSubcategoria(Long subcategoriaId) {
         Subcategoria subcategoria = this.subcategoriaRepository.findById(subcategoriaId)
                 .orElseThrow(() -> new ProductoException("No se encontró la categoria con id: " + subcategoriaId));
 

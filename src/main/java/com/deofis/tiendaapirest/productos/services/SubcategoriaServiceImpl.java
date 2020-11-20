@@ -18,7 +18,7 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Subcategoria> listarSubcategorias() {
+    public List<Subcategoria> obtenerSubcategorias() {
         return this.subcategoriaRepository.findAll();
     }
 

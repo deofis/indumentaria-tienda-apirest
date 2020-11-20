@@ -1,9 +1,7 @@
 package com.deofis.tiendaapirest.productos.controllers.catalogo;
 
-import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
-import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CatalogoService;
 import lombok.AllArgsConstructor;
@@ -101,7 +99,7 @@ public class CatalogoController {
         List<Producto> productosPorCategoria;
 
         try {
-            productosPorCategoria = this.catalogoService.productosPorCategoria(categoriaId);
+            productosPorCategoria = this.catalogoService.productosPorSubcategoria(categoriaId);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al obtener los productos por categoría");
             response.put("error", e.getMessage());
@@ -141,16 +139,6 @@ public class CatalogoController {
     }
 
     /**
-     * Lista las categorías.
-     *
-     * @return List categorias.
-     */
-    @GetMapping("/catalogo/categorias")
-    public List<Categoria> listarCategorias() {
-        return this.catalogoService.listarCategorias();
-    }
-
-    /**
      * Lista las marcas.
      *
      * @return List marcas.
@@ -175,7 +163,7 @@ public class CatalogoController {
         try {
             productosOrdenadosPrecioMenorAMayor = this.catalogoService.productosPrecioMenorMayor();
         } catch (ProductoException e) {
-            response.put("mensaje", "Error al ordenar los productos por precio de menor a mayor");
+            response.put("mensaje", "Error al ordear los productos por precio de menor a mayor");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -239,23 +227,4 @@ public class CatalogoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/categorias/{categoriaId}/subcategorias")
-    public ResponseEntity<?> obtenerSubcategoriasDeCategoria(@PathVariable Long categoriaId) {
-        Map<String, Object> response = new HashMap<>();
-        List<Subcategoria> subcategorias;
-        String categoria;
-
-        try {
-            subcategorias = this.catalogoService.listarSubcategoriasPorCategoria(categoriaId);
-            categoria = this.catalogoService.obtenerCategoria(categoriaId).getNombre();
-        } catch (ProductoException e) {
-            response.put("mensaje", "Error al obtener las subcategorias de la categoría");
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("categoria", categoria);
-        response.put("subcategorias", subcategorias);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }

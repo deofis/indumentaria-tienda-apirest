@@ -8,11 +8,21 @@ import java.util.List;
 public interface CategoriaService {
 
     /**
-     * Método para registrar una nueva categoría.
+     * Método para registrar una nueva categoría. SERVICIO solo utilizado
+     * por desarrolladores, no debería llamarse en ningun controlador.
      * @param categoria Categoria a guardar.
      * @return Categoria guardada en la BD.
      */
     Categoria crear(Categoria categoria);
+
+    /**
+     * Método para actualizar una categoría. SERVICIO solo utilizado
+     * por desarrolladores, no debería llamarse en ningun controlador.
+     * @param categoria Categoria actualizada.
+     * @param id Long id de la categoría a actualizar.
+     * @return Categoria actualizada.
+     */
+    Categoria actualizar(Categoria categoria, Long id);
 
     /**
      * Método para obtener todas las categorias ordenadas por nombre asc.
@@ -35,10 +45,10 @@ public interface CategoriaService {
     List<Subcategoria> obtenerSubcategorias(Long categoriaId);
 
     /**
-     * Método para actualizar una categoría.
-     * @param categoria Categoria actualizada.
-     * @param id Long id de la categoría a actualizar.
-     * @return Categoria actualizada.
+     * Obtiene una {@link Subcategoria} de una {@link Categoria} requerida.
+     * @param categoriaId Long id de la categoría.
+     * @param subcategoriaId Long id de la subcategoría.
+     * @return Subcategoria.
      */
-    Categoria actualizar(Categoria categoria, Long id);
+    Subcategoria obtenerSubcategoriaDeCategoria(Long categoriaId, Long subcategoriaId);
 }

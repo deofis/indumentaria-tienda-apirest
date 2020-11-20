@@ -1,6 +1,7 @@
-package com.deofis.tiendaapirest.productos.controllers.producto;
+package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.ProductoService;
@@ -58,27 +59,56 @@ public class ObtenerProductosController {
 
     /**
      * Obtiene un producto específico.
-     * URL: http://localhost:8080/api/productos/ver/1
+     * URL: http://localhost:8080/api/productos/1
      * HttpStatus: OK
      * HttpMethod: GET
-     * @param id PathVarible Long con el id solicitado.
+     * @param productoId PathVarible Long con el id solicitado.
      * @return ResponseEntity con el Producto.
      */
-    @GetMapping("/productos/ver/{id}")
-    public ResponseEntity<?> obtenerProducto(@PathVariable Long id) {
+    @GetMapping("/productos/{productoId}")
+    public ResponseEntity<?> obtenerProducto(@PathVariable Long productoId) {
 
         Map<String, Object> response = new HashMap<>();
         Producto producto;
 
         try {
-            producto = this.productoService.obtenerProducto(id);
+            producto = this.productoService.obtenerProducto(productoId);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al obtener el producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(producto, HttpStatus.OK);
+        response.put("producto", producto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene las propiedades de un producto requerido.
+     * URL: ~/api/productos/1/propiedades
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId Long id del producto a listar propiedades.
+     * @return ResponseEntity listado de propiedades.
+     */
+    @GetMapping("/productos/{productoId}/propiedades")
+    public ResponseEntity<?> obtenerPropiedadesDeProducto(@PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        List<PropiedadProducto> propiedades;
+        String producto;
+
+        try {
+            propiedades = this.productoService.obtenerPropiedadesDeProducto(productoId);
+            producto = this.productoService.obtenerProducto(productoId).getNombre();
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener las propiedades del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", producto);
+        response.put("propiedades", propiedades);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
