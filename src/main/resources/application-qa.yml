@@ -29,3 +29,6 @@ spring:
 endpoints:
   baseUrl: https://api.deofisdev.online
   clientUrl: https://wantfrom-tienda.web.app
+
+server:
+  port: ${PORT:5000}

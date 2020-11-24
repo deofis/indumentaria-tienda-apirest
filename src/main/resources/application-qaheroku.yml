@@ -29,3 +29,6 @@ spring:
 endpoints:
   baseUrl: https://deofis-tienda-apirest.herokuapp.com
   clientUrl: https://wantfrom-tienda.web.app
+
+server:
+  port: ${PORT:8080}
