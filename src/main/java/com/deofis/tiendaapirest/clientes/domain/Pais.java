@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,9 +23,30 @@ public class Pais implements Serializable {
 
     @Id
     private Long id;
+    @Column(name = "name")
     private String nombre;
+    private String iso3;
+    private String iso2;
+    private String phonecode;
+    private String capital;
+    private String currency;
+    @Column(name = "native")
+    private String nativo;
+    private String region;
+    private String subregion;
+    private String emoji;
+    private String emojiU;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+    private Integer flag;
+    @Column(name = "wikiDataId")
+    private String wikiDataId;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "pais_id")
+    @JoinColumn(name = "country_id")
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     private List<Estado> estados;
 }

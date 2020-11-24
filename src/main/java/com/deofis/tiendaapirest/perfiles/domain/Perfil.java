@@ -32,15 +32,18 @@ public class Perfil implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Usuario usuario;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id", unique = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "carrito_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Carrito carrito;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "favoritos_id")
+    private Favoritos favoritos;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "perfil_id")

@@ -38,9 +38,6 @@ server:
     include-message: always
     include-binding-errors: always
 
-jwt:
-  expirationInMillis: 900000
-
 app:
   oauth2:
     authorizedRedirectUris:

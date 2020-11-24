@@ -3,7 +3,7 @@ package com.deofis.tiendaapirest.clientes.controllers;
 import com.deofis.tiendaapirest.clientes.domain.Estado;
 import com.deofis.tiendaapirest.clientes.domain.Pais;
 import com.deofis.tiendaapirest.clientes.exceptions.PaisesException;
-import com.deofis.tiendaapirest.clientes.services.PaisService;
+import com.deofis.tiendaapirest.clientes.services.LocalizacionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class PaisController {
 
-    private final PaisService paisService;
+    private final LocalizacionService localizacionService;
 
     /**
      * Lista todos los paises de forma ordenada de menor a mayor.
@@ -32,16 +32,16 @@ public class PaisController {
      */
     @GetMapping("/paises")
     public ResponseEntity<List<Pais>> listarPaises() {
-        return new ResponseEntity<>(this.paisService.listarPaises(), HttpStatus.OK);
+        return new ResponseEntity<>(this.localizacionService.listarPaises(), HttpStatus.OK);
     }
 
-    @GetMapping("/paises/estados-por-pais/{nombrePais}")
+    @GetMapping("/paises/{nombrePais}/estados")
     public ResponseEntity<?> listarEstadosDePais(@PathVariable String nombrePais) {
         Map<String, Object> response = new HashMap<>();
         List<Estado> estados;
 
         try {
-            estados = this.paisService.estadosDePais(nombrePais);
+            estados = this.localizacionService.estadosDePais(nombrePais);
         } catch (PaisesException e) {
             response.put("mensaje", "Error al obtener los estados del pais " + nombrePais);
             response.put("error", e.getMessage());
