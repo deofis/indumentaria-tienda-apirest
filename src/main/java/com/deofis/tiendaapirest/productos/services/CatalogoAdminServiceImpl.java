@@ -107,6 +107,10 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         if (this.validarPropiedad(producto.getSubcategoria(), propiedad)) throw new ProductoException("La propiedad: ".concat(propiedad.getNombre()).concat(" " +
                 "no pertenece a la subcategoría: ".concat(producto.getSubcategoria().getNombre())));
 
+        if (!this.validarPropiedad(producto, propiedad)) throw new ProductoException("La propiedad: "
+                .concat(propiedad.getNombre()).concat(" ya está asignada al producto: " )
+                .concat(producto.getNombre()));
+
         producto.getPropiedades().add(propiedad);
         this.productoRepository.save(producto);
     }
@@ -117,8 +121,9 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         Subcategoria subcategoria = this.subcategoriaService.obtenerSubcategoria(subcategoriaId);
         PropiedadProducto propiedad = this.propiedadProductoService.obtenerPropiedadProducto(propiedadId);
 
-        if (this.validarPropiedad(subcategoria, propiedad)) throw new ProductoException("La propiedad: ".concat(propiedad.getNombre()).concat(" " +
-                "no pertenece a la subcategoría: ".concat(subcategoria.getNombre())));
+        if (!this.validarPropiedad(subcategoria, propiedad)) throw new ProductoException("La propiedad: "
+                .concat(propiedad.getNombre()).concat(" ya está asignada a la subcategoría: "
+                + subcategoria.getNombre()));
 
         subcategoria.getPropiedades().add(propiedad);
         this.subcategoriaRepository.save(subcategoria);
@@ -144,5 +149,9 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
 
     private boolean validarPropiedad(Subcategoria subcategoria, PropiedadProducto propiedad) {
         return !subcategoria.getPropiedades().contains(propiedad);
+    }
+
+    private boolean validarPropiedad(Producto producto, PropiedadProducto propiedad) {
+        return !producto.getPropiedades().contains(propiedad);
     }
 }
