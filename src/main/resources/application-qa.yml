@@ -28,7 +28,10 @@ spring:
 
 endpoints:
   baseUrl: https://api.deofisdev.online
-  clientUrl: https://wantfrom-tienda.web.app
+  clientUrl: https://deofisdev.online
+
+jwt:
+  expirationInMillis: 900000
 
 server:
   port: ${PORT:5000}

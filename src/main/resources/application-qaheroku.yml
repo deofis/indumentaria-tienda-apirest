@@ -30,5 +30,8 @@ endpoints:
   baseUrl: https://deofis-tienda-apirest.herokuapp.com
   clientUrl: https://wantfrom-tienda.web.app
 
+jwt:
+  expirationInMillis: 900000
+
 server:
   port: ${PORT:8080}
