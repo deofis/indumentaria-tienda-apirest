@@ -29,7 +29,6 @@ public class ClienteServiceImpl implements ClienteService {
                 .telefono(cliente.getTelefono())
                 .email(cliente.getEmail())
                 .direccion(cliente.getDireccion())
-                .tarjetaCredito(null)
                 .build();
 
         return this.clienteRepository.save(nuevoCliente);

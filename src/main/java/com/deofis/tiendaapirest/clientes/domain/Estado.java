@@ -1,13 +1,14 @@
 package com.deofis.tiendaapirest.clientes.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,5 +21,24 @@ public class Estado implements Serializable {
 
     @Id
     private Long id;
+    @Column(name = "name")
     private String nombre;
+    @Column(name = "country_code")
+    private String countryCode;
+    @Column(name = "fips_code")
+    private String fipsCode;
+    private String iso2;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+    private Integer flag;
+    @Column(name = "wikiDataId")
+    private String wikiDataId;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_id")
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+    private List<Ciudad> ciudades;
 }
