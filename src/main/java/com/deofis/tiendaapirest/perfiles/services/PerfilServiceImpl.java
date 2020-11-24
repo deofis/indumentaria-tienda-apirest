@@ -7,11 +7,13 @@ import com.deofis.tiendaapirest.autenticacion.security.UserPrincipal;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.services.ClienteService;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
+import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.perfiles.repositories.CarritoRepository;
+import com.deofis.tiendaapirest.perfiles.repositories.FavoritosRepository;
 import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     private final PerfilRepository perfilRepository;
     private final CarritoRepository carritoRepository;
+    private final FavoritosRepository favoritosRepository;
     private final ClienteService clienteService;
     private final UsuarioRepository usuarioRepository;
 
@@ -46,12 +49,17 @@ public class PerfilServiceImpl implements PerfilService {
                 .fechaCreacion(new Date())
                 .items(new ArrayList<>())
                 .build();
-        this.carritoRepository.save(carrito);
+        // Cascade: All : no hace falta --> this.carritoRepository.save(carrito);
+
+        Favoritos favoritos = Favoritos.builder()
+                .items(new ArrayList<>())
+                .useremail(usuarioEmail).build();
 
         Perfil perfil = Perfil.builder()
                 .usuario(usuario)
                 .cliente(clienteCargado)
                 .carrito(carrito)
+                .favoritos(favoritos)
                 .build();
 
         try {
@@ -69,10 +77,15 @@ public class PerfilServiceImpl implements PerfilService {
                 .items(new ArrayList<>())
                 .build();
 
+        Favoritos favoritos = Favoritos.builder()
+                .items(new ArrayList<>())
+                .useremail(usuario.getEmail()).build();
+
         Perfil perfil = Perfil.builder()
                 .usuario(usuario)
                 .cliente(cliente)
                 .carrito(carrito)
+                .favoritos(favoritos)
                 .build();
 
         try {
@@ -195,11 +208,26 @@ public class PerfilServiceImpl implements PerfilService {
         carrito.getItems().clear();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Favoritos obtenerFavoritos() {
+        Perfil perfil = this.obtenerPerfil();
+        if (perfil.getFavoritos() == null) {
+            throw new PerfilesException("Error al obtener los favoritos: Favoritos no se cargo" +
+                    "correctamente al crear el perfil");
+        }
+
+        return this.favoritosRepository.findById(perfil.getFavoritos().getId())
+                .orElseThrow(() -> new PerfilesException("No existe el objeto favoritos asociado" +
+                        "al perfil"));
+    }
+
     private PerfilDTO mapToDTO(Perfil perfil) {
         return PerfilDTO.builder()
                 .usuario(perfil.getUsuario().getEmail())
                 .cliente(perfil.getCliente())
                 .carrito(perfil.getCarrito())
+                .favoritos(perfil.getFavoritos())
                 .compras(perfil.getCompras())
                 .build();
     }

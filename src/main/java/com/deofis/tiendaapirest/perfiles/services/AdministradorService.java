@@ -15,7 +15,7 @@ import java.util.List;
  * deshabilitar usuarios.
  */
 
-public interface UsuarioService {
+public interface AdministradorService {
 
     /**
      * Lista los roles.

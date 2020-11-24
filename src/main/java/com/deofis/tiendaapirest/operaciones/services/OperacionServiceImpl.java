@@ -14,8 +14,8 @@ import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
+import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
-import com.deofis.tiendaapirest.perfiles.services.UsuarioService;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
@@ -37,7 +37,7 @@ public class OperacionServiceImpl implements OperacionService {
     private final StateMachineService stateMachineService;
 
     private final AutenticacionService autenticacionService;
-    private final UsuarioService usuarioService;
+    private final AdministradorService administradorService;
     private final MailService mailService;
 
     private final OperacionRepository operacionRepository;
@@ -111,7 +111,7 @@ public class OperacionServiceImpl implements OperacionService {
                         operacion.getNroOperacion()));
          */
 
-        List<UsuarioDTO> admins = this.usuarioService.obtenerAdministradores();
+        List<UsuarioDTO> admins = this.administradorService.obtenerAdministradores();
 
         for (UsuarioDTO admin: admins) {
             NotificationEmail notificationEmail = new NotificationEmail();
