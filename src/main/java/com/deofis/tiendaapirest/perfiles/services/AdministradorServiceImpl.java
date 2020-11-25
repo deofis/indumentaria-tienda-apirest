@@ -193,6 +193,8 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .email(usuario.getEmail())
                 .enabled(usuario.isEnabled())
                 .fechaCreacion(usuario.getFechaCreacion())
+                .authProvider(usuario.getAuthProvider())
+                .providerId(usuario.getProviderId())
                 .rol(usuario.getRol().getNombre())
                 .build();
     }

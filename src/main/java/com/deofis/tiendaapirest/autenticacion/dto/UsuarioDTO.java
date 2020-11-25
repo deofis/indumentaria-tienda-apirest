@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.autenticacion.dto;
 
+import com.deofis.tiendaapirest.autenticacion.domain.AuthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,7 @@ public class UsuarioDTO {
     private String email;
     private boolean enabled;
     private Date fechaCreacion;
+    private AuthProvider authProvider;
+    private String providerId;
     private String rol;
 }
