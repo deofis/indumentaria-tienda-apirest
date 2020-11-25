@@ -31,7 +31,7 @@ public class Cliente implements Serializable {
     @NotNull(message = "El apellido es obligatorio.")
     private String apellido;
 
-    private Long idUnicoPersona;
+    private Long dni;
 
     private String email;
 
