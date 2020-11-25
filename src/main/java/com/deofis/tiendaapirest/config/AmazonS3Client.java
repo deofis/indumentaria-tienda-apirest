@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.deofis.tiendaapirest.productos.dto.AmazonDAO;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +19,12 @@ public class AmazonS3Client {
     private AmazonS3 s3Client;
     private String endpoint;
     private String bucketName;
-    private String accesKey;
+    private String accessKey;
     private String secretKey;
 
     @Bean
     public BasicAWSCredentials basicAWSCredentials() {
-        return new BasicAWSCredentials(accesKey, secretKey);
+        return new BasicAWSCredentials(accessKey, secretKey);
     }
 
     @Bean
@@ -33,4 +34,10 @@ public class AmazonS3Client {
                 .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials())).build();
     }
 
+    @Bean
+    public AmazonDAO amazonDAO() {
+        return AmazonDAO.builder()
+                .endpoint(endpoint)
+                .bucketName(bucketName).build();
+    }
 }
