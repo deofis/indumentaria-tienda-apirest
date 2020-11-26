@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.autenticacion.controllers;
 
 import com.deofis.tiendaapirest.autenticacion.dto.SignupRequest;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
+import com.deofis.tiendaapirest.autenticacion.exceptions.MailSenderException;
 import com.deofis.tiendaapirest.autenticacion.exceptions.PasswordException;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
@@ -60,8 +61,10 @@ public class RegistrarUsuarioController {
         try {
             this.autenticacionService.registrarse(signupRequest);
             this.perfilService.cargarPerfil(signupRequest.getCliente(), signupRequest.getEmail());
-        } catch (AutenticacionException | PasswordException | ClienteException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (AutenticacionException | PasswordException | ClienteException | MailSenderException e) {
+            response.put("mensaje", "Error al registrar al usuario");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         response.put("mensaje", "Usuario registrado exitosamente. " +
