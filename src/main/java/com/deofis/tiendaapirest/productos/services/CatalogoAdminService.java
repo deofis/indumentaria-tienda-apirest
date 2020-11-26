@@ -39,10 +39,17 @@ public interface CatalogoAdminService {
     byte[] obtenerFotoPpalProducto(Long productoId);
 
     /**
+     * Obtiene el path de foto de un {@link Producto}.
+     * @param productoId Long id del producto.
+     * @return String path de foto del producto.
+     */
+    String obtenerPathFotoPpalProducto(Long productoId);
+
+    /**
      * Elimina una foto asociada a un {@link Producto}.
      * @param productoId Long id del producto.
      */
-    void eliminarFotoProducto(Long productoId);
+    void eliminarFotoPpalProducto(Long productoId);
 
     /**
      * Crea un nuevo {@link Sku} de un {@link Producto}.

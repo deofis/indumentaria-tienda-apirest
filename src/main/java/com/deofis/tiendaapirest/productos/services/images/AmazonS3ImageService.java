@@ -67,6 +67,7 @@ public class AmazonS3ImageService implements ImageService {
         return content;
     }
 
+    @Transactional
     @Override
     public void eliminarImagen(Imagen imagen) {
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(

@@ -44,12 +44,12 @@ public class Producto implements Serializable {
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "foto_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Imagen foto;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "producto_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Imagen> imagenes;

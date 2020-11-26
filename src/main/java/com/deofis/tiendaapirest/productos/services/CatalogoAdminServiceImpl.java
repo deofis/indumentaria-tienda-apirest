@@ -4,6 +4,7 @@ import com.deofis.tiendaapirest.productos.domain.*;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
+import com.deofis.tiendaapirest.productos.services.images.ImageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
     private final PropiedadProductoService propiedadProductoService;
     private final SubcategoriaService subcategoriaService;
     private final SubcategoriaRepository subcategoriaRepository;
+    private final ImageService imageService;
 
     @Transactional
     @Override
@@ -31,19 +33,51 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         return this.productoService.crearProducto(producto);
     }
 
+    @Transactional
     @Override
     public Imagen subirFotoPpalProducto(Long productoId, MultipartFile foto) {
-        return null;
+        Producto producto = this.productoService.obtenerProducto(productoId);
+
+        if (producto.getFoto() != null) {
+            this.eliminarFotoPpalProducto(producto.getId());
+        }
+
+        Imagen fotoProducto = this.imageService.subirImagen(foto);
+        producto.setFoto(fotoProducto);
+        this.productoRepository.save(producto);
+
+        return fotoProducto;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public byte[] obtenerFotoPpalProducto(Long productoId) {
-        return new byte[0];
+        Producto producto = this.productoService.obtenerProducto(productoId);
+        Imagen fotoProducto = producto.getFoto();
+
+        if (fotoProducto == null) throw new ProductoException("El producto con id: " + productoId + " no tiene foto principal");
+
+        return this.imageService.descargarImagen(fotoProducto);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public void eliminarFotoProducto(Long productoId) {
+    public String obtenerPathFotoPpalProducto(Long productoId) {
+        Producto producto = this.productoService.obtenerProducto(productoId);
+        return producto.getFoto().getPath();
+    }
 
+    @Transactional
+    @Override
+    public void eliminarFotoPpalProducto(Long productoId) {
+        Producto producto = this.productoService.obtenerProducto(productoId);
+
+        if (producto.getFoto() == null) throw new  ProductoException("El producto con id: " + productoId + " no tiene foto principal");
+
+        Imagen fotoProducto = producto.getFoto();
+        producto.setFoto(null);
+        this.productoRepository.save(producto);
+        this.imageService.eliminarImagen(fotoProducto);
     }
 
     @Transactional
