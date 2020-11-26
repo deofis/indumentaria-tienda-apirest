@@ -17,7 +17,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: deofis.github@gmail.com
-    password: Deofis1224
+    password: Deofisdev1224
     properties:
       mail:
         smtp:
