@@ -1,9 +1,7 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Producto;
-import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
-import com.deofis.tiendaapirest.productos.domain.Sku;
-import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +22,27 @@ public interface CatalogoAdminService {
      * @return Producto creado y guardado.
      */
     Producto crearProducto(Producto producto);
+
+    /**
+     * Crea, sube y vincula la foto principal a un {@link Producto}.
+     * @param productoId Long id del producto a subir su foto.
+     * @param foto Multipartfile archivo con la imagen a subir.
+     * @return {@link Imagen} con los datos del archivo subido.
+     */
+    Imagen subirFotoPpalProducto(Long productoId, MultipartFile foto);
+
+    /**
+     * Obtiene la foto principal de un {@link Producto}.
+     * @param productoId Long id del producto.
+     * @return imagen descargada en bytes.
+     */
+    byte[] obtenerFotoPpalProducto(Long productoId);
+
+    /**
+     * Elimina una foto asociada a un {@link Producto}.
+     * @param productoId Long id del producto.
+     */
+    void eliminarFotoProducto(Long productoId);
 
     /**
      * Crea un nuevo {@link Sku} de un {@link Producto}.

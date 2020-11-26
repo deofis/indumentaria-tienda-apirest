@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,21 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
     @Override
     public Producto crearProducto(Producto producto) {
         return this.productoService.crearProducto(producto);
+    }
+
+    @Override
+    public Imagen subirFotoPpalProducto(Long productoId, MultipartFile foto) {
+        return null;
+    }
+
+    @Override
+    public byte[] obtenerFotoPpalProducto(Long productoId) {
+        return new byte[0];
+    }
+
+    @Override
+    public void eliminarFotoProducto(Long productoId) {
+
     }
 
     @Transactional
