@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +33,8 @@ public class SkuServiceImpl implements SkuService {
                 .precio(sku.getPrecio())
                 .precioOferta(sku.getPrecioOferta())
                 .disponibilidad(sku.getDisponibilidad())
+                .fechaCreacion(new Date())
+                .foto(null)
                 .defaultProducto(null)
                 .producto(producto)
                 .valores(new ArrayList<>())

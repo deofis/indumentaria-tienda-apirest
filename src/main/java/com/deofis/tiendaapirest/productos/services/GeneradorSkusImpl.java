@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -147,6 +148,8 @@ public class GeneradorSkusImpl implements GeneradorSkus {
                     .precio(null)
                     .precioOferta(null)
                     .disponibilidad(null)
+                    .fechaCreacion(new Date())
+                    .foto(null)
                     .defaultProducto(null)
                     .producto(producto)
                     .valores(combinacion).build();

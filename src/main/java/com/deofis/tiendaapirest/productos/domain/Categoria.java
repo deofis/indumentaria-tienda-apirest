@@ -22,6 +22,10 @@ public class Categoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "foto_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Imagen foto;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

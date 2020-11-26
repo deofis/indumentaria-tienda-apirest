@@ -24,6 +24,10 @@ public class Subcategoria implements Serializable {
     private Long id;
     private String nombre;
     private String codigo;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "foto_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Imagen foto;
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "subcategorias_x_propiedades",
             joinColumns = @JoinColumn(name = "subcategoria_id"),
