@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.ProductoService;
@@ -108,6 +109,31 @@ public class ObtenerProductosController {
 
         response.put("producto", producto);
         response.put("propiedades", propiedades);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene todos los Skus de un producto.
+     * URL: ~/api/productos/1/skus
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId Long id del producto.
+     * @return ResponseEntity con el listado de skus del producto.
+     */
+    @GetMapping("/productos/{productoId}/skus")
+    public ResponseEntity<?> obtenerSkusProducto(@PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        List<Sku> skus;
+
+        try {
+            skus = this.productoService.obtenerSkusProducto(productoId);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener los skus del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("skus", skus);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
