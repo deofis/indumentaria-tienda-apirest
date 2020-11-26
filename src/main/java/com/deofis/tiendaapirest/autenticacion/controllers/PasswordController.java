@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.autenticacion.controllers;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.autenticacion.dto.CambiarPasswordRequest;
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
+import com.deofis.tiendaapirest.autenticacion.exceptions.MailSenderException;
 import com.deofis.tiendaapirest.autenticacion.services.PasswordService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -86,7 +87,7 @@ public class PasswordController {
 
         try {
             this.passwordService.recuperarPassword(email);
-        } catch (AutenticacionException e) {
+        } catch (AutenticacionException | MailSenderException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
