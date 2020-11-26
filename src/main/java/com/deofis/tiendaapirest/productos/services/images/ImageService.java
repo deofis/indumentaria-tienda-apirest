@@ -3,14 +3,11 @@ package com.deofis.tiendaapirest.productos.services.images;
 import com.deofis.tiendaapirest.productos.domain.Imagen;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 /**
  * Este servicio se encarga de subir las imágenes utilizadas por Objetos que
  * los necesiten ({@link com.deofis.tiendaapirest.productos.domain.Producto}
  * y {@link com.deofis.tiendaapirest.productos.domain.Sku}).
  */
-
 public interface ImageService {
 
     /**
@@ -22,15 +19,14 @@ public interface ImageService {
 
     /**
      * Devuelve bytes asociados a una imágen guardada.
-     * @param path String path del archivo imagen a descargar.
+     * @param imagen Imagen que contiene el path del archivo imagen a descargar.
      * @return byte[] bytes del archivo imagen.
-     * @throws IOException por los archivos.
      */
-    byte[] descargarImagen(String path) throws IOException;
+    byte[] descargarImagen(Imagen imagen);
 
     /**
      * Elimina un archivo de imagen a través de su path.
-     * @param path String path del archivo imagen a eliminar.
+     * @param imagen Imagen que contiene el path del archivo imagen a eliminar.
      */
-    void eliminarImagen(String path);
+    void eliminarImagen(Imagen imagen);
 }
