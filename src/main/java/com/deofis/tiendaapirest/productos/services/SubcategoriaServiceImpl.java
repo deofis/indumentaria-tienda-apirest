@@ -3,8 +3,10 @@ package com.deofis.tiendaapirest.productos.services;
 import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
+import com.deofis.tiendaapirest.productos.exceptions.CategoriaException;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
+import com.deofis.tiendaapirest.productos.services.images.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.List;
 public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     private final SubcategoriaRepository subcategoriaRepository;
+    private final ImageService imageService;
 
     @Transactional(readOnly = true)
     @Override
@@ -61,23 +64,50 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
         return subcategoria.getPropiedades();
     }
 
+    @Transactional
     @Override
-    public Imagen subirFotoCategoria(Long subcategoriaId, MultipartFile foto) {
-        return null;
+    public Imagen subirFotoSubcategoria(Long subcategoriaId, MultipartFile foto) {
+        Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
+
+        if (subcategoria.getFoto() != null)
+            this.eliminarFotoSubcategoria(subcategoria.getId());
+
+        Imagen fotoSubcategoria = this.imageService.subirImagen(foto);
+        subcategoria.setFoto(fotoSubcategoria);
+        this.subcategoriaRepository.save(subcategoria);
+        return fotoSubcategoria;
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public byte[] obtenerFotoCategoria(Long subcategoriaId) {
-        return new byte[0];
+    public byte[] obtenerFotoSubcategoria(Long subcategoriaId) {
+        Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
+        Imagen fotoSubcategoria = subcategoria.getFoto();
+
+        if (fotoSubcategoria == null) throw new CategoriaException("La subcategoría: " + subcategoria.getNombre()
+                + " no tiene foto");
+
+        return this.imageService.descargarImagen(fotoSubcategoria);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public String obtenerPathFotoCategoria(Long subcategoriaId) {
-        return null;
+    public String obtenerPathFotoSubcategoria(Long subcategoriaId) {
+        Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
+        return subcategoria.getFoto().getPath();
     }
 
+    @Transactional
     @Override
-    public void eliminarFotoCategoria(Long subcategoriaId) {
+    public void eliminarFotoSubcategoria(Long subcategoriaId) {
+        Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
 
+        if (subcategoria.getFoto() == null) throw new CategoriaException("La subcategoría: " + subcategoria.getNombre()
+                + " no tiene foto");
+
+        Imagen fotoSubcategoria = subcategoria.getFoto();
+        subcategoria.setFoto(null);
+        this.subcategoriaRepository.save(subcategoria);
+        this.imageService.eliminarImagen(fotoSubcategoria);
     }
 }

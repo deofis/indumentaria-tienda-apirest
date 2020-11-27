@@ -44,27 +44,27 @@ public interface SubcategoriaService {
      * @param foto MultipartFile archivo que contiene la foto a subir.
      * @return {@link Imagen} con los datos del archivo subido.
      */
-    Imagen subirFotoCategoria(Long subcategoriaId, MultipartFile foto);
+    Imagen subirFotoSubcategoria(Long subcategoriaId, MultipartFile foto);
 
     /**
      * Obtiene la foto de una {@link Subcategoria}.
      * @param subcategoriaId Long id de la categoría.
      * @return imagen descargada en bytes.
      */
-    byte[] obtenerFotoCategoria(Long subcategoriaId);
+    byte[] obtenerFotoSubcategoria(Long subcategoriaId);
 
     /**
      * Obtiene el path de foto de una {@link Subcategoria}.
      * @param subcategoriaId Long id de la categoría.
      * @return String path de foto de la categoría.
      */
-    String obtenerPathFotoCategoria(Long subcategoriaId);
+    String obtenerPathFotoSubcategoria(Long subcategoriaId);
 
     /**
      * Elimina la foto asociada a una {@link Subcategoria}.
      * @param subcategoriaId Long id de la categoría.
      */
-    void eliminarFotoCategoria(Long subcategoriaId);
+    void eliminarFotoSubcategoria(Long subcategoriaId);
 
     // todo: Catalogo --> obtener productos de subcategoría: lista todos los productos de una subcategoría.
 }

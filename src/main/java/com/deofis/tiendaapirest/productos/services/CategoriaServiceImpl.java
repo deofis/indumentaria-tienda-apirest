@@ -3,8 +3,9 @@ package com.deofis.tiendaapirest.productos.services;
 import com.deofis.tiendaapirest.productos.domain.Categoria;
 import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
-import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
+import com.deofis.tiendaapirest.productos.exceptions.CategoriaException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
+import com.deofis.tiendaapirest.productos.services.images.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.List;
 public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final ImageService imageService;
 
     @Override
     @Transactional
@@ -48,14 +50,14 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Categoria obtenerCategoria(Long id) {
         return this.categoriaRepository.findById(id)
-                .orElseThrow(() -> new ProductoException("Categoría no existente con id: " + id));
+                .orElseThrow(() -> new CategoriaException("Categoría no existente con id: " + id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Subcategoria> obtenerSubcategorias(Long categoriaId) {
         Categoria categoria = this.categoriaRepository.findById(categoriaId)
-                .orElseThrow(() -> new ProductoException("Categoria no existente con id: " + categoriaId));
+                .orElseThrow(() -> new CategoriaException("Categoria no existente con id: " + categoriaId));
 
 
         return categoria.getSubcategorias();
@@ -76,28 +78,55 @@ public class CategoriaServiceImpl implements CategoriaService {
             }
         }
 
-        if (!existeSub) throw new ProductoException("La subcategoría no pertenece a la categoría: ".concat(categoria.getNombre()));
+        if (!existeSub) throw new CategoriaException("La subcategoría no pertenece a la categoría: ".concat(categoria.getNombre()));
 
         return subcategoria;
     }
 
+    @Transactional
     @Override
     public Imagen subirFotoCategoria(Long categoriaId, MultipartFile foto) {
-        return null;
+        Categoria categoria = this.obtenerCategoria(categoriaId);
+
+        if (categoria.getFoto() != null)
+            this.eliminarFotoCategoria(categoria.getId());
+
+        Imagen fotoCategoria = this.imageService.subirImagen(foto);
+        categoria.setFoto(fotoCategoria);
+        this.categoriaRepository.save(categoria);
+        return fotoCategoria;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public byte[] obtenerFotoCategoria(Long categoriaId) {
-        return new byte[0];
+        Categoria categoria = this.obtenerCategoria(categoriaId);
+        Imagen fotoCategoria = categoria.getFoto();
+
+        if (fotoCategoria == null) throw new CategoriaException("La categoría: " + categoria.getNombre()
+                + " no tiene foto");
+
+        return this.imageService.descargarImagen(fotoCategoria);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String obtenerPathFotoCategoria(Long categoriaId) {
-        return null;
+        Categoria categoria = this.obtenerCategoria(categoriaId);
+        return categoria.getFoto().getPath();
     }
 
+    @Transactional
     @Override
     public void eliminarFotoCategoria(Long categoriaId) {
+        Categoria categoria = this.obtenerCategoria(categoriaId);
 
+        if (categoria.getFoto() == null) throw new CategoriaException("La categoría: " + categoria.getNombre()
+                + " no tiene foto");
+
+        Imagen fotoCategoria = categoria.getFoto();
+        categoria.setFoto(null);
+        this.categoriaRepository.save(categoria);
+        this.imageService.eliminarImagen(fotoCategoria);
     }
 }
