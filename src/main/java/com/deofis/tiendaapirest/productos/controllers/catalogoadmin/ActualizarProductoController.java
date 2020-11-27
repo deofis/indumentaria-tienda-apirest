@@ -23,16 +23,19 @@ public class ActualizarProductoController {
     private final ProductoService productoService;
 
     /**
-     * Actualiza los datos de un producto seleccionado: nombre, descripción, subcategoría, marca y unidad de medida.
+     * Actualiza los datos de un producto seleccionado: nombre, descripción, subcategoría,
+     * marca y unidad de medida.
      * URL: ~/api/productos/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param producto Producto actualizado.
-     * @param id PathVariable Long del producto a modificar.
+     * @param productoId PathVariable Long del producto a modificar.
      * @return ResponseEntity con el producto actualizado.
      */
-    @PutMapping("/productos/{id}")
-    public ResponseEntity<?> actualizarDatosProducto(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
+    @PutMapping("/productos/{productoId}")
+    public ResponseEntity<?> actualizarDatosProducto(@Valid @RequestBody Producto producto,
+                                                     @PathVariable Long productoId,
+                                                     BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Producto productoActualizado;
 
@@ -47,14 +50,15 @@ public class ActualizarProductoController {
         }
 
         try {
-            productoActualizado = this.productoService.actualizarDatosProducto(producto, id);
+            productoActualizado = this.productoService.actualizarDatosProducto(producto, productoId);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al modificar el producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(productoActualizado, HttpStatus.CREATED);
+        response.put("producto", productoActualizado);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -67,12 +71,14 @@ public class ActualizarProductoController {
      * @return ResponseEntity con el producto actualizado.
      */
     @PutMapping("/productos/{productoId}/disponibilidad")
-    public ResponseEntity<?> actualizarDisponibilidadGeneralProducto(@RequestParam Integer disponibilidad, @PathVariable Long productoId) {
+    public ResponseEntity<?> actualizarDisponibilidadGeneralProducto(@RequestParam Integer disponibilidad,
+                                                                     @PathVariable Long productoId) {
         Map<String, Object> response = new HashMap<>();
         Producto productoActualizado;
 
         try {
-            productoActualizado = this.productoService.actualizarDisponibilidadGeneralProducto(disponibilidad, productoId);
+            productoActualizado = this.productoService
+                    .actualizarDisponibilidadGeneralProducto(disponibilidad,productoId);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al actualizar disponibilidad del producto");
             response.put("error", e.getMessage());

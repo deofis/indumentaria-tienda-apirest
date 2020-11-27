@@ -24,15 +24,15 @@ public class ActualizarMarcaController {
 
     /**
      * Actualizar una marca.
-     * URL: ~/api/productos/marcas/actualizar/1
+     * URL: ~/api/productos/marcas/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param marca Marca actualizada.
-     * @param id PathVariable id de la marca a actualizar.
+     * @param marcaId PathVariable id de la marca a actualizar.
      * @return ResponseEntity con la marca actualizada.
      */
-    @PutMapping("/productos/marcas/actualizar/{id}")
-    public ResponseEntity<?> actualizar(@Valid @RequestBody Marca marca, @PathVariable Long id, BindingResult result) {
+    @PutMapping("/productos/marcas/{marcaId}")
+    public ResponseEntity<?> actualizar(@Valid @RequestBody Marca marca, @PathVariable Long marcaId, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Marca marcaActualizada;
 
@@ -47,7 +47,7 @@ public class ActualizarMarcaController {
         }
 
         try {
-            marcaActualizada = this.marcaService.actualizar(marca, id);
+            marcaActualizada = this.marcaService.actualizar(marca, marcaId);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al actualizar la marca");
             response.put("error", e.getMessage());
