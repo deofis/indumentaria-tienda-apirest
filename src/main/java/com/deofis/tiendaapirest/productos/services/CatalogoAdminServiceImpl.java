@@ -79,6 +79,7 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
 
         Imagen fotoProducto = producto.getFoto();
         producto.setFoto(null);
+        producto.getDefaultSku().setFoto(null);
         this.productoRepository.save(producto);
         this.imageService.eliminarImagen(fotoProducto);
     }
