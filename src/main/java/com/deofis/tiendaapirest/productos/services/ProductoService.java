@@ -82,4 +82,12 @@ public interface ProductoService {
      * @return List de SKUs.
      */
     List<Sku> obtenerSkusProducto(Long productoId);
+
+    /**
+     * Obtiene un {@link Sku} requerido de un {@link Producto}.
+     * @param productoId Long id del producto al que pertenece el sku.
+     * @param skuId Long id del sku.
+     * @return Sku.
+     */
+    Sku obtenerSkuProducto(Long productoId, Long skuId);
 }

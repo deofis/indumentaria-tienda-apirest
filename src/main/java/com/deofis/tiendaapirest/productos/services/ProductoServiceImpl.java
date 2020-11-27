@@ -150,4 +150,26 @@ public class ProductoServiceImpl implements ProductoService {
 
         return producto.getSkus();
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Sku obtenerSkuProducto(Long productoId, Long skuId) {
+        Producto producto = this.obtenerProducto(productoId);
+        Sku sku = null;
+
+        boolean existeSku = false;
+        for (Sku skuEnProducto: producto.getSkus()) {
+            if (skuEnProducto.getId().equals(skuId)) {
+                sku = skuEnProducto;
+                existeSku = true;
+                break;
+            }
+        }
+
+        if (!existeSku) throw new ProductoException("El sku con id: " + skuId + " no pertenece" +
+                "al producto: " + producto.getNombre().concat(" : ")
+                .concat(String.valueOf(producto.getId())));
+
+        return sku;
+    }
 }

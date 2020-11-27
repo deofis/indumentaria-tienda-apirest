@@ -138,6 +138,36 @@ public class ObtenerProductosController {
     }
 
     /**
+     * Obtiene un Sku a partir de un producto.
+     * URL: ~/api/productos/1/skus/1
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId PathVariable Long id del producto.
+     * @param skuId PathVariable Long id del sku.
+     * @return ResponseEntity con el nombre del producto y el sku.
+     */
+    @GetMapping("/productos/{productoId}/skus/{skuId}")
+    public ResponseEntity<?> obtenerSkuDeProducto(@PathVariable Long productoId,
+                                                  @PathVariable Long skuId) {
+        Map<String, Object> response = new HashMap<>();
+        Sku sku;
+        String productoNombre;
+
+        try {
+            sku = this.productoService.obtenerSkuProducto(productoId, skuId);
+            productoNombre = this.productoService.obtenerProducto(productoId).getNombre();
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener sku del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", productoNombre);
+        response.put("sku", sku);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
      * Obtiene listado de las unidades de medida.
      * URL: ~/api/productos/unidades-medida
      * HttpMethod: GET

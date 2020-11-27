@@ -59,6 +59,8 @@ public interface CatalogoAdminService {
      */
     Sku crearSku(Long productoId, Sku sku);
 
+    Imagen subirFotoSku(Long skuId, MultipartFile foto);
+
     /**
      * Elimina un {@link Sku} requerido.
      * @param skuId Long id del SKU a eliminar.
