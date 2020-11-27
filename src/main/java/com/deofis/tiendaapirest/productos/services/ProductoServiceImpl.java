@@ -78,18 +78,48 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Producto actualizarProducto(Producto producto, Long id) {
+    public Producto actualizarDatosProducto(Producto producto, Long id) {
 
         Producto productoActual = this.obtenerProducto(id);
 
         productoActual.setNombre(producto.getNombre());
         productoActual.setDescripcion(producto.getDescripcion());
-        productoActual.setPrecio(producto.getPrecio());
         productoActual.setSubcategoria(producto.getSubcategoria());
         productoActual.setMarca(producto.getMarca());
-        productoActual.setDisponibilidadGeneral(producto.getDisponibilidadGeneral());
         productoActual.setUnidadMedida(producto.getUnidadMedida());
-        productoActual.getDefaultSku().setDisponibilidad(producto.getDisponibilidadGeneral());
+
+        return this.productoRepository.save(productoActual);
+    }
+
+    @Transactional
+    @Override
+    public Producto actualizarDisponibilidadGeneralProducto(Integer disponibilidadGral, Long productoId) {
+        Producto productoActual = this.obtenerProducto(productoId);
+
+        productoActual.setDisponibilidadGeneral(disponibilidadGral);
+        productoActual.getDefaultSku().setDisponibilidad(disponibilidadGral);
+
+        return this.productoRepository.save(productoActual);
+    }
+
+    @Transactional
+    @Override
+    public Producto actualizarPrecioBaseProducto(Double precio, Long productoId) {
+        Producto productoActual = this.obtenerProducto(productoId);
+
+        productoActual.setPrecio(precio);
+        productoActual.getDefaultSku().setPrecio(precio);
+
+        return this.productoRepository.save(productoActual);
+    }
+
+    @Transactional
+    @Override
+    public Producto actualizarPrecioOferta(Double precioOferta, Long productoId) {
+        Producto productoActual = this.obtenerProducto(productoId);
+
+        productoActual.setPrecioOferta(precioOferta);
+        productoActual.getDefaultSku().setPrecioOferta(precioOferta);
 
         return this.productoRepository.save(productoActual);
     }

@@ -42,7 +42,32 @@ public interface ProductoService {
      * @param id Long del id del producto a modificar.
      * @return Producto actualizado.
      */
-    Producto actualizarProducto(Producto producto, Long id);
+    Producto actualizarDatosProducto(Producto producto, Long id);
+
+    /**
+     * Actualiza la disponibilidad general de un {@link Producto} y la disponibilidad
+     * de su {@link Sku} por defecto.
+     * @param disponibilidadGral Integer nueva disponibilidad.
+     * @param productoId Long id del producto.
+     * @return Producto con disponibilidad actualizada.
+     */
+    Producto actualizarDisponibilidadGeneralProducto(Integer disponibilidadGral, Long productoId);
+
+    /**
+     * Establece un nuevo precio base para un {@link Producto} y su {@link Sku} por defecto.
+     * @param precio Double precio nuevo.
+     * @param productoId Long id del producto.
+     * @return Producto con precio base actualizado.
+     */
+    Producto actualizarPrecioBaseProducto(Double precio, Long productoId);
+
+    /**
+     * Establece un nuevo precio oferta para un {@link Producto}
+     * @param precioOferta Double precio oferta nuevo.
+     * @param productoId Long id del producto.
+     * @return Producto con precio oferta actualizado.
+     */
+    Producto actualizarPrecioOferta(Double precioOferta, Long productoId);
 
     /**
      * Método para registrar la baja lógica de un producto.

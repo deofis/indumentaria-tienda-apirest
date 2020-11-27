@@ -24,14 +24,14 @@ public class ActualizarProductoController {
 
     /**
      * Modifica un producto seleccionado.
-     * URL: ~/api/productos/actualizar/1
+     * URL: ~/api/productos/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
      * @param producto Producto ya modificado.
      * @param id PathVariable Long del producto a modificar.
      * @return ResponseEntity con el producto ya actualizado.
      */
-    @PutMapping("/productos/actualizar/{id}")
+    @PutMapping("/productos/{id}")
     public ResponseEntity<?> actualizar(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Producto productoActualizado;
@@ -47,7 +47,7 @@ public class ActualizarProductoController {
         }
 
         try {
-            productoActualizado = this.productoService.actualizarProducto(producto, id);
+            productoActualizado = this.productoService.actualizarDatosProducto(producto, id);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al modificar el producto");
             response.put("error", e.getMessage());
@@ -55,5 +55,47 @@ public class ActualizarProductoController {
         }
 
         return new ResponseEntity<>(productoActualizado, HttpStatus.CREATED);
+    }
+
+    /**
+     * Actualiza la disponibilidad general de un Producto y su Sku por defecto.
+     * URL: ~/api/productos/1/disponibilidad
+     * HttpMethod: PUT
+     * HttpStatus: OK
+     * @param disponibilidad RequestParam Integer nueva disponibilidad.
+     * @param productoId PathVariable Long id del producto.
+     * @return ResponseEntity con el producto actualizado.
+     */
+    @PutMapping("/productos/{productoId}/disponibilidad")
+    public ResponseEntity<?> actualizarDisponibilidadGeneral(@RequestParam Integer disponibilidad, @PathVariable Long productoId) {
+        return null;
+    }
+
+    /**
+     * Actualiza el precio base de un Producto y su Sku por defecto.
+     * URL: ~/api/productos/1/precios/base
+     * HttpMethod: PUT
+     * HttpStatus: OK
+     * @param precio RequestParam Double nuevo precio.
+     * @param productoId PathVariable Long id del producto.
+     * @return ResponseEntity con el producto actualizado.
+     */
+    @PutMapping("/productos/{productoId}/precios/base")
+    public ResponseEntity<?> actualizarPrecioBase(@RequestParam Double precio, @PathVariable Long productoId) {
+        return null;
+    }
+
+    /**
+     * Actualiza el precio oferta de un Producto y su Sku por defecto.
+     * URL: ~/api/productos/1/precios/oferta
+     * HttpMethod: PUT
+     * HttpStatus: OK
+     * @param precioOferta RequestParam Double nuevo precio oferta.
+     * @param productoId PathVariable Long id del producto.
+     * @return ResponseEntity con el producto actualizado.
+     */
+    @PutMapping("/productos/{productoId}/precios/oferta")
+    public ResponseEntity<?> actualizarPrecioOferta(@RequestParam Double precioOferta, @PathVariable Long productoId) {
+        return null;
     }
 }
