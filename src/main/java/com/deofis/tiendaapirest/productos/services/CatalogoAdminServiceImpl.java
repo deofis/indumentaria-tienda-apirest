@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.productos.services;
 import com.deofis.tiendaapirest.productos.domain.*;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
+import com.deofis.tiendaapirest.productos.repositories.SkuRepository;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
 import com.deofis.tiendaapirest.productos.services.images.ImageService;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
     private final ProductoService productoService;
     private final ProductoRepository productoRepository;
     private final SkuService skuService;
+    private final SkuRepository skuRepository;
     private final PropiedadProductoService propiedadProductoService;
     private final SubcategoriaService subcategoriaService;
     private final SubcategoriaRepository subcategoriaRepository;
@@ -86,6 +88,55 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         Producto producto = this.productoService.obtenerProducto(productoId);
 
         return this.skuService.crearNuevoSku(sku, producto);
+    }
+
+    @Transactional
+    @Override
+    public Imagen subirFotoSku(Long skuId, MultipartFile foto) {
+        Sku sku = this.skuService.obtenerSku(skuId);
+
+        if (sku.getFoto() != null) {
+            this.eliminarFotoSku(sku.getId());
+        }
+
+        Imagen fotoSku = this.imageService.subirImagen(foto);
+        sku.setFoto(fotoSku);
+        this.skuRepository.save(sku);
+
+        return fotoSku;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public byte[] obtenerFotoSku(Long skuId) {
+        Sku sku = this.skuService.obtenerSku(skuId);
+        Imagen fotoSku = sku.getFoto();
+
+        if (fotoSku == null) throw new ProductoException("El sku con id: " + skuId
+                + "notiene foto");
+
+        return this.imageService.descargarImagen(fotoSku);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public String obtenerPathFotoSku(Long skuId) {
+        Sku sku = this.skuService.obtenerSku(skuId);
+        return sku.getFoto().getPath();
+    }
+
+    @Transactional
+    @Override
+    public void eliminarFotoSku(Long skuId) {
+        Sku sku = this.skuService.obtenerSku(skuId);
+
+        if (sku.getFoto() == null) throw new  ProductoException("El sku con id: " + skuId
+                + " no tiene foto");
+
+        Imagen fotoProducto = sku.getFoto();
+        sku.setFoto(null);
+        this.skuRepository.save(sku);
+        this.imageService.eliminarImagen(fotoProducto);
     }
 
     @Transactional

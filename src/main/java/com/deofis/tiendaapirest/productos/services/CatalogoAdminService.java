@@ -39,7 +39,7 @@ public interface CatalogoAdminService {
     byte[] obtenerFotoPpalProducto(Long productoId);
 
     /**
-     * Obtiene el path de foto de un {@link Producto}.
+     * Obtiene el path de foto principal de un {@link Producto}.
      * @param productoId Long id del producto.
      * @return String path de foto del producto.
      */
@@ -59,7 +59,33 @@ public interface CatalogoAdminService {
      */
     Sku crearSku(Long productoId, Sku sku);
 
+    /**
+     * Crea, sube y vincula foto de {@link Sku}.
+     * @param skuId Long id del sku a subir su foto.
+     * @param foto MultipartFile archivo que contiene la foto a subir.
+     * @return {@link Imagen} con los datos del archivo subido.
+     */
     Imagen subirFotoSku(Long skuId, MultipartFile foto);
+
+    /**
+     * Obtiene la foto de un {@link Producto}.
+     * @param skuId Long id del sku.
+     * @return imagen descargada en bytes.
+     */
+    byte[] obtenerFotoSku(Long skuId);
+
+    /**
+     * Obtiene el path de foto de un {@link Sku}.
+     * @param skuId Long id del sku.
+     * @return String path de foto del sku.
+     */
+    String obtenerPathFotoSku(Long skuId);
+
+    /**
+     * Elimina una foto asociada a un {@link Sku}.
+     * @param skuId Long id del sku.
+     */
+    void eliminarFotoSku(Long skuId);
 
     /**
      * Elimina un {@link Sku} requerido.
