@@ -23,16 +23,16 @@ public class ActualizarProductoController {
     private final ProductoService productoService;
 
     /**
-     * Modifica un producto seleccionado.
+     * Actualiza los datos de un producto seleccionado: nombre, descripción, subcategoría, marca y unidad de medida.
      * URL: ~/api/productos/1
      * HttpMethod: PUT
      * HttpStatus: CREATED
-     * @param producto Producto ya modificado.
+     * @param producto Producto actualizado.
      * @param id PathVariable Long del producto a modificar.
-     * @return ResponseEntity con el producto ya actualizado.
+     * @return ResponseEntity con el producto actualizado.
      */
     @PutMapping("/productos/{id}")
-    public ResponseEntity<?> actualizar(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
+    public ResponseEntity<?> actualizarDatosProducto(@Valid @RequestBody Producto producto, @PathVariable Long id, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Producto productoActualizado;
 
@@ -67,8 +67,20 @@ public class ActualizarProductoController {
      * @return ResponseEntity con el producto actualizado.
      */
     @PutMapping("/productos/{productoId}/disponibilidad")
-    public ResponseEntity<?> actualizarDisponibilidadGeneral(@RequestParam Integer disponibilidad, @PathVariable Long productoId) {
-        return null;
+    public ResponseEntity<?> actualizarDisponibilidadGeneralProducto(@RequestParam Integer disponibilidad, @PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        Producto productoActualizado;
+
+        try {
+            productoActualizado = this.productoService.actualizarDisponibilidadGeneralProducto(disponibilidad, productoId);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al actualizar disponibilidad del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", productoActualizado);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -81,8 +93,20 @@ public class ActualizarProductoController {
      * @return ResponseEntity con el producto actualizado.
      */
     @PutMapping("/productos/{productoId}/precios/base")
-    public ResponseEntity<?> actualizarPrecioBase(@RequestParam Double precio, @PathVariable Long productoId) {
-        return null;
+    public ResponseEntity<?> actualizarPrecioBaseProducto(@RequestParam Double precio, @PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        Producto productoActualizado;
+
+        try {
+            productoActualizado = this.productoService.actualizarPrecioBaseProducto(precio, productoId);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al actualizar el precio base del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", productoActualizado);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -95,7 +119,19 @@ public class ActualizarProductoController {
      * @return ResponseEntity con el producto actualizado.
      */
     @PutMapping("/productos/{productoId}/precios/oferta")
-    public ResponseEntity<?> actualizarPrecioOferta(@RequestParam Double precioOferta, @PathVariable Long productoId) {
-        return null;
+    public ResponseEntity<?> actualizarPrecioOfertaProducto(@RequestParam Double precioOferta, @PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        Producto productoActualizado;
+
+        try {
+            productoActualizado = this.productoService.actualizarPrecioOferta(precioOferta, productoId);
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al actualizar el precio oferta del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", productoActualizado);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
