@@ -11,7 +11,7 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
 
   mail:
     host: smtp.gmail.com
@@ -29,6 +29,13 @@ spring:
 endpoints:
   baseUrl: https://api.deofisdev.online
   clientUrl: https://deofisdev.online
+
+amazon:
+  s3:
+    bucketName: deofis-images-bucket
+    endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
+    accessKey: AKIAZ67T4O5CQ2MJ2BHE
+    secretKey: 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
 
 jwt:
   expirationInMillis: 900000
