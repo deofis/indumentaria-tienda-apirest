@@ -12,17 +12,22 @@ import java.util.List;
 public interface CatalogoService {
 
     /**
-     * Obtiene un listado desordenado de todas las marcas.
-     * @return List de marcas.
-     */
-    List<Marca> listarMarcas();
-
-    /**
-     * Busca y devuelve un listado de productos que contienen al termino que se envía.
+     * Busca y devuelve un listado de productos que contienen al termino que se envía. El listado
+     * de productos que se genera a partir del termino debe ser por: nombre, marca o subcategoría
+     * del producto.
+     * <br>
+     * Ej.: Termino = 'celulares' --> Busca todos los productos que contengan 'celulares' en su
+     * nombre, marca o subcategoría, y si los encuentra, los agrega al listado a devolver.
      * @param termino String consulta sobre los productos a buscar.
      * @return List listado de productos que coinciden con el término de búsqueda.
      */
     List<Producto> buscarProductos(String termino);
+
+    /**
+     * Obtiene un listado desordenado de todas las marcas.
+     * @return List de marcas.
+     */
+    List<Marca> listarMarcas();
 
     /**
      * Obtiene el listado de los productos destacados, que al ser destacados, tambiíen tienen que

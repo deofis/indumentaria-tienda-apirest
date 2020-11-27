@@ -20,17 +20,18 @@ public class CatalogoServiceImpl implements CatalogoService {
     private final ProductoRepository productoRepository;
     private final SubcategoriaRepository subcategoriaRepository;
     private final MarcaRepository marcaRepository;
-
-    @Override
-    public List<Marca> listarMarcas() {
-        return this.marcaRepository.findAll();
-    }
+    private final BuscadorProductosService buscadorProductosService;
 
     @Transactional(readOnly = true)
     @Override
     public List<Producto> buscarProductos(String termino) {
-        return this.productoRepository
-                .findAllByNombreContainingIgnoringCaseAndActivoIsTrueOrderByNombreAsc(termino);
+        return this.buscadorProductosService.buscarProductos(termino);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Marca> listarMarcas() {
+        return this.marcaRepository.findAll();
     }
 
     @Transactional(readOnly = true)

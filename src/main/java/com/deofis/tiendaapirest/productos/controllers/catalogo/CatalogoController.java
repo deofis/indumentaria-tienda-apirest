@@ -48,15 +48,22 @@ public class CatalogoController {
     }
 
     /**
-     * Obtiene una lista con los productos buscados por un termino.
+     * Obtiene una lista con los productos buscados por un termino. El término puede ser: nombre, marca o subcategoría
+     * de productos a buscar.
      * URL: ~/api/catalogo/buscar
-     *
+     * HttpMethod: GET
+     * HttpStatus: OK
      * @param termino Param 'termino' con el termino a buscar.
      * @return Lista de productos encontrados.
      */
     @GetMapping("/catalogo/buscar")
-    public List<Producto> buscarProductos(@RequestParam String termino) {
-        return this.catalogoService.buscarProductos(termino);
+    public ResponseEntity<Map<String, Object>> buscarProductos(@RequestParam String termino) {
+        Map<String, Object> response = new HashMap<>();
+        List<Producto> productosEncontrados = this.catalogoService.buscarProductos(termino);
+
+        response.put("total", productosEncontrados.size());
+        response.put("productos", productosEncontrados);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
