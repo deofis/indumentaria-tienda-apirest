@@ -55,7 +55,7 @@ public class ImagenesProductoController {
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param skuId PathVariable Long id del sku a subir foto.
-     * @param foto MultipartFile archivo que contiene la foto del sku a crear y subir.
+     * @param foto RequestParam MultipartFile archivo que contiene la foto del sku a crear y subir.
      * @return ResponseEntity {@link Imagen} con los datos de la foto creada y subida.
      */
     @PostMapping("/productos/skus/{skuId}/fotos")

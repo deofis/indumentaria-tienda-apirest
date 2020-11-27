@@ -1,18 +1,21 @@
 package com.deofis.tiendaapirest.productos.controllers.categorias;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
+import com.deofis.tiendaapirest.productos.exceptions.CategoriaException;
+import com.deofis.tiendaapirest.productos.exceptions.FileException;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CategoriaService;
 import com.deofis.tiendaapirest.productos.services.SubcategoriaService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -219,5 +222,175 @@ public class CategoriasController {
         response.put("subcategoria", subcategoria);
         response.put("propiedades", propiedades);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Sube y asocia foto a una {@link Categoria} requerida.
+     * URL: ~/api/categorias/1/fotos
+     * HttpMethod: POST
+     * HttpStatus: CREATED
+     * @param categoriaId PathVariable Long id de la categoría.
+     * @param foto RequestParam MultipartFile archivo que contiene la foto de categoría a crear y subir.
+     * @return ResponseEntity {@link Imagen} con los datos de la foto creada y subida.
+     */
+    @PostMapping("/categorias/{categoriaId}/fotos")
+    public ResponseEntity<?> subirFotoCategoria(@PathVariable Long categoriaId,
+                                                @RequestParam(name = "foto")MultipartFile foto) {
+        Map<String, Object> response = new HashMap<>();
+        Imagen fotoCategoria;
+
+        try {
+            fotoCategoria = this.subcategoriaService.subirFotoSubcategoria(categoriaId, foto);
+        } catch (CategoriaException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al subir foto de categoría");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("foto", fotoCategoria);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    /**
+     * Sube y asocia foto a una {@link Subcategoria} requerida.
+     * URL: ~/api/subcategorias/1/fotos
+     * HttpMethod: POST
+     * HttpStatus: CREATED
+     * @param subcategoriaId PathVariable Long id de la subcategoría.
+     * @param foto RequestParam MultipartFile archivo que contiene la foto de subcategoría a crear y subir.
+     * @return ResponseEntity {@link Imagen} con los datos de la foto creada y subida.
+     */
+    @PostMapping("/subcategorias/{subcategoriaId}/fotos")
+    public ResponseEntity<?> subirFotoSubcategoria(@PathVariable Long subcategoriaId,
+                                                   @RequestParam(name = "foto")MultipartFile foto) {
+        Map<String, Object> response = new HashMap<>();
+        Imagen fotoSubcategoria;
+
+        try {
+            fotoSubcategoria = this.subcategoriaService.subirFotoSubcategoria(subcategoriaId, foto);
+        } catch (CategoriaException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al subir foto de subcategoría");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("foto", fotoSubcategoria);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    /**
+     * Descarga y obtiene la foto asociada a una {@link Categoria}.
+     * URL: ~/api/categorias/1/fotos
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param categoriaId PathVariable Long id de la categoría a obtener foto.
+     * @return ResponseEntity con la imagen como recurso.
+     */
+    @GetMapping("/categorias/{categoriaId}/fotos")
+    public ResponseEntity<?> obtenerFotoCategoria(@PathVariable Long categoriaId) {
+        Map<String, Object> response = new HashMap<>();
+        byte[] fotoBytes;
+        ByteArrayResource fotoAsResource;
+        String imagePath;
+
+        try {
+            fotoBytes = this.categoriaService.obtenerFotoCategoria(categoriaId);
+            imagePath = this.categoriaService.obtenerPathFotoCategoria(categoriaId);
+            fotoAsResource = new ByteArrayResource(fotoBytes);
+        } catch (CategoriaException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al obtener foto de la categoría");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseEntity
+                .ok()
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + imagePath + "\"")
+                .body(fotoAsResource);
+    }
+
+    /**
+     * Descarga y obtiene la foto asociada a una {@link Subcategoria}.
+     * URL: ~/api/subcategorias/1/fotos
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param subcategoriaId PathVariable Long id de la subcategoría a obtener foto.
+     * @return ResponseEntity con la imagen como recurso.
+     */
+    @GetMapping("/subcategorias/{subcategoriaId}/fotos")
+    public ResponseEntity<?> obtenerFotoSubcategoria(@PathVariable Long subcategoriaId) {
+        Map<String, Object> response = new HashMap<>();
+        byte[] fotoBytes;
+        ByteArrayResource fotoAsResource;
+        String imagePath;
+
+        try {
+            fotoBytes = this.subcategoriaService.obtenerFotoSubcategoria(subcategoriaId);
+            imagePath = this.subcategoriaService.obtenerPathFotoSubcategoria(subcategoriaId);
+            fotoAsResource = new ByteArrayResource(fotoBytes);
+        } catch (CategoriaException | FileException | AmazonS3Exception e) {
+            response.put("mensaje", "Error al obtener foto de la subcategoría");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseEntity
+                .ok()
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + imagePath + "\"")
+                .body(fotoAsResource);
+    }
+
+    /**
+     * Elimina la foto asociada a un {@link Categoria}.
+     * URL: ~/api/categorias/1/fotos
+     * HttpMethod: DELETE
+     * HttpStatus: OK
+     * @param categoriaId PathVariable Long id de la categoría a eliminar foto.
+     * @return ResponseEntity con mensaje éxito/error sobre la eliminación de la foto de la categoría.
+     */
+    @DeleteMapping("/categorias/{categoriaId}/fotos")
+    public ResponseEntity<?> eliminarFotoCategoria(@PathVariable Long categoriaId) {
+        Map<String, Object> respose = new HashMap<>();
+        String msg;
+
+        try {
+            this.categoriaService.eliminarFotoCategoria(categoriaId);
+            msg = "Foto de categoría eliminada con éxito";
+        } catch (CategoriaException | FileException | AmazonS3Exception e) {
+            respose.put("mensaje", "Error al eliminar foto de categoría");
+            respose.put("error", e.getMessage());
+            return new ResponseEntity<>(respose, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        respose.put("mensaje", msg);
+        return new ResponseEntity<>(respose, HttpStatus.OK);
+    }
+
+    /**
+     * Elimina la foto asociada a un {@link Subcategoria}.
+     * URL: ~/api/subcategorias/1/fotos
+     * HttpMethod: DELETE
+     * HttpStatus: OK
+     * @param subcategoriaId PathVariable Long id de la subcategoría a eliminar foto.
+     * @return ResponseEntity con mensaje éxito/error sobre la eliminación de la foto de la subcategoría.
+     */
+    @DeleteMapping("/subcategorias/{subcategoriaId}/fotos")
+    public ResponseEntity<?> eliminarFotoSubcategoria(@PathVariable Long subcategoriaId) {
+        Map<String, Object> respose = new HashMap<>();
+        String msg;
+
+        try {
+            this.subcategoriaService.eliminarFotoSubcategoria(subcategoriaId);
+            msg = "Foto de subcategoría eliminada con éxito";
+        } catch (CategoriaException | FileException | AmazonS3Exception e) {
+            respose.put("mensaje", "Error al eliminar foto de subcategoría");
+            respose.put("error", e.getMessage());
+            return new ResponseEntity<>(respose, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        respose.put("mensaje", msg);
+        return new ResponseEntity<>(respose, HttpStatus.OK);
     }
 }
