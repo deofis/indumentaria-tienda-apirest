@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
@@ -7,6 +8,7 @@ import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -57,5 +59,25 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
         Subcategoria subcategoria = this.obtenerSubcategoria(subcategoriaId);
 
         return subcategoria.getPropiedades();
+    }
+
+    @Override
+    public Imagen subirFotoCategoria(Long subcategoriaId, MultipartFile foto) {
+        return null;
+    }
+
+    @Override
+    public byte[] obtenerFotoCategoria(Long subcategoriaId) {
+        return new byte[0];
+    }
+
+    @Override
+    public String obtenerPathFotoCategoria(Long subcategoriaId) {
+        return null;
+    }
+
+    @Override
+    public void eliminarFotoCategoria(Long subcategoriaId) {
+
     }
 }

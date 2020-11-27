@@ -82,7 +82,7 @@ public interface CatalogoAdminService {
     String obtenerPathFotoSku(Long skuId);
 
     /**
-     * Elimina una foto asociada a un {@link Sku}.
+     * Elimina la foto asociada a un {@link Sku}.
      * @param skuId Long id del sku.
      */
     void eliminarFotoSku(Long skuId);

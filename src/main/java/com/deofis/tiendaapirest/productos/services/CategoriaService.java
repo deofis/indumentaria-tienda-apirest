@@ -1,7 +1,9 @@
 package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -51,4 +53,32 @@ public interface CategoriaService {
      * @return Subcategoria.
      */
     Subcategoria obtenerSubcategoriaDeCategoria(Long categoriaId, Long subcategoriaId);
+
+    /**
+     * Crea, sube y vincula foto de {@link Categoria}.
+     * @param categoriaId Long id de la categoría.
+     * @param foto MultipartFile archivo que contiene la foto a subir.
+     * @return {@link Imagen} con los datos del archivo subido.
+     */
+    Imagen subirFotoCategoria(Long categoriaId, MultipartFile foto);
+
+    /**
+     * Obtiene la foto de una {@link Categoria}.
+     * @param categoriaId Long id de la categoría.
+     * @return imagen descargada en bytes.
+     */
+    byte[] obtenerFotoCategoria(Long categoriaId);
+
+    /**
+     * Obtiene el path de foto de una {@link Categoria}.
+     * @param categoriaId Long id de la categoría.
+     * @return String path de foto de la categoría.
+     */
+    String obtenerPathFotoCategoria(Long categoriaId);
+
+    /**
+     * Elimina la foto asociada a una {@link Categoria}.
+     * @param categoriaId Long id de la categoría.
+     */
+    void eliminarFotoCategoria(Long categoriaId);
 }

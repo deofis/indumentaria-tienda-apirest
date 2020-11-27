@@ -1,12 +1,14 @@
 package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Categoria;
+import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.CategoriaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -77,5 +79,25 @@ public class CategoriaServiceImpl implements CategoriaService {
         if (!existeSub) throw new ProductoException("La subcategoría no pertenece a la categoría: ".concat(categoria.getNombre()));
 
         return subcategoria;
+    }
+
+    @Override
+    public Imagen subirFotoCategoria(Long categoriaId, MultipartFile foto) {
+        return null;
+    }
+
+    @Override
+    public byte[] obtenerFotoCategoria(Long categoriaId) {
+        return new byte[0];
+    }
+
+    @Override
+    public String obtenerPathFotoCategoria(Long categoriaId) {
+        return null;
+    }
+
+    @Override
+    public void eliminarFotoCategoria(Long categoriaId) {
+
     }
 }
