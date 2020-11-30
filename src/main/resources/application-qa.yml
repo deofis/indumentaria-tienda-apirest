@@ -30,6 +30,13 @@ endpoints:
   baseUrl: https://api.deofisdev.online
   clientUrl: https://deofisdev.online
 
+amazon:
+  s3:
+    bucketName: deofis-images-bucket
+    endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
+    accessKey: AKIAZ67T4O5CQ2MJ2BHE
+    secretKey: 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
+
 jwt:
   expirationInMillis: 900000
 
