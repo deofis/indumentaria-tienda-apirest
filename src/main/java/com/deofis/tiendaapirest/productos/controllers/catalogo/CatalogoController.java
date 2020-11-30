@@ -58,23 +58,22 @@ public class CatalogoController {
      */
     @GetMapping("/catalogo/buscar")
     public ResponseEntity<Map<String, Object>> buscarProductos(@RequestParam String termino) {
-        Map<String, Object> response = new HashMap<>();
-        List<Producto> productosEncontrados = this.catalogoService.buscarProductos(termino);
+        Map<String, Object> response = this.catalogoService.buscarProductos(termino);
 
-        response.put("total", productosEncontrados.size());
-        response.put("productos", productosEncontrados);
+        if (response.get("totalProductos").equals(0)) response.put("mensaje", "No se encontraron resultados de la búsqueda");
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
      * Obtiene un producto para ver en detalle por el usuario.
-     * URL: ~/api/catalogo/productos/ver/1
+     * URL: ~/api/catalogo/productos/1
      * HttpMethod: GET
      * HttpStatus: OK
      * @param productoId @PathVariable Long id del producto a obtener.
      * @return ResponseEntity Producto obtenido.
      */
-    @GetMapping("/catalogo/productos/ver/{productoId}")
+    @GetMapping("/catalogo/productos/{productoId}")
     public ResponseEntity<?> obtenerProducto(@PathVariable Long productoId) {
         Map<String, Object> response = new HashMap<>();
         Producto producto;

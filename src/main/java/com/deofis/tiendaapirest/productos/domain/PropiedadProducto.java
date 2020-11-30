@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class PropiedadProducto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message = "El nombre de la propiedad del producto es obligatorio")
     private String nombre;
     /**
      * Este atributo será true si se quiere utilizar la propiedad de producto para

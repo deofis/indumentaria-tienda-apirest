@@ -59,15 +59,13 @@ public class Producto implements Serializable {
     private boolean destacado;
 
     @NotNull(message = "La subcategoria del producto es obligatoria.")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "subcategoria_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Subcategoria subcategoria;
 
     @NotNull(message = "La marca del producto es obligatoria.")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "marca_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Marca marca;
 
     @NotNull(message = "La unidad de medida del producto es obligatoria.")
@@ -76,12 +74,11 @@ public class Producto implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private UnidadMedida unidadMedida;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "productos_x_propiedades",
             joinColumns = @JoinColumn(name = "producto_id"),
             inverseJoinColumns = @JoinColumn(name = "producto_propiedad_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"producto_id", "producto_propiedad_id"})})
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<PropiedadProducto> propiedades;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

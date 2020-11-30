@@ -1,6 +1,9 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 
 import java.util.List;
 
@@ -17,4 +20,37 @@ public interface BuscadorProductosService {
      * @return List listado de productos encontrados.
      */
     List<Producto> buscarProductos(String termino);
+
+    /**
+     * Busca los productos por término, y devuelve un listado con las marcas pertenecientes a productos
+     * encontrados.
+     * <br>
+     * Ej.: Termino = 'celulares' --> Del array de productos encontrados al término, genera un listado
+     * con las marcas de esos productos: 'Samsung', 'Apple', etc...
+     * @param termino String consulta sobre los productos a buscar (mismo que buscar productos).
+     * @return List listado de marcas que son de productos encontrados.
+     */
+    List<Marca> marcasDeProductosEncontrados(String termino);
+
+    /**
+     * Busca los productos por término, y devuelve un listado con las subcategorías pertenecientes a productos
+     * encontrados.
+     * <br>
+     * Ej.: Termino = 'celulares' --> Del array de productos encontrados al término, genera un listado
+     * con las subcategorías de esos productos: 'Celulares'.
+     * @param termino String consulta sobre los productos a buscar (mismo que buscar productos).
+     * @return List listado de subcategorías que son de productos encontrados.
+     */
+    List<Subcategoria> subcategoriasDeProductosEncontrados(String termino);
+
+    /**
+     * Busca los productos por término, y devuelve un listado con las propiedades pertenecientes a productos
+     * encontrados.
+     * <br>
+     * Ej.: Termino = 'celulares' --> Del array de productos encontrados al término, genera un listado
+     * con las propiedades de esos productos: 'Color', 'Modelo', etc...
+     * @param termino String consulta sobre los productos a buscar (mismo que buscar productos).
+     * @return List listado de propiedades que son de productos encontrados.
+     */
+    List<PropiedadProducto> propiedadesDeProductosEncontrados(String termino);
 }

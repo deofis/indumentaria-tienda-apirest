@@ -1,6 +1,9 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
+import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.SubcategoriaRepository;
@@ -37,6 +40,45 @@ public class BuscadorProductosServiceImpl implements BuscadorProductosService {
         return this.eliminarDuplicados(productosTotal);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Marca> marcasDeProductosEncontrados(String termino) {
+        List<Producto> productos = this.buscarProductos(termino);
+        List<Marca> marcasDeProductos = new ArrayList<>();
+
+        for (Producto producto: productos) {
+            marcasDeProductos.add(producto.getMarca());
+        }
+
+        return this.eliminarDuplicados(marcasDeProductos);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Subcategoria> subcategoriasDeProductosEncontrados(String termino) {
+        List<Producto> productos = this.buscarProductos(termino);
+        List<Subcategoria> subcategoriasDeProductos = new ArrayList<>();
+
+        for (Producto producto: productos) {
+            subcategoriasDeProductos.add(producto.getSubcategoria());
+        }
+
+        return this.eliminarDuplicados(subcategoriasDeProductos);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PropiedadProducto> propiedadesDeProductosEncontrados(String termino) {
+        List<Producto> productos = this.buscarProductos(termino);
+        List<PropiedadProducto> propiedadesDeProductos = new ArrayList<>();
+
+        for (Producto producto: productos) {
+            propiedadesDeProductos.addAll(producto.getPropiedades());
+        }
+
+        return this.eliminarDuplicados(propiedadesDeProductos);
+    }
+
     private List<Producto> encontrarProductosPorNombre(String termino) {
         return this.productoRepository
                 .findAllByNombreContainingIgnoringCaseAndActivoIsTrueOrderByNombreAsc(termino);
@@ -44,16 +86,30 @@ public class BuscadorProductosServiceImpl implements BuscadorProductosService {
 
     private List<Producto> encontrarProductosPorMarca(String termino) {
         List<Producto> productos = new ArrayList<>();
+        List<Marca> marcas = this.marcaRepository.findAllByNombreContainingIgnoringCase(termino);
+        /*
         this.marcaRepository.findByNombreContainingIgnoringCase(termino).ifPresent(marca -> productos
                 .addAll(this.productoRepository.findAllByMarcaAndActivoIsTrue(marca)));
+         */
+
+        for (Marca marca: marcas) {
+            productos.addAll(this.productoRepository.findAllByMarcaAndActivoIsTrue(marca));
+        }
 
         return productos;
     }
 
     private List<Producto> encontrarProductosPorSubcategoria(String termino) {
         List<Producto> productos = new ArrayList<>();
+        List<Subcategoria> subcategorias = this.subcategoriaRepository.findAllByNombreContainingIgnoringCase(termino);
+        /*
         this.subcategoriaRepository.findByNombreContainingIgnoringCase(termino).ifPresent(subcategoria -> productos
                 .addAll(this.productoRepository.findAllBySubcategoriaAndActivoIsTrue(subcategoria)));
+         */
+
+        for (Subcategoria subcategoria: subcategorias) {
+            productos.addAll(this.productoRepository.findAllBySubcategoriaAndActivoIsTrue(subcategoria));
+        }
 
         return productos;
     }

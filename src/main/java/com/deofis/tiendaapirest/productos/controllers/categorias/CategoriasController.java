@@ -136,7 +136,7 @@ public class CategoriasController {
         try {
             subcategoria = this.categoriaService.obtenerSubcategoriaDeCategoria(categoriaId, subcategoriaId);
             categoria = this.categoriaService.obtenerCategoria(categoriaId).getNombre();
-        } catch (ProductoException e) {
+        } catch (ProductoException | CategoriaException e) {
             response.put("mensaje", "Error al obtener la subcategoría de la categoría");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

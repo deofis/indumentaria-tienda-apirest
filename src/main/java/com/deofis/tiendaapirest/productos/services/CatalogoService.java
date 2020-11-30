@@ -4,6 +4,7 @@ import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Este servicio tiene la lógica relacionada con el catálogo de productos para mostrar,
@@ -21,7 +22,7 @@ public interface CatalogoService {
      * @param termino String consulta sobre los productos a buscar.
      * @return List listado de productos que coinciden con el término de búsqueda.
      */
-    List<Producto> buscarProductos(String termino);
+    Map<String, Object> buscarProductos(String termino);
 
     /**
      * Obtiene un listado desordenado de todas las marcas.

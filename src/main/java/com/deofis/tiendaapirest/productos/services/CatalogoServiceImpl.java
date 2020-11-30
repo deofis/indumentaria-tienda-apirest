@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Marca;
 import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.MarcaRepository;
@@ -11,7 +12,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -24,8 +27,19 @@ public class CatalogoServiceImpl implements CatalogoService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Producto> buscarProductos(String termino) {
-        return this.buscadorProductosService.buscarProductos(termino);
+    public Map<String, Object> buscarProductos(String termino) {
+        Map<String, Object> resultadoBusqueda = new HashMap<>();
+        List<Producto> productos = this.buscadorProductosService.buscarProductos(termino);
+        List<Marca> marcas = this.buscadorProductosService.marcasDeProductosEncontrados(termino);
+        List<Subcategoria> subcategorias = this.buscadorProductosService.subcategoriasDeProductosEncontrados(termino);
+        List<PropiedadProducto> propiedades = this.buscadorProductosService.propiedadesDeProductosEncontrados(termino);
+
+        resultadoBusqueda.put("totalProductos", productos.size());
+        resultadoBusqueda.put("productos", productos);
+        resultadoBusqueda.put("marcas", marcas);
+        resultadoBusqueda.put("subcategorias", subcategorias);
+        resultadoBusqueda.put("propiedades", propiedades);
+        return resultadoBusqueda;
     }
 
     @Transactional(readOnly = true)
