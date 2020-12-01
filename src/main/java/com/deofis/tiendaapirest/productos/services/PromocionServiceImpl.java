@@ -84,6 +84,9 @@ public class PromocionServiceImpl implements PromocionService {
         log.info("Cantidad de productos a promocionar: " + productosPromocionados);
 
         for (Producto producto: productosDeSubcategoria) {
+            if (producto.getPromocion() != null) this.promocionRepository
+                    .deleteById(producto.getPromocion().getId());
+
             Promocion promoProducto = Promocion.builder()
                     .fechaDesde(promocion.getFechaDesde())
                     .fechaHasta(promocion.getFechaHasta())
@@ -95,6 +98,9 @@ public class PromocionServiceImpl implements PromocionService {
             producto.getDefaultSku().setPromocion(promoProducto);
 
             for (Sku sku: producto.getSkus()) {
+                if (sku.getPromocion() != null) this.promocionRepository
+                        .deleteById(sku.getPromocion().getId());
+
                 Promocion promoSku = Promocion.builder()
                         .fechaDesde(promocion.getFechaDesde())
                         .fechaHasta(promocion.getFechaHasta())
