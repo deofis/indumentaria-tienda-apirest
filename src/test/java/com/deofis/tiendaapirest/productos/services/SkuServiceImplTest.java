@@ -37,7 +37,6 @@ class SkuServiceImplTest {
 
         sku = Sku.builder()
                 .precio(20000.00)
-                .precioOferta(18000.00)
                 .disponibilidad(13)
                 .valores(new ArrayList<>()).build();
 

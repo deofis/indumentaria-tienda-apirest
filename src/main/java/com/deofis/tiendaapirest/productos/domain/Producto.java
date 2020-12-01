@@ -35,7 +35,10 @@ public class Producto implements Serializable {
     @NotNull(message = "El precio del producto es obligatorio.")
     private Double precio;
 
-    private Double precioOferta;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "promocion_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Promocion promocion;
 
     @NotNull(message = "La disponibilidad inicial del producto es obligatorio.")
     private Integer disponibilidadGeneral;

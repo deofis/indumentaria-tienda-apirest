@@ -26,4 +26,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findAllByOrderByPrecioDesc();
 
     List<Producto> findAllByPrecioBetween(Double min, Double max);
+
+    List<Producto> findAllBySubcategoria(Subcategoria subcategoria);
 }

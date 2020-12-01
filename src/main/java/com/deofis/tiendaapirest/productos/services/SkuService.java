@@ -13,7 +13,7 @@ import java.util.Map;
  * Un {@link Sku} es un {@link Producto} vendible, es decir, es lo que realmente se vende/guarda en el carrito.
  */
 
-public interface SkuService {
+public interface SkuService extends CrudService<Sku, Long> {
 
     /**
      * Crea un nuevo SKU a partir de un {@link Producto}.
@@ -70,6 +70,7 @@ public interface SkuService {
      * @param precioOferta Double precio de oferta nuevo.
      * @return Sku actualizado y guardado.
      */
+    @Deprecated
     Sku actualizarPrecioOferta(Long skuId, Double precioOferta);
 
     /**

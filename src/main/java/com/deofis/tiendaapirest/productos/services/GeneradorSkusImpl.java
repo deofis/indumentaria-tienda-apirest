@@ -146,7 +146,6 @@ public class GeneradorSkusImpl implements GeneradorSkus {
                     .nombre(producto.getNombre())
                     .descripcion(producto.getDescripcion())
                     .precio(null)
-                    .precioOferta(null)
                     .disponibilidad(null)
                     .fechaCreacion(new Date())
                     .foto(null)

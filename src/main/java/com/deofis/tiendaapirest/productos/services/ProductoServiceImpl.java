@@ -1,9 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Producto;
-import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
-import com.deofis.tiendaapirest.productos.domain.Sku;
-import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
+import com.deofis.tiendaapirest.productos.domain.*;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
@@ -51,7 +48,6 @@ public class ProductoServiceImpl implements ProductoService {
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
                 .precio(producto.getPrecio())
-                .precioOferta(producto.getPrecioOferta())
                 .disponibilidad(producto.getDisponibilidadGeneral())
                 .fechaCreacion(new Date())
                 .foto(null)
@@ -60,7 +56,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .valoresData(null)
                 .defaultProducto(nuevoProducto).build());
 
-        return this.productoRepository.save(nuevoProducto);
+        return this.save(nuevoProducto);
     }
 
     @Override
@@ -88,7 +84,7 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setMarca(producto.getMarca());
         productoActual.setUnidadMedida(producto.getUnidadMedida());
 
-        return this.productoRepository.save(productoActual);
+        return this.save(productoActual);
     }
 
     @Transactional
@@ -99,7 +95,7 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setDisponibilidadGeneral(disponibilidadGral);
         productoActual.getDefaultSku().setDisponibilidad(disponibilidadGral);
 
-        return this.productoRepository.save(productoActual);
+        return this.save(productoActual);
     }
 
     @Transactional
@@ -110,7 +106,7 @@ public class ProductoServiceImpl implements ProductoService {
         productoActual.setPrecio(precio);
         productoActual.getDefaultSku().setPrecio(precio);
 
-        return this.productoRepository.save(productoActual);
+        return this.save(productoActual);
     }
 
     @Transactional
@@ -118,10 +114,7 @@ public class ProductoServiceImpl implements ProductoService {
     public Producto actualizarPrecioOferta(Double precioOferta, Long productoId) {
         Producto productoActual = this.obtenerProducto(productoId);
 
-        productoActual.setPrecioOferta(precioOferta);
-        productoActual.getDefaultSku().setPrecioOferta(precioOferta);
-
-        return this.productoRepository.save(productoActual);
+        return this.save(productoActual);
     }
 
     @Override
@@ -134,7 +127,7 @@ public class ProductoServiceImpl implements ProductoService {
         }
 
         productoActual.setActivo(false);
-        this.productoRepository.save(productoActual);
+        this.save(productoActual);
     }
 
     @Override
@@ -147,7 +140,7 @@ public class ProductoServiceImpl implements ProductoService {
         }
 
         productoActual.setActivo(true);
-        this.productoRepository.save(productoActual);
+        this.save(productoActual);
     }
 
     @Override
@@ -156,7 +149,7 @@ public class ProductoServiceImpl implements ProductoService {
         Producto productoActual = this.obtenerProducto(id);
 
         productoActual.setDestacado(!producto.isDestacado());
-        this.productoRepository.save(productoActual);
+        this.save(productoActual);
     }
 
     @Transactional(readOnly = true)
@@ -201,5 +194,17 @@ public class ProductoServiceImpl implements ProductoService {
                 .concat(String.valueOf(producto.getId())));
 
         return sku;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Producto> productosEnSubcategoria(Subcategoria subcategoria) {
+        return this.productoRepository.findAllBySubcategoria(subcategoria);
+    }
+
+    @Transactional
+    @Override
+    public Producto save(Producto object) {
+        return this.productoRepository.save(object);
     }
 }

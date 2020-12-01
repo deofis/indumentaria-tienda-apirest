@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,11 +23,19 @@ public class Promocion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message = "La fecha desde de la promoción es obligatoria")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_desde")
     private Date fechaDesde;
+    @NotNull(message = "La fecha hasta de la promoción es obligatoria")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_hasta")
     private Date fechaHasta;
     private Double precioOferta;
+    private Double porcentaje;
 
     public boolean getEstaVigente() {
-        return this.fechaHasta != null;
+        Date actualDate = new Date();
+        return actualDate.after(this.fechaDesde) && actualDate.before(this.fechaHasta);
     }
 }

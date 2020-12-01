@@ -28,7 +28,10 @@ public class Sku implements Serializable {
 
     private Double precio;
 
-    private Double precioOferta;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "promocion_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Promocion promocion;
 
     private Integer disponibilidad;
     @Temporal(TemporalType.TIMESTAMP)

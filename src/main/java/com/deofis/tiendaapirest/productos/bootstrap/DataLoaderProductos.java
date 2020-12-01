@@ -298,7 +298,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre("Samsung J2 Grand Prime")
                     .descripcion("Modelo: J2 GP 16GB de memoria, 1GB de RAM")
                     .precio(25000.00)
-                    .precioOferta(23000.00)
                     .disponibilidadGeneral(107)
                     .foto(null)
                     .imagenes(new ArrayList<>())
@@ -318,7 +317,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .descripcion(samsungJ2.getDescripcion())
                     .fechaCreacion(new Date())
                     .precio(samsungJ2.getPrecio())
-                    .precioOferta(samsungJ2.getPrecioOferta())
                     .disponibilidad(samsungJ2.getDisponibilidadGeneral())
                     .defaultProducto(samsungJ2).build());
 
@@ -346,7 +344,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre(samsungS20.getNombre())
                     .descripcion(samsungS20.getDescripcion())
                     .precio(samsungS20.getPrecio())
-                    .precioOferta(samsungS20.getPrecioOferta())
                     .fechaCreacion(new Date())
                     .disponibilidad(samsungS20.getDisponibilidadGeneral())
                     .defaultProducto(samsungS20).build());
@@ -374,7 +371,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre(samsungS10.getNombre())
                     .descripcion(samsungS10.getDescripcion())
                     .precio(samsungS10.getPrecio())
-                    .precioOferta(samsungS10.getPrecioOferta())
                     .fechaCreacion(new Date())
                     .disponibilidad(samsungS10.getDisponibilidadGeneral())
                     .defaultProducto(samsungS10).build());
@@ -402,7 +398,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre(iphone11plus.getNombre())
                     .descripcion(iphone11plus.getDescripcion())
                     .precio(iphone11plus.getPrecio())
-                    .precioOferta(iphone11plus.getPrecioOferta())
                     .fechaCreacion(new Date())
                     .disponibilidad(iphone11plus.getDisponibilidadGeneral())
                     .defaultProducto(iphone11plus).build());
@@ -430,7 +425,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre(iphone11.getNombre())
                     .descripcion(iphone11.getDescripcion())
                     .precio(iphone11.getPrecio())
-                    .precioOferta(iphone11.getPrecioOferta())
                     .fechaCreacion(new Date())
                     .disponibilidad(iphone11.getDisponibilidadGeneral())
                     .defaultProducto(iphone11).build());
@@ -458,7 +452,6 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .nombre(samsungA10.getNombre())
                     .descripcion(samsungA10.getDescripcion())
                     .precio(samsungA10.getPrecio())
-                    .precioOferta(samsungA10.getPrecioOferta())
                     .fechaCreacion(new Date())
                     .disponibilidad(samsungA10.getDisponibilidadGeneral())
                     .defaultProducto(samsungA10).build());

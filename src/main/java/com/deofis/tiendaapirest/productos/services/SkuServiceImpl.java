@@ -31,7 +31,6 @@ public class SkuServiceImpl implements SkuService {
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
                 .precio(sku.getPrecio())
-                .precioOferta(sku.getPrecioOferta())
                 .disponibilidad(sku.getDisponibilidad())
                 .fechaCreacion(new Date())
                 .foto(null)
@@ -52,7 +51,7 @@ public class SkuServiceImpl implements SkuService {
         nuevoSku.setValores(valoresReales);
         nuevoSku.setValoresData(valoresData);
 
-        return this.skuRepository.save(nuevoSku);
+        return this.save(nuevoSku);
     }
 
     @Override
@@ -90,9 +89,8 @@ public class SkuServiceImpl implements SkuService {
         skuActual.setNombre(sku.getNombre());
         skuActual.setDescripcion(sku.getDescripcion());
         skuActual.setPrecio(sku.getPrecio());
-        skuActual.setPrecioOferta(sku.getPrecioOferta());
         skuActual.setDisponibilidad(sku.getDisponibilidad());
-        return this.skuRepository.save(skuActual);
+        return this.save(skuActual);
     }
 
     @Transactional
@@ -101,7 +99,7 @@ public class SkuServiceImpl implements SkuService {
         Sku skuActual = this.obtenerSku(skuId);
 
         skuActual.setDisponibilidad(disponibilidad);
-        return this.skuRepository.save(skuActual);
+        return this.save(skuActual);
     }
 
     @Transactional
@@ -109,15 +107,14 @@ public class SkuServiceImpl implements SkuService {
     public Sku actualizarPrecio(Long skuId, Double precio) {
         Sku sku = this.obtenerSku(skuId);
         sku.setPrecio(precio);
-        return this.skuRepository.save(sku);
+        return this.save(sku);
     }
 
     @Transactional
     @Override
     public Sku actualizarPrecioOferta(Long skuId, Double precioOferta) {
         Sku sku = this.obtenerSku(skuId);
-        sku.setPrecioOferta(precioOferta);
-        return this.skuRepository.save(sku);
+        return this.save(sku);
     }
 
     @Transactional
@@ -129,5 +126,11 @@ public class SkuServiceImpl implements SkuService {
     private ValorPropiedadProducto getValor(Long valorId) {
         return this.valorPropiedadProductoRepository.findById(valorId)
                 .orElseThrow(() -> new ProductoException("No existe el valor de propiedad"));
+    }
+
+    @Transactional
+    @Override
+    public Sku save(Sku object) {
+        return this.skuRepository.save(object);
     }
 }

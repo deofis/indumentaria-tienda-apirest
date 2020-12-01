@@ -1,9 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
-import com.deofis.tiendaapirest.productos.domain.Producto;
-import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
-import com.deofis.tiendaapirest.productos.domain.Sku;
-import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
+import com.deofis.tiendaapirest.productos.domain.*;
 
 import java.util.List;
 
@@ -13,7 +10,7 @@ import java.util.List;
  * destacados a un producto requerido.
  */
 
-public interface ProductoService {
+public interface ProductoService extends CrudService<Producto, Long> {
 
     /**
      * Método que se encarga de registrar un nuevo producto en la BD y devolverlo. También
@@ -67,6 +64,7 @@ public interface ProductoService {
      * @param productoId Long id del producto.
      * @return Producto con precio oferta actualizado.
      */
+    @Deprecated
     Producto actualizarPrecioOferta(Double precioOferta, Long productoId);
 
     /**
@@ -115,4 +113,12 @@ public interface ProductoService {
      * @return Sku.
      */
     Sku obtenerSkuProducto(Long productoId, Long skuId);
+
+    /**
+     * Obtiene un listado de todos los {@link Producto}s pertenecientes a una
+     * {@link Subcategoria} requerida.
+     * @param subcategoria Subcategoria requerida.
+     * @return List listado de productos pertenecientes a la subcategoría.
+     */
+    List<Producto> productosEnSubcategoria(Subcategoria subcategoria);
 }
