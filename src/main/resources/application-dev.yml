@@ -29,11 +29,15 @@ amazon:
   s3:
     bucketName: deofis-images-bucket
     endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
-    accessKey: AKIAZ67T4O5CQ2MJ2BHE
-    secretKey: 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
+    accessKey: ENC(KDAOVAGwgVlAy3p81kVkiM8E+075tCb3D9ZIkMFrcSc=)
+    secretKey: ENC(M/rXjb895VoXdgvzdPlorMfTOmhQftQFGOCc8x+YvDYsZLe0TnTCScBQmG7rbEto8uSvH76aNrc=)
 
 jwt:
   expirationInMillis: 3600000
 
 server:
   port: ${PORT:8080}
+
+jasypt:
+  encryptor:
+    password: deofis1224
