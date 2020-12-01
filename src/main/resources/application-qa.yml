@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://deofis.c0j3cq5bdbwq.eu-west-2.rds.amazonaws.com/deofis_qa
     username: user_qa
-    password: ENC(2vGG489Cx5ar2akHboQnIKuXPApttgwA)
+    password: ENC(2ns5ABYULg5Mg6srSA5tefYRlkqAebbl)
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
@@ -17,7 +17,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: deofis.github@gmail.com
-    password: ENC(GHcd9hKRmbT/kPPNHJhA+Gx9ZhHmKSFh)
+    password: ENC(43ObyGBU+p+d7yD3/Qq9eYoVocoDxeYk)
     properties:
       mail:
         smtp:
@@ -34,15 +34,11 @@ amazon:
   s3:
     bucketName: deofis-images-bucket
     endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
-    accessKey: ENC(KDAOVAGwgVlAy3p81kVkiM8E+075tCb3D9ZIkMFrcSc=)
-    secretKey: ENC(M/rXjb895VoXdgvzdPlorMfTOmhQftQFGOCc8x+YvDYsZLe0TnTCScBQmG7rbEto8uSvH76aNrc=)
+    accessKey: ENC(G8IyhZeQLap2yXU26oMJmcfmwkeEKfvIFId40bmsUvs=)
+    secretKey: ENC(c/9xHbxVjYPRv5i0krzKvejyw/0L2gB6GQ9bCIvy6adYN67uK7WTJGwBwHUogDjhSw6MQyZdRVM=)
 
 jwt:
   expirationInMillis: 900000
 
 server:
   port: ${PORT:5000}
-
-jasypt:
-  encryptor:
-    password: deofis1224

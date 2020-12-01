@@ -49,3 +49,9 @@ app:
 paypal:
   clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
   clientSecret: EFoADORBnsYEkgM6YNfTU_pfHu0D8Npi2W8ZFASWysDKWnicY0OQX2sYCyCQs8H7RU9w5bnleMcUP5JP
+
+jasypt:
+  encryptor:
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    algorithm: PBEWithMD5AndDES
+    password: deofis1224
