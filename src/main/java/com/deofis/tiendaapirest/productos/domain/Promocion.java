@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,10 +26,12 @@ public class Promocion implements Serializable {
     private Long id;
     @NotNull(message = "La fecha desde de la promoción es obligatoria")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(timezone = "America/Argentina/Cordoba")
     @Column(name = "fecha_desde")
     private Date fechaDesde;
     @NotNull(message = "La fecha hasta de la promoción es obligatoria")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(timezone = "America/Argentina/Cordoba")
     @Column(name = "fecha_hasta")
     private Date fechaHasta;
     private Double precioOferta;
