@@ -4,7 +4,7 @@ import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.Promocion;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
-import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
+import com.deofis.tiendaapirest.productos.exceptions.PromocionException;
 import com.deofis.tiendaapirest.productos.repositories.PromocionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,6 +83,11 @@ public class PromocionServiceImpl implements PromocionService {
         Integer productosPromocionados = productosDeSubcategoria.size();
         log.info("Cantidad de productos a promocionar: " + productosPromocionados);
 
+        // En este caso, el porcentaje es requerido NOT NULL.
+        // El precio oferta es IRRELEVANTE, porque, en caso de recibir, se sobreescribe.
+        if (promocion.getPorcentaje() == null) throw new PromocionException("El porcentaje de" +
+                " promoción es requerido para aplicar la promoción");
+
         for (Producto producto: productosDeSubcategoria) {
             if (producto.getPromocion() != null) this.promocionRepository
                     .deleteById(producto.getPromocion().getId());
@@ -134,7 +139,7 @@ public class PromocionServiceImpl implements PromocionService {
     }
 
     private Double calcularPorcentajeOferta(Double precioOferta, Double precioBase) {
-        if (precioBase < precioOferta) throw new ProductoException("El precio de la promoción" +
+        if (precioBase < precioOferta) throw new PromocionException("El precio de la promoción" +
                 " no puede ser mayor al del precio base del producto");
         return (precioBase - precioOferta) / precioBase;
     }
