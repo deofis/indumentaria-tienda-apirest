@@ -47,6 +47,7 @@ public class PromocionServiceImpl implements PromocionService {
                 .porcentaje(promocion.getPorcentaje()).build();
 
         producto.setPromocion(nuevaPromocion);
+        producto.getDefaultSku().setPromocion(nuevaPromocion);
         return this.productoService.save(producto);
     }
 
