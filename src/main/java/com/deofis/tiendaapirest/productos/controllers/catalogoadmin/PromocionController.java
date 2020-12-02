@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.productos.domain.Promocion;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.exceptions.PromocionException;
+import com.deofis.tiendaapirest.productos.exceptions.SkuException;
 import com.deofis.tiendaapirest.productos.services.PromocionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class PromocionController {
 
         try {
             productoPromocionado = this.promocionService.programarOfertaProducto(productoId, promocion);
-        } catch (ProductoException | PromocionException e) {
+        } catch (ProductoException | SkuException | PromocionException e) {
             response.put("mensaje", "Error al crear la promoción para el producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,7 +67,7 @@ public class PromocionController {
 
         try {
             skuPromocionado = this.promocionService.programarOfertaSku(skuId, promocion);
-        } catch (ProductoException | PromocionException e) {
+        } catch (ProductoException | SkuException | PromocionException e) {
             response.put("mensaje", "Error al crear la promoción para el sku");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,7 +97,7 @@ public class PromocionController {
         try {
             cantProductosPromocionados = this.promocionService.programarOfertaProductosSubcategoria(subcategoriaId,
                     promocion);
-        } catch (ProductoException | PromocionException e) {
+        } catch (ProductoException | SkuException | PromocionException e) {
             response.put("mensaje", "Error al crear promociones para los productos de la subcategoría");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -121,7 +122,7 @@ public class PromocionController {
 
         try {
             promocionProducto = this.promocionService.obtenerPromocionProducto(productoId);
-        } catch (ProductoException | PromocionException e) {
+        } catch (ProductoException | SkuException | PromocionException e) {
             response.put("mensaje", "Error al obtener la promoción del producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -146,7 +147,7 @@ public class PromocionController {
 
         try {
             promocionProducto = this.promocionService.obtenerPromocionSku(skuId);
-        } catch (ProductoException | PromocionException e) {
+        } catch (ProductoException | SkuException | PromocionException e) {
             response.put("mensaje", "Error al obtener la promoción del sku");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
