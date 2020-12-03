@@ -65,15 +65,6 @@ public interface SkuService extends CrudService<Sku, Long> {
     Sku actualizarPrecio(Long skuId, Double precio);
 
     /**
-     * Acualiza o establece el precio de oferta de un SKU requerido.
-     * @param skuId Long id del sku a actualizar o establecer precio de oferta.
-     * @param precioOferta Double precio de oferta nuevo.
-     * @return Sku actualizado y guardado.
-     */
-    @Deprecated
-    Sku actualizarPrecioOferta(Long skuId, Double precioOferta);
-
-    /**
      * Elimina un SKU requerido.
      * @param skuId Long id del SKU a eliminar.
      */

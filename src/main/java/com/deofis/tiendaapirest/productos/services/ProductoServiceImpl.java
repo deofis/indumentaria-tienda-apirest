@@ -109,14 +109,6 @@ public class ProductoServiceImpl implements ProductoService {
         return this.save(productoActual);
     }
 
-    @Transactional
-    @Override
-    public Producto actualizarPrecioOferta(Double precioOferta, Long productoId) {
-        Producto productoActual = this.obtenerProducto(productoId);
-
-        return this.save(productoActual);
-    }
-
     @Override
     @Transactional
     public void darDeBaja(Producto producto, Long id) {

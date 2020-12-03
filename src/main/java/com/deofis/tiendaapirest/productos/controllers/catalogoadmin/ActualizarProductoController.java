@@ -114,30 +114,4 @@ public class ActualizarProductoController {
         response.put("producto", productoActualizado);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    /**
-     * Actualiza el precio oferta de un Producto y su Sku por defecto.
-     * URL: ~/api/productos/1/precios/oferta
-     * HttpMethod: PUT
-     * HttpStatus: OK
-     * @param precioOferta RequestParam Double nuevo precio oferta.
-     * @param productoId PathVariable Long id del producto.
-     * @return ResponseEntity con el producto actualizado.
-     */
-    @PutMapping("/productos/{productoId}/precios/oferta")
-    public ResponseEntity<?> actualizarPrecioOfertaProducto(@RequestParam Double precioOferta, @PathVariable Long productoId) {
-        Map<String, Object> response = new HashMap<>();
-        Producto productoActualizado;
-
-        try {
-            productoActualizado = this.productoService.actualizarPrecioOferta(precioOferta, productoId);
-        } catch (ProductoException e) {
-            response.put("mensaje", "Error al actualizar el precio oferta del producto");
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("producto", productoActualizado);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }

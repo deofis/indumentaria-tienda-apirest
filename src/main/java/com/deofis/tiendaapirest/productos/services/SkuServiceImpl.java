@@ -113,13 +113,6 @@ public class SkuServiceImpl implements SkuService {
 
     @Transactional
     @Override
-    public Sku actualizarPrecioOferta(Long skuId, Double precioOferta) {
-        Sku sku = this.obtenerSku(skuId);
-        return this.save(sku);
-    }
-
-    @Transactional
-    @Override
     public void eliminarSku(Long skuId) {
         this.skuRepository.deleteById(skuId);
     }

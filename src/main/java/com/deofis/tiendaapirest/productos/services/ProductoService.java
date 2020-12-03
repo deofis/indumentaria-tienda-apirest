@@ -59,15 +59,6 @@ public interface ProductoService extends CrudService<Producto, Long> {
     Producto actualizarPrecioBaseProducto(Double precio, Long productoId);
 
     /**
-     * Establece un nuevo precio oferta para un {@link Producto}
-     * @param precioOferta Double precio oferta nuevo.
-     * @param productoId Long id del producto.
-     * @return Producto con precio oferta actualizado.
-     */
-    @Deprecated
-    Producto actualizarPrecioOferta(Double precioOferta, Long productoId);
-
-    /**
      * Método para registrar la baja lógica de un producto.
      * @param id Long id del producto a dar de baja.
      */

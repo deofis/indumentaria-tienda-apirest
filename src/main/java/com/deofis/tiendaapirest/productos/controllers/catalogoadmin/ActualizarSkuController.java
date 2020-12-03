@@ -113,31 +113,4 @@ public class ActualizarSkuController {
         response.put("sku", skuActualizado);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    /**
-     * Actualiza el precio oferta de un Sku.
-     * URL: ~/api/productos/skus/1/precios/oferta
-     * HttpMethod: PUT
-     * HttpStatus: OK
-     * @param skuId PathVariable Long id del sku.
-     * @param precioOferta RequestParam Double precio oferta nuevo.
-     * @return ResponseEntity sku actualizado.
-     */
-    @PutMapping("/productos/skus/{skuId}/precios/oferta")
-    public ResponseEntity<?> actualizarPrecioOfertaSku(@PathVariable Long skuId,
-                                                       @RequestParam Double precioOferta) {
-        Map<String, Object> response = new HashMap<>();
-        Sku skuActualizado;
-
-        try {
-            skuActualizado = this.skuService.actualizarPrecioOferta(skuId, precioOferta);
-        } catch (ProductoException e) {
-            response.put("mensaje", "Error al actualizar precio base del sku");
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("sku", skuActualizado);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }
