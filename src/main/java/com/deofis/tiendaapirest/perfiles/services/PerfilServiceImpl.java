@@ -219,7 +219,7 @@ public class PerfilServiceImpl implements PerfilService {
     @Transactional(readOnly = true)
     @Override
     public Favoritos obtenerFavoritos() {
-        Perfil perfil = this.obtenerPerfil();
+        PerfilDTO perfil = this.verPerfil();
         if (perfil.getFavoritos() == null) {
             throw new PerfilesException("Error al obtener los favoritos: Favoritos no se cargo" +
                     "correctamente al crear el perfil");

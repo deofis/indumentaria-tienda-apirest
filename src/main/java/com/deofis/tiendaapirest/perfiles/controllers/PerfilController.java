@@ -164,7 +164,7 @@ public class PerfilController {
 
         try {
             carrito = this.perfilService.obtenerCarrito();
-        } catch (PerfilesException | CarritoException e) {
+        } catch (PerfilesException | CarritoException | AutenticacionException e) {
             response.put("mensaje", "Error al obtener el carrito del perfil");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -188,7 +188,7 @@ public class PerfilController {
 
         try {
             favoritos = this.perfilService.obtenerFavoritos();
-        } catch (PerfilesException e) {
+        } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al obtener los favoritos del perfil");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
