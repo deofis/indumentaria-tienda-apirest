@@ -3,9 +3,9 @@ package com.deofis.tiendaapirest.perfiles.services;
 import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
 import com.deofis.tiendaapirest.perfiles.domain.ItemFavorito;
 import com.deofis.tiendaapirest.perfiles.repositories.FavoritosRepository;
+import com.deofis.tiendaapirest.perfiles.repositories.ItemFavoritoRepository;
 import com.deofis.tiendaapirest.productos.domain.Producto;
-import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
+import com.deofis.tiendaapirest.productos.services.ProductoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class FavoritosServiceImpl implements FavoritosService {
 
     private final FavoritosRepository favoritosRepository;
-    private final ProductoRepository productoRepository;
+    private final ItemFavoritoRepository itemFavoritoRepository;
+    private final ProductoService productoService;
     private final PerfilService perfilService;
 
     @Transactional
@@ -25,7 +26,7 @@ public class FavoritosServiceImpl implements FavoritosService {
     public Favoritos agregarFavorito(Long productoId) {
         boolean existeProd = false;
         Favoritos favoritos = this.perfilService.obtenerFavoritos();
-        Producto productoAgregar = this.obtenerProducto(productoId);
+        Producto productoAgregar = this.productoService.obtenerProducto(productoId);
 
         for (ItemFavorito item: favoritos.getItems()) {
             if (item.getProducto().equals(productoAgregar)) {
@@ -49,14 +50,11 @@ public class FavoritosServiceImpl implements FavoritosService {
     @Override
     public Favoritos quitarFavorito(Long productoId) {
         Favoritos favoritos = this.perfilService.obtenerFavoritos();
-        Producto productoQuitar = this.obtenerProducto(productoId);
+        Producto productoQuitar = this.productoService.obtenerProducto(productoId);
 
         favoritos.getItems().removeIf(item -> item.getProducto().equals(productoQuitar));
-        return this.favoritosRepository.save(favoritos);
-    }
+        this.itemFavoritoRepository.deleteByProducto(productoQuitar);
 
-    private Producto obtenerProducto(Long id) {
-        return this.productoRepository.findById(id)
-                .orElseThrow(() -> new ProductoException("Producto no encontrado con id " + id));
+        return this.favoritosRepository.save(favoritos);
     }
 }
