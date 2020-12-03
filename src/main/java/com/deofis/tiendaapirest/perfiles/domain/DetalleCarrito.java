@@ -29,12 +29,9 @@ public class DetalleCarrito implements Serializable {
 
     public Double getSubtotal() {
         // Si existe promoción vigente, el subtotal se calcula acorde al precio oferta.
-        /*
         if (sku.getPromocion() != null && sku.getPromocion().getEstaVigente()) {
             return cantidad.doubleValue() * sku.getPromocion().getPrecioOferta();
         }
-
-         */
 
         return cantidad.doubleValue() * sku.getPrecio();
     }
