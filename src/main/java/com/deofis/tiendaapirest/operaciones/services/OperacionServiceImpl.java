@@ -82,9 +82,9 @@ public class OperacionServiceImpl implements OperacionService {
 
             item.setPrecioVenta(producto.getPrecio());
             producto.setDisponibilidadGeneral(producto.getDisponibilidadGeneral() - item.getCantidad());
-            item.setSubTotal(item.getPrecioVenta() * item.getCantidad().doubleValue());
+            item.setSubtotal(item.getPrecioVenta() * item.getCantidad().doubleValue());
 
-            nuevaOperacion.setTotal(this.calcularTotal(nuevaOperacion.getTotal(), item.getSubTotal()));
+            nuevaOperacion.setTotal(this.calcularTotal(nuevaOperacion.getTotal(), item.getSubtotal()));
             this.productoRepository.save(producto);
         }
 

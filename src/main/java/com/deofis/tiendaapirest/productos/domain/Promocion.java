@@ -31,6 +31,7 @@ public class Promocion implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_hasta")
     private Date fechaHasta;
+    @Column(name = "precio_oferta")
     private Double precioOferta;
     private Double porcentaje;
 

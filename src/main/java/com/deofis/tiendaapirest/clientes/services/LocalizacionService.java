@@ -34,6 +34,13 @@ public interface LocalizacionService {
     Pais obtenerPais(String nombrePais);
 
     /**
+     * Lista los estados que pertenecen a un país seleccionado por su id.
+     * @param paisId Long id del país.
+     * @return List de estados del país.
+     */
+    List<Estado> estadosDePais(Long paisId);
+
+    /**
      * Lista los estados que pertenecen a un país seleccionoado.
      * @param nombrePais String del nombre del pais seleccionado.
      * @return List de estados del país.
@@ -41,10 +48,26 @@ public interface LocalizacionService {
     List<Estado> estadosDePais(String nombrePais);
 
     /**
+     * Obtiene un {@link Estado} requerido.
+     * @param nombreEstado String nombre del estado.
+     * @return Estado
+     */
+    Estado obtenerEstado(String nombreEstado);
+
+    /**
      * Lista las ciudades pertenecientes a un estado de un país.
-     * @param pais String nombre del país.
-     * @param estado String nombre del estado.
+     * @param nombrePais String nombre del país.
+     * @param nombreEstado String nombre del estado.
      * @return List listado de ciudades del estado requerido.
      */
-    List<Ciudad> ciudadesEstado(String pais, String estado);
+    List<Ciudad> ciudadesEstado(String nombrePais, String nombreEstado);
+
+    /**
+     *
+     * Lista las ciudades pertenecientes a un estado de un país por id.
+     * @param paisId Long id del país.
+     * @param estadoId Long id del estado.
+     * @return List listado de ciudades del estado requerido.
+     */
+    List<Ciudad> ciudadesEstado(Long paisId, Long estadoId);
 }

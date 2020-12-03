@@ -40,6 +40,7 @@ public class Producto implements Serializable {
     private Promocion promocion;
 
     @NotNull(message = "La disponibilidad inicial del producto es obligatorio.")
+    @Column(name = "disponibilidad_general")
     private Integer disponibilidadGeneral;
 
     @Temporal(TemporalType.TIMESTAMP)

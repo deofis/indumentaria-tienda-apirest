@@ -36,6 +36,13 @@ public class LocalizacionServiceImpl implements LocalizacionService {
     }
 
     @Override
+    public List<Estado> estadosDePais(Long paisId) {
+        Pais pais = this.obtenerPais(paisId);
+
+        return pais.getEstados();
+    }
+
+    @Override
     public List<Estado> estadosDePais(String nombrePais) {
         Pais pais = this.obtenerPais(nombrePais);
 
@@ -43,7 +50,40 @@ public class LocalizacionServiceImpl implements LocalizacionService {
     }
 
     @Override
-    public List<Ciudad> ciudadesEstado(String pais, String estado) {
-        return null;
+    public Estado obtenerEstado(String nombreEstado) {
+        return this.estadoRepository.findByNombre(nombreEstado)
+                .orElseThrow(() -> new PaisesException("Estado no encontrado con nombre: " + nombreEstado));
+    }
+
+    @Override
+    public List<Ciudad> ciudadesEstado(String nombrePais, String nombreEstado) {
+        Pais pais = this.obtenerPais(nombrePais);
+        Estado estado = null;
+
+        for (Estado state: pais.getEstados()) {
+            if (state.getNombre().equals(nombreEstado)) estado = state;
+        }
+
+        if (estado == null) throw new PaisesException("El estado: " + nombreEstado +
+                " no pertenece al país: " + nombreEstado);
+
+
+        return estado.getCiudades();
+    }
+
+    @Override
+    public List<Ciudad> ciudadesEstado(Long paisId, Long estadoId) {
+        Pais pais = this.obtenerPais(paisId);
+        Estado estado = null;
+
+        for (Estado state: pais.getEstados()) {
+            if (state.getId().equals(estadoId)) estado = state;
+        }
+
+        if (estado == null) throw new PaisesException("El estado: " + estadoId +
+                " no pertenece al país: " + paisId);
+
+
+        return estado.getCiudades();
     }
 }

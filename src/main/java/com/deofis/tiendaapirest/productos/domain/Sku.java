@@ -46,6 +46,7 @@ public class Sku implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Imagen foto;
 
+    @Column(name = "valores_data")
     private String valoresData;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})

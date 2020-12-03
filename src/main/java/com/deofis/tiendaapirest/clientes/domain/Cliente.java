@@ -37,6 +37,7 @@ public class Cliente implements Serializable {
 
     private String telefono;
 
+    @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

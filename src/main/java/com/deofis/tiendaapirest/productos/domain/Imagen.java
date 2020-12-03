@@ -20,6 +20,7 @@ public class Imagen implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "image_url")
     private String imageUrl;
     private String path;
 }

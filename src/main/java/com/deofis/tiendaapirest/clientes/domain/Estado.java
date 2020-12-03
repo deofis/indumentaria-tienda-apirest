@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.clientes.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,5 +41,6 @@ public class Estado implements Serializable {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "state_id")
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private List<Ciudad> ciudades;
 }

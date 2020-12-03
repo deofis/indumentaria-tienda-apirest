@@ -30,6 +30,7 @@ public class Operacion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "nro_operacion")
     private Long nroOperacion;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -56,7 +57,7 @@ public class Operacion implements Serializable {
     // Luego crear FormaPago con las distintas formas de pago.
     @NotNull(message = "La forma de pago es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "forma_pago_id")
+    @JoinColumn(name = "medio_pago_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private MedioPago medioPago;
 

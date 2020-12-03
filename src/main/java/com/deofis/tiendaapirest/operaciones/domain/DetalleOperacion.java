@@ -28,6 +28,7 @@ public class DetalleOperacion implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Producto producto;
     private Integer cantidad;
+    @Column(name = "precio_venta")
     private Double precioVenta;
-    private Double subTotal;
+    private Double subtotal;
 }
