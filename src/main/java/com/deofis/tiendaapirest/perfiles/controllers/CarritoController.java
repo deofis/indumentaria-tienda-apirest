@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.perfiles.controllers;
 
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
@@ -37,7 +38,7 @@ public class CarritoController {
 
         try {
             carrito = this.carritoService.agregarItem(skuId);
-        } catch (PerfilesException | SkuException | ClienteException e) {
+        } catch (PerfilesException | SkuException | ClienteException | AutenticacionException e) {
             response.put("mensaje", "Error al agregar item al carrito");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,7 +65,7 @@ public class CarritoController {
 
         try {
             carritoActualizado = this.carritoService.actualizarCantidad(skuId, cantidad);
-        } catch (SkuException | PerfilesException | ClienteException | CarritoException e) {
+        } catch (SkuException | PerfilesException | ClienteException | CarritoException | AutenticacionException e) {
             response.put("mensaje", "Error al actualizar la cantidad de skus en el carrito");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,7 +90,7 @@ public class CarritoController {
 
         try {
             carritoActualizado = this.carritoService.quitarItem(skuId);
-        } catch (CarritoException | PerfilesException | SkuException e) {
+        } catch (CarritoException | PerfilesException | SkuException | AutenticacionException e) {
             response.put("mensaje", "Error al quitar el item del carrito");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +111,7 @@ public class CarritoController {
     public ResponseEntity<String> vaciarCarrito() {
         try {
             this.carritoService.vaciar();
-        } catch (PerfilesException | CarritoException e) {
+        } catch (PerfilesException | CarritoException | AutenticacionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

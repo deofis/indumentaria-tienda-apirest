@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.perfiles.controllers;
 
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.perfiles.services.FavoritosService;
@@ -38,7 +39,7 @@ public class FavoritosController {
 
         try {
             favoritosActualizado = this.favoritosService.agregarFavorito(productoId);
-        } catch (PerfilesException e) {
+        } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al agregar producto a favoritos");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,7 +69,7 @@ public class FavoritosController {
 
         try {
             favoritosActualizado = this.favoritosService.quitarFavorito(productoId);
-        } catch (PerfilesException e) {
+        } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al quitar producto de favoritos");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
