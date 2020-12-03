@@ -34,8 +34,8 @@ amazon:
   s3:
     bucketName: deofis-images-bucket
     endpoint: https://deofis-images-bucket.s3.eu-west-2.amazonaws.com/
-    accessKey: ENC(G8IyhZeQLap2yXU26oMJmcfmwkeEKfvIFId40bmsUvs=)
-    secretKey: ENC(c/9xHbxVjYPRv5i0krzKvejyw/0L2gB6GQ9bCIvy6adYN67uK7WTJGwBwHUogDjhSw6MQyZdRVM=)
+    accessKey: ENC(6ik+s8LqW3b68c9K1eOX3yoxpeU6+LgcboZbr07ZANw=)
+    secretKey: ENC(RkOXxN4A2LF+JrZGafMYlbNwY6JkcIdyPNv+vjahgcHfg0gTjm4i/fRt9SWM33RN46vY/N/50gg=)
 
 jwt:
   expirationInMillis: 900000
