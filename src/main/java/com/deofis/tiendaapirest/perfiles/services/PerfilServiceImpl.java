@@ -7,12 +7,14 @@ import com.deofis.tiendaapirest.autenticacion.security.UserPrincipal;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.services.ClienteService;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
+import com.deofis.tiendaapirest.perfiles.domain.DetalleCarrito;
 import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.perfiles.repositories.CarritoRepository;
+import com.deofis.tiendaapirest.perfiles.repositories.DetalleCarritoRepository;
 import com.deofis.tiendaapirest.perfiles.repositories.FavoritosRepository;
 import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
 import lombok.AllArgsConstructor;
@@ -34,6 +36,7 @@ public class PerfilServiceImpl implements PerfilService {
 
     private final PerfilRepository perfilRepository;
     private final CarritoRepository carritoRepository;
+    private final DetalleCarritoRepository detalleCarritoRepository;
     private final FavoritosRepository favoritosRepository;
     private final ClienteService clienteService;
     private final UsuarioRepository usuarioRepository;
@@ -205,7 +208,12 @@ public class PerfilServiceImpl implements PerfilService {
     public void vaciarCarrito() {
         Carrito carrito = this.obtenerCarrito();
 
+        for (DetalleCarrito item: carrito.getItems()) {
+            this.detalleCarritoRepository.delete(item);
+        }
+
         carrito.getItems().clear();
+        this.carritoRepository.save(carrito);
     }
 
     @Transactional(readOnly = true)

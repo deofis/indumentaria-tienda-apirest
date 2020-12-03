@@ -82,7 +82,7 @@ public class CarritoController {
      * @param skuId Long id del sku a quitar del carrito.
      * @return ResponseEntity del carrito actualizado.
      */
-    @DeleteMapping("/carrito/producto/quitar")
+    @DeleteMapping("/carrito/item/quitar")
     public ResponseEntity<?> quitarItem(@RequestParam Long skuId) {
         Map<String, Object> response = new HashMap<>();
         Carrito carritoActualizado;

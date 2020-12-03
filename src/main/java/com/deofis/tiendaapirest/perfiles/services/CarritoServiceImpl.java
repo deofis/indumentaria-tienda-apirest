@@ -4,6 +4,7 @@ import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.DetalleCarrito;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.repositories.CarritoRepository;
+import com.deofis.tiendaapirest.perfiles.repositories.DetalleCarritoRepository;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CarritoServiceImpl implements CarritoService {
 
     private final CarritoRepository carritoRepository;
+    private final DetalleCarritoRepository detalleCarritoRepository;
     private final PerfilService perfilService;
     private final SkuService skuService;
 
@@ -78,6 +80,7 @@ public class CarritoServiceImpl implements CarritoService {
         Sku sku = this.skuService.obtenerSku(skuId);
 
         carrito.getItems().removeIf(item -> item.getSku().equals(sku));
+        this.detalleCarritoRepository.deleteBySku(sku);
 
         return this.carritoRepository.save(carrito);
     }
@@ -87,6 +90,11 @@ public class CarritoServiceImpl implements CarritoService {
     public void vaciar() {
         Carrito carrito = this.perfilService.obtenerCarrito();
 
+        for (DetalleCarrito item: carrito.getItems()) {
+            this.detalleCarritoRepository.delete(item);
+        }
+
         carrito.getItems().clear();
+        this.carritoRepository.save(carrito);
     }
 }
