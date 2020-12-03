@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,13 +27,16 @@ public class Sku implements Serializable {
 
     private String descripcion;
 
+    @NotNull(message = "El precio del Sku es obligatorio")
     private Double precio;
+
+    @NotNull(message = "La disponibilidad del Sku es obligatoria")
+    private Integer disponibilidad;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "promocion_id")
     private Promocion promocion;
 
-    private Integer disponibilidad;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
