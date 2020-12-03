@@ -31,6 +31,7 @@ public class SkuServiceImpl implements SkuService {
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
                 .precio(sku.getPrecio())
+                .promocion(producto.getPromocion())
                 .disponibilidad(sku.getDisponibilidad())
                 .fechaCreacion(new Date())
                 .foto(null)

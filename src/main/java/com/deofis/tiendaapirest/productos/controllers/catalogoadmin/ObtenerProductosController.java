@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.UnidadMedida;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
+import com.deofis.tiendaapirest.productos.exceptions.SkuException;
 import com.deofis.tiendaapirest.productos.services.ProductoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -156,8 +157,36 @@ public class ObtenerProductosController {
         try {
             sku = this.productoService.obtenerSkuProducto(productoId, skuId);
             productoNombre = this.productoService.obtenerProducto(productoId).getNombre();
-        } catch (ProductoException e) {
+        } catch (ProductoException | SkuException e) {
             response.put("mensaje", "Error al obtener sku del producto");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("producto", productoNombre);
+        response.put("sku", sku);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene el Sku por defecto de un producto.
+     * URL: ~/api/productos/1/skus/defecto
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param productoId PathVariable Long id del producto.
+     * @return ResponseEntity con el nombre del producto y su default sku.
+     */
+    @GetMapping("/productos/{productoId}/skus/defecto")
+    public ResponseEntity<?> obtenerSkuPorDefectoDeProducto(@PathVariable Long productoId) {
+        Map<String, Object> response = new HashMap<>();
+        Sku sku;
+        String productoNombre;
+
+        try {
+            sku = this.productoService.obtenerSkuDefectoProducto(productoId);
+            productoNombre = this.productoService.obtenerProducto(productoId).getNombre();
+        } catch (ProductoException e) {
+            response.put("mensaje", "Error al obtener sku por defecto del producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }

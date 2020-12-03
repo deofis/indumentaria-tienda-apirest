@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.perfiles.domain;
 
-import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,12 +22,20 @@ public class DetalleCarrito implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producto_id")
+    @JoinColumn(name = "sku_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Producto producto;
+    private Sku sku;
     private Integer cantidad;
 
     public Double getSubtotal() {
-        return this.cantidad.doubleValue() * this.producto.getPrecio();
+        // Si existe promoción vigente, el subtotal se calcula acorde al precio oferta.
+        /*
+        if (sku.getPromocion() != null && sku.getPromocion().getEstaVigente()) {
+            return cantidad.doubleValue() * sku.getPromocion().getPrecioOferta();
+        }
+
+         */
+
+        return cantidad.doubleValue() * sku.getPrecio();
     }
 }

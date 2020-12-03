@@ -4,9 +4,8 @@ import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.DetalleCarrito;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.repositories.CarritoRepository;
-import com.deofis.tiendaapirest.productos.domain.Producto;
-import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
+import com.deofis.tiendaapirest.productos.domain.Sku;
+import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,29 +18,29 @@ public class CarritoServiceImpl implements CarritoService {
 
     private final CarritoRepository carritoRepository;
     private final PerfilService perfilService;
-    private final ProductoRepository productoRepository;
+    private final SkuService skuService;
 
     @Transactional
     @Override
-    public Carrito agregarProducto(Long productoId) {
-        boolean existeProd = false;
+    public Carrito agregarItem(Long skuId) {
+        boolean existeItem = false;
         Carrito carrito = this.perfilService.obtenerCarrito();
-        Producto producto = this.obtenerProducto(productoId);
+        Sku sku = this.skuService.obtenerSku(skuId);
 
         for (DetalleCarrito item: carrito.getItems()) {
-            if (item.getProducto().equals(producto)) {
-                existeProd = true;
+            if (item.getSku().equals(sku)) {
+                existeItem = true;
                 item.setCantidad(item.getCantidad() + 1);
-                log.info("Ya existe producto. Sumar cantidad");
+                log.info("Ya existe item con sku. Sumar cantidad");
             } else {
-                existeProd = false;
-                log.info("No existe producto. agregar nuevo detalle");
+                existeItem = false;
+                log.info("No existe item con sku. agregar nuevo detalle");
             }
         }
 
-        if (!existeProd) {
+        if (!existeItem) {
             DetalleCarrito detalleCarrito = new DetalleCarrito();
-            detalleCarrito.setProducto(producto);
+            detalleCarrito.setSku(sku);
             detalleCarrito.setCantidad(1);
             carrito.getItems().add(detalleCarrito);
         }
@@ -51,21 +50,21 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Transactional
     @Override
-    public Carrito actualizarCantidad(Long productoId, Integer cantidad) {
+    public Carrito actualizarCantidad(Long skuId, Integer cantidad) {
         Carrito carrito = this.perfilService.obtenerCarrito();
-        Producto producto = this.obtenerProducto(productoId);
+        Sku sku = this.skuService.obtenerSku(skuId);
 
         if (carrito.getItems().size() == 0) {
             throw new CarritoException("Carrito vacío.");
         }
 
         for (DetalleCarrito item: carrito.getItems()) {
-            if (item.getProducto().equals(producto)) {
-                log.info("Existe producto en el carrito");
+            if (item.getSku().equals(sku)) {
+                log.info("Existe item con sku en el carrito");
                 item.setCantidad(cantidad);
                 break;
             } else {
-                log.info("No existe el producto en el carrito");
+                log.info("No existe el item con sku en el carrito");
                 throw new CarritoException("Producto no agregado al carrito");
             }
         }
@@ -74,11 +73,11 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Transactional
     @Override
-    public Carrito quitarProducto(Long productoId) {
+    public Carrito quitarItem(Long skuId) {
         Carrito carrito = this.perfilService.obtenerCarrito();
-        Producto producto = this.obtenerProducto(productoId);
+        Sku sku = this.skuService.obtenerSku(skuId);
 
-        carrito.getItems().removeIf(item -> item.getProducto().equals(producto));
+        carrito.getItems().removeIf(item -> item.getSku().equals(sku));
 
         return this.carritoRepository.save(carrito);
     }
@@ -89,10 +88,5 @@ public class CarritoServiceImpl implements CarritoService {
         Carrito carrito = this.perfilService.obtenerCarrito();
 
         carrito.getItems().clear();
-    }
-
-    private Producto obtenerProducto(Long id) {
-        return this.productoRepository.findById(id)
-                .orElseThrow(() -> new ProductoException("Producto no encontrado con id " + id));
     }
 }

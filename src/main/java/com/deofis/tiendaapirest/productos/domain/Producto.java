@@ -83,7 +83,7 @@ public class Producto implements Serializable {
             uniqueConstraints = {@UniqueConstraint(columnNames = {"producto_id", "producto_propiedad_id"})})
     private List<PropiedadProducto> propiedades;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "default_sku_id")
     @JsonIgnoreProperties(value = {"producto", "defaultProducto" , "hibernateLazyInitializer", "handler"}, allowSetters = true)
     private Sku defaultSku;

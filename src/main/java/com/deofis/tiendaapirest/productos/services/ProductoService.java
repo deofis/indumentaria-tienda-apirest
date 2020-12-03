@@ -115,6 +115,13 @@ public interface ProductoService extends CrudService<Producto, Long> {
     Sku obtenerSkuProducto(Long productoId, Long skuId);
 
     /**
+     * Obtiene el {@link Sku} por defecto de un {@link Producto} requerido.
+     * @param productoId Long id del producto.
+     * @return Sku.
+     */
+    Sku obtenerSkuDefectoProducto(Long productoId);
+
+    /**
      * Obtiene un listado de todos los {@link Producto}s pertenecientes a una
      * {@link Subcategoria} requerida.
      * @param subcategoria Subcategoria requerida.

@@ -181,6 +181,11 @@ public class ProductoServiceImpl implements ProductoService {
         Sku sku = null;
 
         boolean existeSku = false;
+        //Verificamos si no es el default sku
+        if (producto.getDefaultSku().getId().equals(skuId)) {
+            sku = producto.getDefaultSku();
+            existeSku = true;
+        }
         for (Sku skuEnProducto: producto.getSkus()) {
             if (skuEnProducto.getId().equals(skuId)) {
                 sku = skuEnProducto;
@@ -189,11 +194,17 @@ public class ProductoServiceImpl implements ProductoService {
             }
         }
 
-        if (!existeSku) throw new ProductoException("El sku con id: " + skuId + " no pertenece" +
-                "al producto: " + producto.getNombre().concat(" : ")
-                .concat(String.valueOf(producto.getId())));
+        if (!existeSku) throw new ProductoException("El sku con id: " + skuId + " no pertenece " +
+                "al producto: " + producto.getNombre().concat(" (ID: ")
+                .concat(String.valueOf(producto.getId())).concat(")"));
 
         return sku;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Sku obtenerSkuDefectoProducto(Long productoId) {
+        return this.obtenerProducto(productoId).getDefaultSku();
     }
 
     @Transactional(readOnly = true)

@@ -32,7 +32,7 @@ public class Perfil implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Usuario usuario;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id", unique = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;

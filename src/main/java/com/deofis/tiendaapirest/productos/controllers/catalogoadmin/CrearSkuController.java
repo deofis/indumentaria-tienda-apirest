@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class CrearSkuController {
     private final CatalogoAdminService catalogoAdminService;
 
     @PostMapping("/productos/{productoId}/skus")
-    public ResponseEntity<?> crearNuevoSkuProducto(@PathVariable Long productoId, @RequestBody Sku sku) {
+    public ResponseEntity<?> crearNuevoSkuProducto(@PathVariable Long productoId, @Valid @RequestBody Sku sku) {
         Map<String, Object> response = new HashMap<>();
         Sku nuevoSku;
 
