@@ -10,9 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 /**
  * API que se dedica al cambio/reinicio de contraseña de los usuarios del sistema.
  */
@@ -59,14 +56,12 @@ public class PasswordController {
      */
     @PostMapping("/cambiar-password/{token}")
     public ResponseEntity<String> cambiarPassword(@PathVariable String token,
-                                                  @RequestBody CambiarPasswordRequest cambiarPasswordRequest,
-                                                  HttpServletResponse response) {
+                                                  @RequestBody CambiarPasswordRequest cambiarPasswordRequest) {
         Usuario usuario;
 
         try {
             usuario = this.passwordService.cambiarPassword(token, cambiarPasswordRequest);
-            response.sendRedirect(clientUrl.concat("/password/redirect"));
-        } catch (AutenticacionException | IOException e) {
+        } catch (AutenticacionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
