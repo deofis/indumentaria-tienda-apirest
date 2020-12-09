@@ -128,12 +128,12 @@ public class PerfilController {
 
     /**
      * Permite ver el perfil completo del usuario logueado.
-     * URL: ~/api/perfil/ver
+     * URL: ~/api/perfil
      * HttpMethod: GET
      * HttpStatus: OK
      * @return ResponseEntity PerfilDTO datos del perfil.
      */
-    @GetMapping("/perfil/ver")
+    @GetMapping("/perfil")
     public ResponseEntity<?> verPerfil() {
         Map<String, Object> response = new HashMap<>();
         PerfilDTO perfil;
