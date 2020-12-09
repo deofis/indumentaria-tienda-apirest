@@ -50,9 +50,16 @@ public interface LocalizacionService {
     /**
      * Obtiene un {@link Estado} requerido.
      * @param nombreEstado String nombre del estado.
-     * @return Estado
+     * @return Estado.
      */
     Estado obtenerEstado(String nombreEstado);
+
+    /**
+     * Obtiene un {@link Estado} a través de su id.
+     * @param estadoId Long id del estado.
+     * @return Estado.
+     */
+    Estado obtenerEstado(Long estadoId);
 
     /**
      * Lista las ciudades pertenecientes a un estado de un país.

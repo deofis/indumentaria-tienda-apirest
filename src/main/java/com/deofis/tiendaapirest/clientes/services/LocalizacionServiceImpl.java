@@ -56,6 +56,12 @@ public class LocalizacionServiceImpl implements LocalizacionService {
     }
 
     @Override
+    public Estado obtenerEstado(Long estadoId) {
+        return this.estadoRepository.findById(estadoId)
+                .orElseThrow(() -> new PaisesException("Estado no encontrado con id: " + estadoId));
+    }
+
+    @Override
     public List<Ciudad> ciudadesEstado(String nombrePais, String nombreEstado) {
         Pais pais = this.obtenerPais(nombrePais);
         Estado estado = null;
