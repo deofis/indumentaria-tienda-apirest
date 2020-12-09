@@ -5,8 +5,8 @@ import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import java.util.List;
 
 /**
- * Este servicio se encarga de implementar la lógica para obtener las compras de
- * un perfil.
+ * Este servicio se encarga de la lógica para el manejo de {@link Operacion}es desde el lado
+ * del usuario comprador de productos del sistema, es decir, viendo las {@link Operacion}es como COMPRAS.
  */
 
 public interface CompraService {

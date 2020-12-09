@@ -182,18 +182,6 @@ public class OperacionServiceImpl implements OperacionService {
         return operacion;
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Operacion> listarVentas() {
-        return this.operacionRepository.findAllByOrderByFechaOperacionDesc();
-    }
-
-    @Override
-    public Operacion obtenerVenta(Long nroOperacion) {
-        return this.operacionRepository.findById(nroOperacion)
-                .orElseThrow(() -> new OperacionException("No existe la operación con id: " + nroOperacion));
-    }
-
     private Double calcularTotal(Double total, Double subTotal) {
         return total + subTotal;
     }

@@ -2,7 +2,7 @@ package com.deofis.tiendaapirest.operaciones.controllers;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
-import com.deofis.tiendaapirest.operaciones.services.OperacionService;
+import com.deofis.tiendaapirest.operaciones.services.VentaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ObtenerVentasController {
 
-    private final OperacionService operacionService;
+    private final VentaService ventaService;
 
     /**
      * Obtener un listado de todas las operaciones (ventas) registradas en el sistema.
@@ -37,7 +37,7 @@ public class ObtenerVentasController {
         List<Operacion> ventas;
 
         try {
-            ventas = this.operacionService.listarVentas();
+            ventas = this.ventaService.listarVentas();
         } catch (OperacionException e) {
             response.put("mensaje", "Error al obtener el listado de ventas");
             response.put("error", e.getMessage());
@@ -69,7 +69,7 @@ public class ObtenerVentasController {
         Operacion operacion;
 
         try {
-            operacion = this.operacionService.obtenerVenta(nroOperacion);
+            operacion = this.ventaService.obtenerVenta(nroOperacion);
         } catch (OperacionException e) {
             response.put("mensaje", "Error al obtener la venta");
             response.put("error", e.getMessage());

@@ -4,6 +4,11 @@ import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.dto.paypal.OrderPayload;
 import com.deofis.tiendaapirest.operaciones.dto.paypal.PaymentPayload;
 
+/**
+ * Servicio que se encarga de crear y completar pagos de una {@link Operacion} a través
+ * de la API de PayPal.
+ */
+
 public interface PayPalService {
 
     /**

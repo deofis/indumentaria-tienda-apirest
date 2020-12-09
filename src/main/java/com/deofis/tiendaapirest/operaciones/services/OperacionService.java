@@ -2,7 +2,10 @@ package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 
-import java.util.List;
+/**
+ * Servicio que se encarga de la lógica de las {@link Operacion}es y sus transacciones: Registrar un nuevo pedido, y
+ * registrar las distintas transiciones de Estados de la {@link Operacion}.
+ */
 
 public interface OperacionService {
 
@@ -34,18 +37,4 @@ public interface OperacionService {
      * @param nroOperacion Long nro de operacion a cancelar.
      */
     Operacion cancelar(Long nroOperacion);
-
-    /**
-     * Como administrador quiero obtener un listado con todas las ventas que fueron realizadas
-     * en el sistema.
-     * @return List con las operaciones registradas, ordenadas por fecha.
-     */
-    List<Operacion> listarVentas();
-
-    /**
-     * Como administrador quiero ver una venta en particular.
-     * @param nroOperacion Long numero de operacion correspondiente a ver.
-     * @return Operacion solicitada.
-     */
-    Operacion obtenerVenta(Long nroOperacion);
 }
