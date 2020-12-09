@@ -3,7 +3,7 @@ package com.deofis.tiendaapirest.perfiles.services;
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 
@@ -67,5 +67,5 @@ public interface PerfilService {
      * Obtiene el objeto Favoritos que pertenece al usuario logueado.
      * @return Favoritos del perfil.
      */
-    Favoritos obtenerFavoritos();
+    Favorito obtenerFavoritos();
 }

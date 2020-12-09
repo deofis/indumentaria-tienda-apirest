@@ -8,7 +8,7 @@ import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.services.ClienteService;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.DetalleCarrito;
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
@@ -50,19 +50,21 @@ public class PerfilServiceImpl implements PerfilService {
         Cliente clienteCargado = this.clienteService.crear(cliente);
         Carrito carrito = Carrito.builder()
                 .fechaCreacion(new Date())
+                .useremail(usuarioEmail)
                 .items(new ArrayList<>())
                 .build();
         // Cascade: All : no hace falta --> this.carritoRepository.save(carrito);
 
-        Favoritos favoritos = Favoritos.builder()
-                .items(new ArrayList<>())
-                .useremail(usuarioEmail).build();
+        Favorito favorito = Favorito.builder()
+                .fechaCreacion(new Date())
+                .useremail(usuarioEmail)
+                .items(new ArrayList<>()).build();
 
         Perfil perfil = Perfil.builder()
                 .usuario(usuario)
                 .cliente(clienteCargado)
                 .carrito(carrito)
-                .favoritos(favoritos)
+                .favorito(favorito)
                 .build();
 
         try {
@@ -77,18 +79,20 @@ public class PerfilServiceImpl implements PerfilService {
     public void cargarPerfil(Cliente cliente, Usuario usuario) {
         Carrito carrito = Carrito.builder()
                 .fechaCreacion(new Date())
+                .useremail(usuario.getEmail())
                 .items(new ArrayList<>())
                 .build();
 
-        Favoritos favoritos = Favoritos.builder()
-                .items(new ArrayList<>())
-                .useremail(usuario.getEmail()).build();
+        Favorito favorito = Favorito.builder()
+                .fechaCreacion(new Date())
+                .useremail(usuario.getEmail())
+                .items(new ArrayList<>()).build();
 
         Perfil perfil = Perfil.builder()
                 .usuario(usuario)
                 .cliente(cliente)
                 .carrito(carrito)
-                .favoritos(favoritos)
+                .favorito(favorito)
                 .build();
 
         try {
@@ -218,14 +222,14 @@ public class PerfilServiceImpl implements PerfilService {
 
     @Transactional(readOnly = true)
     @Override
-    public Favoritos obtenerFavoritos() {
+    public Favorito obtenerFavoritos() {
         PerfilDTO perfil = this.verPerfil();
-        if (perfil.getFavoritos() == null) {
+        if (perfil.getFavorito() == null) {
             throw new PerfilesException("Error al obtener los favoritos: Favoritos no se cargo" +
                     "correctamente al crear el perfil");
         }
 
-        return this.favoritosRepository.findById(perfil.getFavoritos().getId())
+        return this.favoritosRepository.findById(perfil.getFavorito().getId())
                 .orElseThrow(() -> new PerfilesException("No existe el objeto favoritos asociado" +
                         "al perfil"));
     }
@@ -235,7 +239,7 @@ public class PerfilServiceImpl implements PerfilService {
                 .usuario(perfil.getUsuario().getEmail())
                 .cliente(perfil.getCliente())
                 .carrito(perfil.getCarrito())
-                .favoritos(perfil.getFavoritos())
+                .favorito(perfil.getFavorito())
                 .compras(perfil.getCompras())
                 .build();
     }

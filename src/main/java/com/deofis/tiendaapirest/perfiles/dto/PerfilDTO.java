@@ -3,7 +3,7 @@ package com.deofis.tiendaapirest.perfiles.dto;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +27,7 @@ public class PerfilDTO implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Carrito carrito;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Favoritos favoritos;
+    private Favorito favorito;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Operacion> compras;
 }

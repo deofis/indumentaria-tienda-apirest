@@ -1,7 +1,7 @@
 package com.deofis.tiendaapirest.perfiles.controllers;
 
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.perfiles.services.FavoritosService;
 import lombok.AllArgsConstructor;
@@ -35,22 +35,22 @@ public class FavoritosController {
     @PostMapping("/favoritos/producto/{productoId}/agregar")
     public ResponseEntity<?> agregarProductoAFavoritos(@PathVariable Long productoId) {
         Map<String, Object> response = new HashMap<>();
-        Favoritos favoritosActualizado;
+        Favorito favoritoActualizado;
 
         try {
-            favoritosActualizado = this.favoritosService.agregarFavorito(productoId);
+            favoritoActualizado = this.favoritosService.agregarFavorito(productoId);
         } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al agregar producto a favoritos");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (favoritosActualizado == null) {
+        if (favoritoActualizado == null) {
             response.put("mensaje", "El producto ya se encuentra en favoritos");
             return new ResponseEntity<>(response, HttpStatus.FOUND);
         }
 
-        response.put("favoritos", favoritosActualizado);
+        response.put("favoritos", favoritoActualizado);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -65,17 +65,17 @@ public class FavoritosController {
     @DeleteMapping("/favoritos/producto/{productoId}/quitar")
     public ResponseEntity<?> quitarProductoDeFavoritos(@PathVariable Long productoId) {
         Map<String, Object> response = new HashMap<>();
-        Favoritos favoritosActualizado;
+        Favorito favoritoActualizado;
 
         try {
-            favoritosActualizado = this.favoritosService.quitarFavorito(productoId);
+            favoritoActualizado = this.favoritosService.quitarFavorito(productoId);
         } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al quitar producto de favoritos");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("favoritos", favoritosActualizado);
+        response.put("favoritos", favoritoActualizado);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

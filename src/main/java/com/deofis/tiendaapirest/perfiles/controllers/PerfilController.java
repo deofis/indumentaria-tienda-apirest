@@ -4,7 +4,7 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
 import com.deofis.tiendaapirest.perfiles.exceptions.CarritoException;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
@@ -184,17 +184,17 @@ public class PerfilController {
     @GetMapping("/perfil/favoritos")
     public ResponseEntity<?> verFavoritos() {
         Map<String, Object> response = new HashMap<>();
-        Favoritos favoritos;
+        Favorito favorito;
 
         try {
-            favoritos = this.perfilService.obtenerFavoritos();
+            favorito = this.perfilService.obtenerFavoritos();
         } catch (PerfilesException | AutenticacionException e) {
             response.put("mensaje", "Error al obtener los favoritos del perfil");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("favoritos", favoritos);
+        response.put("favoritos", favorito);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

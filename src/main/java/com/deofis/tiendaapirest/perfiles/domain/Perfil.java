@@ -43,7 +43,7 @@ public class Perfil implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "favoritos_id")
-    private Favoritos favoritos;
+    private Favorito favorito;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "perfil_id")

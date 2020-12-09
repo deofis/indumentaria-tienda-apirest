@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.perfiles.services;
 
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 
 public interface FavoritosService {
 
@@ -9,12 +9,12 @@ public interface FavoritosService {
      * @param productoId Long id del producto a agregar.
      * @return Listado de favoritos actualizado.
      */
-    Favoritos agregarFavorito(Long productoId);
+    Favorito agregarFavorito(Long productoId);
 
     /**
      * Elimina un producto del listado de favoritos del perfil.
      * @param productoId Long id del producto a quitar.
      * @return Listado de favoritos actualizado.
      */
-    Favoritos quitarFavorito(Long productoId);
+    Favorito quitarFavorito(Long productoId);
 }

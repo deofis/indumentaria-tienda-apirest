@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.perfiles.services;
 
-import com.deofis.tiendaapirest.perfiles.domain.Favoritos;
+import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.domain.ItemFavorito;
 import com.deofis.tiendaapirest.perfiles.repositories.FavoritosRepository;
 import com.deofis.tiendaapirest.perfiles.repositories.ItemFavoritoRepository;
@@ -23,12 +23,12 @@ public class FavoritosServiceImpl implements FavoritosService {
 
     @Transactional
     @Override
-    public Favoritos agregarFavorito(Long productoId) {
+    public Favorito agregarFavorito(Long productoId) {
         boolean existeProd = false;
-        Favoritos favoritos = this.perfilService.obtenerFavoritos();
+        Favorito favorito = this.perfilService.obtenerFavoritos();
         Producto productoAgregar = this.productoService.obtenerProducto(productoId);
 
-        for (ItemFavorito item: favoritos.getItems()) {
+        for (ItemFavorito item: favorito.getItems()) {
             if (item.getProducto().equals(productoAgregar)) {
                 existeProd = true;
                 log.info("Producto ya cargado en favs");
@@ -39,8 +39,8 @@ public class FavoritosServiceImpl implements FavoritosService {
             ItemFavorito item = ItemFavorito.builder()
                     .producto(productoAgregar).build();
 
-            favoritos.getItems().add(item);
-            return this.favoritosRepository.save(favoritos);
+            favorito.getItems().add(item);
+            return this.favoritosRepository.save(favorito);
         }
 
         return null;
@@ -48,13 +48,13 @@ public class FavoritosServiceImpl implements FavoritosService {
 
     @Transactional
     @Override
-    public Favoritos quitarFavorito(Long productoId) {
-        Favoritos favoritos = this.perfilService.obtenerFavoritos();
+    public Favorito quitarFavorito(Long productoId) {
+        Favorito favorito = this.perfilService.obtenerFavoritos();
         Producto productoQuitar = this.productoService.obtenerProducto(productoId);
 
-        favoritos.getItems().removeIf(item -> item.getProducto().equals(productoQuitar));
+        favorito.getItems().removeIf(item -> item.getProducto().equals(productoQuitar));
         this.itemFavoritoRepository.deleteByProducto(productoQuitar);
 
-        return this.favoritosRepository.save(favoritos);
+        return this.favoritosRepository.save(favorito);
     }
 }

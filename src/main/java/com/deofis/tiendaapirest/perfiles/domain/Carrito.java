@@ -30,6 +30,8 @@ public class Carrito implements Serializable {
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
+    private String useremail;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "carrito_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
