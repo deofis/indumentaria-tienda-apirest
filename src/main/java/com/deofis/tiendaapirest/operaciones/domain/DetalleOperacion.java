@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.operaciones.domain;
 
-import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +23,16 @@ public class DetalleOperacion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producto_id")
+    @JoinColumn(name = "sku_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Producto producto;
+    private Sku sku;
+
     private Integer cantidad;
+
     @Column(name = "precio_venta")
     private Double precioVenta;
+
     private Double subtotal;
 }

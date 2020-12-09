@@ -16,9 +16,9 @@ import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
-import com.deofis.tiendaapirest.productos.domain.Producto;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
+import com.deofis.tiendaapirest.productos.repositories.SkuRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.statemachine.StateMachine;
@@ -41,7 +41,7 @@ public class OperacionServiceImpl implements OperacionService {
     private final MailService mailService;
 
     private final OperacionRepository operacionRepository;
-    private final ProductoRepository productoRepository;
+    private final SkuRepository skuRepository;
     private final ClienteRepository clienteRepository;
     private final PerfilRepository perfilRepository;
     private final PerfilService perfilService;
@@ -70,26 +70,39 @@ public class OperacionServiceImpl implements OperacionService {
                 .items(operacion.getItems())
                 .build();
 
+        boolean hayDisponibilidad = true;
         for (DetalleOperacion item: operacion.getItems()) {
-            Producto producto = this.productoRepository.findById(item.getProducto().getId())
-                    .orElseThrow(() -> new ProductoException("Producto no encontrado con id: " +
-                            item.getProducto().getId()));
+            Sku sku = this.skuRepository.findById(item.getSku().getId())
+                    .orElseThrow(() -> new ProductoException("Sku de producto no encontrado con id: " +
+                            item.getSku().getId()));
 
-            if (producto.getDisponibilidadGeneral() - item.getCantidad() < 0) {
-                throw new OperacionException("Error al completar la compra: " +
-                        "La cantidad de productos vendidos no puede ser menor al stock actual");
+            if (sku.getDisponibilidad() - item.getCantidad() < 0) {
+                hayDisponibilidad = false;
+                break;
             }
 
-            item.setPrecioVenta(producto.getPrecio());
-            producto.setDisponibilidadGeneral(producto.getDisponibilidadGeneral() - item.getCantidad());
+            // Calculamos el precio de venta el producto (sku) de acuerdo a si está en promoción o no.
+            item.setPrecioVenta(this.calcularPrecioVenta(sku));
+
+            // Seteamos la nueva disponibilidad del SKU al finalizar la operación.
+            sku.setDisponibilidad(sku.getDisponibilidad() - item.getCantidad());
+
+            // Calculamos y guardamos el subtotal del item.
             item.setSubtotal(item.getPrecioVenta() * item.getCantidad().doubleValue());
 
+            // Calculamos dentro del ciclo el TOTAL de la operación, para evitarnos calcularlo fuera y volverlo
+            // a recorrer.
             nuevaOperacion.setTotal(this.calcularTotal(nuevaOperacion.getTotal(), item.getSubtotal()));
-            this.productoRepository.save(producto);
+
+            // Se guarda el SKU con la disponibilidad actualizada.
+            this.skuRepository.save(sku);
         }
 
-        this.operacionRepository.save(nuevaOperacion);
+        // Si no hay disponibilidad de un producto, se cancela la operación y tira excepción informando.
+        if (!hayDisponibilidad) throw new OperacionException("Error al completar la compra: " +
+                "La cantidad de productos vendidos no puede ser menor a la disponibilidad actual");
 
+        this.operacionRepository.save(nuevaOperacion);
 
         if (this.autenticacionService.estaLogueado()) {
             Perfil perfil = this.perfilService.obtenerPerfil();
@@ -105,12 +118,14 @@ public class OperacionServiceImpl implements OperacionService {
         return nuevaOperacion;
     }
 
-    private void enviarEmailsAdmins(Operacion operacion) {
-        /*Operacion operacionGuardada = this.operacionRepository.findById(operacion.getNroOperacion())
-                .orElseThrow(() -> new OperacionException("Operación no encontrada con numero: " +
-                        operacion.getNroOperacion()));
-         */
+    private Double calcularPrecioVenta(Sku sku) {
+        if (sku.getPromocion() != null && sku.getPromocion().getEstaVigente())
+            return sku.getPromocion().getPrecioOferta();
 
+        return sku.getPrecio();
+    }
+
+    private void enviarEmailsAdmins(Operacion operacion) {
         List<UsuarioDTO> admins = this.administradorService.obtenerAdministradores();
 
         for (UsuarioDTO admin: admins) {
