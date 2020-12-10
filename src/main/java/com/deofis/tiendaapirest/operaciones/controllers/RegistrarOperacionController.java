@@ -1,10 +1,11 @@
 package com.deofis.tiendaapirest.operaciones.controllers;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.OrderPayload;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.services.OperacionService;
-import com.deofis.tiendaapirest.operaciones.services.paypal.PayPalService;
+import com.deofis.tiendaapirest.pagos.dto.OrderPayload;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.services.paypal.PayPalStrategy;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class RegistrarOperacionController {
 
     private final OperacionService operacionService;
 
-    private final PayPalService payPalService;
+    private final PayPalStrategy payPalStrategy;
 
     /**
      * Registra una nueva operación de compra/venta para el cliente que se pasa como parte de la
@@ -41,20 +42,20 @@ public class RegistrarOperacionController {
     @PostMapping("/operaciones/nueva")
     public ResponseEntity<?> registrarOperacion(@Valid @RequestBody Operacion operacion) {
         Map<String, Object> response = new HashMap<>();
-        Operacion nuevaOperacion;
+        OperacionPagoInfo pagoInfo;
         OrderPayload orderPayload;
 
         try {
-            nuevaOperacion = this.operacionService.registrarNuevaOperacion(operacion);
-            orderPayload = this.payPalService.crearOrder(nuevaOperacion);
+            pagoInfo = this.operacionService.registrarNuevaOperacion(operacion);
+            //orderPayload = this.payPalStrategy.crearOrder(nuevaOperacion);
         } catch (OperacionException | ProductoException | PerfilesException e) {
             response.put("mensahe", "Error al registrar la nueva compra");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("order", orderPayload);
-        response.put("compra", nuevaOperacion);
+        //response.put("order", orderPayload);
+        response.put("compra", pagoInfo);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

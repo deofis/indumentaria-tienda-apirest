@@ -12,13 +12,13 @@ import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
-import com.deofis.tiendaapirest.perfiles.repositories.PerfilRepository;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
 import com.deofis.tiendaapirest.productos.domain.Sku;
-import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
-import com.deofis.tiendaapirest.productos.repositories.SkuRepository;
+import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.statemachine.StateMachine;
@@ -41,14 +41,14 @@ public class OperacionServiceImpl implements OperacionService {
     private final MailService mailService;
 
     private final OperacionRepository operacionRepository;
-    private final SkuRepository skuRepository;
+    private final SkuService skuService;
     private final ClienteRepository clienteRepository;
-    private final PerfilRepository perfilRepository;
     private final PerfilService perfilService;
+    private final PagoStrategy pagoStrategy;
 
     @Transactional
     @Override
-    public Operacion registrarNuevaOperacion(Operacion operacion) {
+    public OperacionPagoInfo registrarNuevaOperacion(Operacion operacion) {
         Cliente cliente;
 
         if (this.autenticacionService.estaLogueado()) {
@@ -61,20 +61,19 @@ public class OperacionServiceImpl implements OperacionService {
 
         Operacion nuevaOperacion = Operacion.builder()
                 .cliente(cliente)
+                .direccionEnvio(operacion.getDireccionEnvio())
                 .fechaOperacion(new Date(new Date().getTime()))
                 .fechaEnviada(null)
                 .fechaRecibida(null)
                 .medioPago(operacion.getMedioPago())
-                .estado(EstadoOperacion.PENDING)
+                .estado(EstadoOperacion.PAYMENT_PENDING)
                 .total(0.0)
                 .items(operacion.getItems())
                 .build();
 
         boolean hayDisponibilidad = true;
         for (DetalleOperacion item: operacion.getItems()) {
-            Sku sku = this.skuRepository.findById(item.getSku().getId())
-                    .orElseThrow(() -> new ProductoException("Sku de producto no encontrado con id: " +
-                            item.getSku().getId()));
+            Sku sku = this.skuService.obtenerSku(item.getSku().getId());
 
             if (sku.getDisponibilidad() - item.getCantidad() < 0) {
                 hayDisponibilidad = false;
@@ -95,27 +94,27 @@ public class OperacionServiceImpl implements OperacionService {
             nuevaOperacion.setTotal(this.calcularTotal(nuevaOperacion.getTotal(), item.getSubtotal()));
 
             // Se guarda el SKU con la disponibilidad actualizada.
-            this.skuRepository.save(sku);
+            this.skuService.save(sku);
         }
 
         // Si no hay disponibilidad de un producto, se cancela la operación y tira excepción informando.
         if (!hayDisponibilidad) throw new OperacionException("Error al completar la compra: " +
                 "La cantidad de productos vendidos no puede ser menor a la disponibilidad actual");
 
-        this.operacionRepository.save(nuevaOperacion);
+        this.save(nuevaOperacion);
 
         if (this.autenticacionService.estaLogueado()) {
             Perfil perfil = this.perfilService.obtenerPerfil();
 
             perfil.getCompras().add(nuevaOperacion);
             this.perfilService.vaciarCarrito();
-            this.perfilRepository.save(perfil);
+            this.perfilService.save(perfil);
         }
 
         this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
         this.enviarEmailsAdmins(nuevaOperacion);
 
-        return nuevaOperacion;
+        return this.pagoStrategy.crearPago(nuevaOperacion);
     }
 
     private Double calcularPrecioVenta(Sku sku) {
@@ -199,5 +198,11 @@ public class OperacionServiceImpl implements OperacionService {
 
     private Double calcularTotal(Double total, Double subTotal) {
         return total + subTotal;
+    }
+
+    @Transactional
+    @Override
+    public Operacion save(Operacion object) {
+        return this.operacionRepository.save(object);
     }
 }

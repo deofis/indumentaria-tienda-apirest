@@ -1,11 +1,12 @@
-package com.deofis.tiendaapirest.operaciones.services.paypal;
+package com.deofis.tiendaapirest.pagos.services.paypal;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.AmountPayload;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.OrderPayload;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.PayerPayload;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.PaymentPayload;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
+import com.deofis.tiendaapirest.pagos.dto.AmountPayload;
+import com.deofis.tiendaapirest.pagos.dto.OrderPayload;
+import com.deofis.tiendaapirest.pagos.dto.PayerPayload;
+import com.deofis.tiendaapirest.pagos.dto.PaymentPayload;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
@@ -20,7 +21,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class PayPalServiceImpl implements PayPalService {
+public class PayPalStrategyImpl implements PayPalStrategy {
 
     private static final String CURRENCY = "USD";
     private static final String INTENT = "CAPTURE";
@@ -108,7 +109,7 @@ public class PayPalServiceImpl implements PayPalService {
                                 .sellerReceivableBreakdown().grossAmount().value())
                     .totalNeto(order.purchaseUnits().get(0).payments().captures().get(0)
                                 .sellerReceivableBreakdown().netAmount().value())
-                    .paypalFee(order.purchaseUnits().get(0).payments().captures().get(0)
+                    .fee(order.purchaseUnits().get(0).payments().captures().get(0)
                                 .sellerReceivableBreakdown().paypalFee().value())
                     .build();
 
@@ -123,5 +124,17 @@ public class PayPalServiceImpl implements PayPalService {
             throw new OperacionException("Error al completar el pago con paypal: " +
                     e.getMessage());
         }
+    }
+
+    @Override
+    public OperacionPagoInfo crearPago(Operacion operacion) {
+        log.info("Pago creado con éxito");
+        return null;
+    }
+
+    @Override
+    public OperacionPagoInfo completarPago(String pagoId) {
+        log.info("Pago completado con éxito");
+        return null;
     }
 }

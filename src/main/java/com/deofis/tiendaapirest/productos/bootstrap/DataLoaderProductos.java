@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.bootstrap;
 
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
+import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
 import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
 import com.deofis.tiendaapirest.productos.domain.*;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
@@ -96,16 +97,16 @@ public class DataLoaderProductos implements CommandLineRunner {
             this.marcaRepository.save(stanley);
         }
 
-        if (this.medioPagoRepository.findByNombre("Efectivo").isEmpty()) {
+        if (this.medioPagoRepository.findByNombre(MedioPagoEnum.EFECTIVO).isEmpty()) {
             MedioPago efectivo = new MedioPago();
-            efectivo.setNombre("Efectivo");
+            efectivo.setNombre(MedioPagoEnum.EFECTIVO);
 
             this.medioPagoRepository.save(efectivo);
         }
 
-        if (this.medioPagoRepository.findByNombre("PayPal").isEmpty()) {
+        if (this.medioPagoRepository.findByNombre(MedioPagoEnum.PAYPAL).isEmpty()) {
             MedioPago paypal = new MedioPago();
-            paypal.setNombre("PayPal");
+            paypal.setNombre(MedioPagoEnum.PAYPAL);
 
             this.medioPagoRepository.save(paypal);
         }

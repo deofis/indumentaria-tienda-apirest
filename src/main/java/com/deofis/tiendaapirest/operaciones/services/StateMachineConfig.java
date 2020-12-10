@@ -23,7 +23,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
     @Override
     public void configure(StateMachineStateConfigurer<EstadoOperacion, EventoOperacion> states) throws Exception {
         states.withStates()
-                .initial(EstadoOperacion.PENDING)
+                .initial(EstadoOperacion.PAYMENT_PENDING)
                 .states(EnumSet.allOf(EstadoOperacion.class))
                 .end(EstadoOperacion.RECEIVED)
                 .end(EstadoOperacion.CANCELLED);
@@ -32,13 +32,23 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
     @Override
     public void configure(StateMachineTransitionConfigurer<EstadoOperacion, EventoOperacion> transitions) throws Exception {
         transitions
-                .withExternal().source(EstadoOperacion.PENDING).target(EstadoOperacion.SENT).event(EventoOperacion.SEND).action(enviar())
+                .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.PAYMENT_DONE).event(EventoOperacion.COMPLETE_PAYMENT).action(completarPago())
                 .and()
-                .withExternal().source(EstadoOperacion.PENDING).target(EstadoOperacion.CANCELLED).event(EventoOperacion.CANCEL)
+                .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.CANCELLED).event(EventoOperacion.CANCEL).action(cancelarOperacion())
+                .and()
+                .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.SENT).event(EventoOperacion.SEND).action(enviar())
                 .and()
                 .withExternal().source(EstadoOperacion.SENT).target(EstadoOperacion.RECEIVED).event(EventoOperacion.RECEIVE).action(recibir())
                 .and()
                 .withExternal().source(EstadoOperacion.SENT).target(EstadoOperacion.CANCELLED).event(EventoOperacion.CANCEL);
+    }
+
+    private Action<EstadoOperacion, EventoOperacion> cancelarOperacion() {
+        return null;
+    }
+
+    private Action<EstadoOperacion, EventoOperacion> completarPago() {
+        return null;
     }
 
     public Action<EstadoOperacion, EventoOperacion> enviar() {

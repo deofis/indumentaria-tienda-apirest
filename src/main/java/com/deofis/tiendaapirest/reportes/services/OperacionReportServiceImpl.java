@@ -50,7 +50,7 @@ public class OperacionReportServiceImpl implements OperacionReportService {
     }
 
     @Override
-    public ByteArrayInputStream generarReportEXCEL() throws IOException, JRException {
+    public ByteArrayInputStream generarReportEXCEL() throws IOException {
         String[] columns = {"N° Operación", "Estado", "Creado En", "Cliente", "Pago", "Total"};
 
         Workbook workbook = new XSSFWorkbook();
@@ -74,9 +74,9 @@ public class OperacionReportServiceImpl implements OperacionReportService {
             row = sheet.createRow(initRow);
             row.createCell(0).setCellValue(operacion.getNroOperacion());
             row.createCell(1).setCellValue(operacion.getEstado());
-            row.createCell(2).setCellValue(operacion.getFechaOperacion().toString());
+            row.createCell(2).setCellValue(String.valueOf(operacion.getFechaOperacion()));
             row.createCell(3).setCellValue(operacion.getCliente());
-            row.createCell(4).setCellValue(operacion.getFormaPago());
+            row.createCell(4).setCellValue(String.valueOf(operacion.getMedioPago()));
             row.createCell(5).setCellValue("$ " + operacion.getTotal());
 
             initRow++;
@@ -131,7 +131,7 @@ public class OperacionReportServiceImpl implements OperacionReportService {
                 .fechaEnviada(operacion.getFechaEnviada())
                 .fechaRecibida(operacion.getFechaRecibida())
                 .cliente(operacion.getCliente().getApellido() + ", " + operacion.getCliente().getNombre())
-                .formaPago(operacion.getMedioPago().getNombre())
+                .medioPago(operacion.getMedioPago().getNombre())
                 .total(operacion.getTotal())
                 .build();
     }

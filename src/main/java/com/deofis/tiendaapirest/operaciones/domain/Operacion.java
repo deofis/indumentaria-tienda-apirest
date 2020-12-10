@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.operaciones.domain;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.clientes.domain.Direccion;
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -48,11 +49,17 @@ public class Operacion implements Serializable {
     @Enumerated(EnumType.STRING)
     private EstadoOperacion estado;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "cliente_id")
     @NotNull(message = "Datos del cliente obligatorios")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinColumn(name = "direccion_envio_id")
+    @NotNull(message = "Dirección de envío obligatoria")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Direccion direccionEnvio;
 
     // Luego crear FormaPago con las distintas formas de pago.
     @NotNull(message = "La forma de pago es obligatoria")

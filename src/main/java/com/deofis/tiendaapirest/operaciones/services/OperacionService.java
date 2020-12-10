@@ -1,22 +1,26 @@
 package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.utils.CrudService;
 
 /**
  * Servicio que se encarga de la lógica de las {@link Operacion}es y sus transacciones: Registrar un nuevo pedido, y
  * registrar las distintas transiciones de Estados de la {@link Operacion}.
  */
 
-public interface OperacionService {
+public interface OperacionService extends CrudService<Operacion, Long> {
 
     /**
      * Registra, como usuario cliente,  una nueva operación con los datos:
      * Cliente, Productos y cantidades, fecha de operación
      * y el estado inicial PENDING.
+     * <br>
+     * Crea el pago a realizar y lo devuelve con su información correspondiente.
      * @param operacion Operacion a registrar.
-     * @return Operacion ya guardada en la base de datos y completada.
+     * @return OperacionPagoInfo con la información necesaria para completar el pago.
      */
-    Operacion registrarNuevaOperacion(Operacion operacion);
+    OperacionPagoInfo registrarNuevaOperacion(Operacion operacion);
 
     /**
      * Registra, por parte de un usuario administrador,  el envio de una operación compra/venta hacia el cliente.

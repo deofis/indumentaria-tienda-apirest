@@ -1,5 +1,9 @@
 package com.deofis.tiendaapirest.operaciones.domain;
 
 public enum EstadoOperacion {
-    PENDING, SENT, RECEIVED, CANCELLED
+    PAYMENT_PENDING,
+    PAYMENT_DONE,
+    SENT,
+    RECEIVED,
+    CANCELLED
 }

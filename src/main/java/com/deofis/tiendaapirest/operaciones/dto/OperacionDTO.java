@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.operaciones.dto;
 
+import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,6 @@ public class OperacionDTO {
     private Date fechaEnviada;
     private Date fechaRecibida;
     private String cliente;
-    private String formaPago;
+    private MedioPagoEnum medioPago;
     private Double total;
 }

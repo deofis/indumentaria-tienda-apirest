@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operaciones.dto.paypal;
+package com.deofis.tiendaapirest.pagos.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,5 +13,5 @@ public class AmountPayload {
 
     private String totalBruto;
     private String totalNeto;
-    private String paypalFee;
+    private String fee;
 }

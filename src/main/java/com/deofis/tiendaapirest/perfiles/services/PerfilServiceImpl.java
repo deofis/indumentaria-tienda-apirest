@@ -68,7 +68,7 @@ public class PerfilServiceImpl implements PerfilService {
                 .build();
 
         try {
-            this.perfilRepository.save(perfil);
+            this.save(perfil);
         } catch (DataIntegrityViolationException e) {
             throw new PerfilesException("El usuario ya tiene asignado datos de cliente a su perfil");
         }
@@ -96,7 +96,7 @@ public class PerfilServiceImpl implements PerfilService {
                 .build();
 
         try {
-            this.perfilRepository.save(perfil);
+            this.save(perfil);
         } catch (DataIntegrityViolationException e) {
             throw new PerfilesException("El usuario ya tiene asignado datos de cliente a su perfil");
         }
@@ -121,7 +121,7 @@ public class PerfilServiceImpl implements PerfilService {
         //Cliente cliente = this.clienteService.obtenerCliente(perfil.getCliente().getId());
         perfil.setCliente(this.clienteService.actualizar(clienteActualizado, perfil.getCliente().getId()));
 
-        return this.mapToDTO(this.perfilRepository.save(perfil));
+        return this.mapToDTO(this.save(perfil));
     }
 
     @Transactional(readOnly = true)
@@ -256,5 +256,11 @@ public class PerfilServiceImpl implements PerfilService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+    }
+
+    @Transactional
+    @Override
+    public Perfil save(Perfil object) {
+        return this.perfilRepository.save(object);
     }
 }

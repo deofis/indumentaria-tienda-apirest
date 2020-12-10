@@ -1,15 +1,16 @@
-package com.deofis.tiendaapirest.operaciones.services.paypal;
+package com.deofis.tiendaapirest.pagos.services.paypal;
 
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.OrderPayload;
-import com.deofis.tiendaapirest.operaciones.dto.paypal.PaymentPayload;
+import com.deofis.tiendaapirest.pagos.dto.OrderPayload;
+import com.deofis.tiendaapirest.pagos.dto.PaymentPayload;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 
 /**
  * Servicio que se encarga de crear y completar pagos de una {@link Operacion} a través
  * de la API de PayPal.
  */
 
-public interface PayPalService {
+public interface PayPalStrategy extends PagoStrategy {
 
     /**
      * Crea una orden de PayPal y genera una url donde se puede aprobar el pago, siendo usuario de paypal

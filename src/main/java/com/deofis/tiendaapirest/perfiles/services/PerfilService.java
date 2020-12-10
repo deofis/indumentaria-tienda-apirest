@@ -6,8 +6,9 @@ import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
+import com.deofis.tiendaapirest.utils.CrudService;
 
-public interface PerfilService {
+public interface PerfilService extends CrudService<Perfil, Long> {
 
     /**
      * Se encarga de tomar los datos del cliente y asignarlos al usuario registrado, creando el nuevo perfil.

@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.operaciones.dto.paypal;
+package com.deofis.tiendaapirest.pagos.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PaymentPayload {
+public class OrderPayload {
 
-    private String orderId;
+    private String id;
     private String status;
-    private PayerPayload payer;
-    private AmountPayload amount;
+    private String approveUrl;
 }

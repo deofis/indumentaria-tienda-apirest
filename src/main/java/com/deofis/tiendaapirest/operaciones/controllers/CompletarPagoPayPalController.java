@@ -1,8 +1,8 @@
 package com.deofis.tiendaapirest.operaciones.controllers;
 
-import com.deofis.tiendaapirest.operaciones.dto.paypal.PaymentPayload;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
-import com.deofis.tiendaapirest.operaciones.services.paypal.PayPalService;
+import com.deofis.tiendaapirest.pagos.dto.PaymentPayload;
+import com.deofis.tiendaapirest.pagos.services.paypal.PayPalStrategy;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class CompletarPagoPayPalController {
 
-    private final PayPalService payPalService;
+    private final PayPalStrategy payPalStrategy;
 
     /**
      * Completa el pago de una operación por PayPal a traves del token enviado por la API de paypal, que es
@@ -36,7 +36,7 @@ public class CompletarPagoPayPalController {
         PaymentPayload paymentPayload;
 
         try {
-            paymentPayload = this.payPalService.capturarOrder(orderId);
+            paymentPayload = this.payPalStrategy.capturarOrder(orderId);
         } catch (OperacionException e) {
             response.put("mensaje", "Error al procesar el pago");
             response.put("error", e.getMessage());

@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "medio_pago")
+@Table(name = "medios_pago")
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedioPago implements Serializable {
@@ -19,5 +19,7 @@ public class MedioPago implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
+
+    @Enumerated(EnumType.STRING)
+    private MedioPagoEnum nombre;
 }
