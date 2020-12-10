@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.productos.services;
 
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.Sku;
+import com.deofis.tiendaapirest.utils.CrudService;
 
 import java.util.Map;
 
