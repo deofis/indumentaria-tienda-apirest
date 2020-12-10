@@ -13,26 +13,26 @@ public class PayPalPagoInfo extends OperacionPagoInfo {
 
     @Override
     public String getId() {
-        return null;
+        return (String) atributos.get("orderId");
     }
 
     @Override
     public String getStatus() {
-        return null;
+        return (String) atributos.get("status");
     }
 
     @Override
     public String getApproveUrl() {
-        return null;
+        return (String) atributos.get("approveUrl");
     }
 
     @Override
     public AmountPayload getAmount() {
-        return null;
+        return (AmountPayload) atributos.get("amount");
     }
 
     @Override
     public PayerPayload getPayer() {
-        return null;
+        return (PayerPayload) atributos.get("payer");
     }
 }

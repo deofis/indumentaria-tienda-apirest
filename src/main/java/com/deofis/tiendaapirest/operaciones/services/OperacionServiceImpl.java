@@ -12,7 +12,9 @@ import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
+import com.deofis.tiendaapirest.pagos.domain.MedioPago;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
@@ -41,6 +43,7 @@ public class OperacionServiceImpl implements OperacionService {
     private final MailService mailService;
 
     private final OperacionRepository operacionRepository;
+    private final MedioPagoRepository medioPagoRepository;
     private final SkuService skuService;
     private final ClienteRepository clienteRepository;
     private final PerfilService perfilService;
@@ -59,13 +62,16 @@ public class OperacionServiceImpl implements OperacionService {
                             "en la base de datos."));
         }
 
+        MedioPago medioPago = this.medioPagoRepository.findById(operacion.getMedioPago().getId())
+                .orElseThrow(() -> new OperacionException("Medio de pago no encontrado en el sistema"));
+
         Operacion nuevaOperacion = Operacion.builder()
                 .cliente(cliente)
                 .direccionEnvio(operacion.getDireccionEnvio())
                 .fechaOperacion(new Date(new Date().getTime()))
                 .fechaEnviada(null)
                 .fechaRecibida(null)
-                .medioPago(operacion.getMedioPago())
+                .medioPago(medioPago)
                 .estado(EstadoOperacion.PAYMENT_PENDING)
                 .total(0.0)
                 .items(operacion.getItems())
@@ -114,6 +120,7 @@ public class OperacionServiceImpl implements OperacionService {
         this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
         this.enviarEmailsAdmins(nuevaOperacion);
 
+        log.info(nuevaOperacion.getMedioPago().toString());
         return this.pagoStrategy.crearPago(nuevaOperacion);
     }
 

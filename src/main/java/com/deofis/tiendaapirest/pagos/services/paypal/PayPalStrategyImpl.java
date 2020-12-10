@@ -7,6 +7,7 @@ import com.deofis.tiendaapirest.pagos.dto.OrderPayload;
 import com.deofis.tiendaapirest.pagos.dto.PayerPayload;
 import com.deofis.tiendaapirest.pagos.dto.PaymentPayload;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfoFactory;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
@@ -15,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -129,7 +129,22 @@ public class PayPalStrategyImpl implements PayPalStrategy {
     @Override
     public OperacionPagoInfo crearPago(Operacion operacion) {
         log.info("Pago creado con éxito");
-        return null;
+        Map<String, Object> atributosPago = new HashMap<>();
+
+        atributosPago.put("orderId", UUID.randomUUID().toString());
+        atributosPago.put("status", "CREATED");
+        atributosPago.put("approveUrl", "https://www.google.com");
+        atributosPago.put("amount", AmountPayload.builder()
+                .totalBruto(String.valueOf(10.00))
+                .totalNeto(String.valueOf(9.75))
+                .fee(String.valueOf(0.25)).build());
+        atributosPago.put("payer", PayerPayload.builder()
+                .payerId(UUID.randomUUID().toString())
+                .payerEmail("ezegavilan95@gmail.com")
+                .payerFullName("Ezequiel Gavilán").build());
+
+        return OperacionPagoInfoFactory
+                .getOperacionPagoInfo(String.valueOf(operacion.getMedioPago().getNombre()), atributosPago);
     }
 
     @Override

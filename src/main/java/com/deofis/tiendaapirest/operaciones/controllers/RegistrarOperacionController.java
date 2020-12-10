@@ -49,7 +49,7 @@ public class RegistrarOperacionController {
             pagoInfo = this.operacionService.registrarNuevaOperacion(operacion);
             //orderPayload = this.payPalStrategy.crearOrder(nuevaOperacion);
         } catch (OperacionException | ProductoException | PerfilesException e) {
-            response.put("mensahe", "Error al registrar la nueva compra");
+            response.put("mensaje", "Error al registrar la nueva compra");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
