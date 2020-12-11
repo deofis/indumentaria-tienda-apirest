@@ -18,6 +18,11 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Implementación de {@link com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy} que realiza el pago
+ * conectandose con la API de PayPal, para crear la orden y capturarla al completar el checkout.
+ */
+
 @Service
 @AllArgsConstructor
 @Slf4j

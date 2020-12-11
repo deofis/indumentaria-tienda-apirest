@@ -120,7 +120,6 @@ public class OperacionServiceImpl implements OperacionService {
         this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
         this.enviarEmailsAdmins(nuevaOperacion);
 
-        log.info(nuevaOperacion.getMedioPago().toString());
         return this.pagoStrategy.crearPago(nuevaOperacion);
     }
 

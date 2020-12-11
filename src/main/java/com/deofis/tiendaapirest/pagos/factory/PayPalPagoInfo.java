@@ -2,9 +2,11 @@ package com.deofis.tiendaapirest.pagos.factory;
 
 import com.deofis.tiendaapirest.pagos.dto.AmountPayload;
 import com.deofis.tiendaapirest.pagos.dto.PayerPayload;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Map;
 
+@JsonIgnoreProperties({"atributos"})
 public class PayPalPagoInfo extends OperacionPagoInfo {
 
     public PayPalPagoInfo(Map<String, Object> atributos) {
