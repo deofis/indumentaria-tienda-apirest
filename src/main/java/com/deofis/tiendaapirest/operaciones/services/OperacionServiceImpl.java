@@ -15,6 +15,7 @@ import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
+import com.deofis.tiendaapirest.pagos.services.strategy.OperacionPagoMapping;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
@@ -48,6 +49,7 @@ public class OperacionServiceImpl implements OperacionService {
     private final ClienteRepository clienteRepository;
     private final PerfilService perfilService;
     private final PagoStrategy pagoStrategy;
+    private final OperacionPagoMapping operacionPagoMapping;
 
     @Transactional
     @Override
@@ -72,6 +74,7 @@ public class OperacionServiceImpl implements OperacionService {
                 .fechaEnviada(null)
                 .fechaRecibida(null)
                 .medioPago(medioPago)
+                .pago(null)
                 .estado(EstadoOperacion.PAYMENT_PENDING)
                 .total(0.0)
                 .items(operacion.getItems())
@@ -120,7 +123,19 @@ public class OperacionServiceImpl implements OperacionService {
         this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
         this.enviarEmailsAdmins(nuevaOperacion);
 
-        return this.pagoStrategy.crearPago(nuevaOperacion);
+        OperacionPagoInfo operacionPagoInfo = this.pagoStrategy.crearPago(nuevaOperacion);
+
+        // Persistir el pago creado y pendiente de pagar asociado a la operación recientemente registrada.
+        this.guardarOperacionPago(nuevaOperacion, operacionPagoInfo);
+
+        log.info(String.valueOf(nuevaOperacion));
+        return operacionPagoInfo;
+    }
+
+    private void guardarOperacionPago(Operacion nuevaOperacion, OperacionPagoInfo operacionPagoInfo) {
+        nuevaOperacion.setPago(this.operacionPagoMapping.mapToOperacionPago(operacionPagoInfo));
+        nuevaOperacion.getPago().setFechaCreacion(new Date());
+        this.save(nuevaOperacion);
     }
 
     private Double calcularPrecioVenta(Sku sku) {
@@ -168,8 +183,7 @@ public class OperacionServiceImpl implements OperacionService {
     @Transactional
     @Override
     public Operacion registrarEnvio(Long nroOperacion) {
-        Operacion operacion = this.operacionRepository.findById(nroOperacion)
-                .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + nroOperacion));
+        Operacion operacion = this.findById(nroOperacion);
         StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
 
         sm.getExtendedState().getVariables().put("operacion", operacion);
@@ -181,8 +195,7 @@ public class OperacionServiceImpl implements OperacionService {
     @Transactional
     @Override
     public Operacion registrarRecibo(Long nroOperacion) {
-        Operacion operacion = this.operacionRepository.findById(nroOperacion)
-                .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + nroOperacion));
+        Operacion operacion = this.findById(nroOperacion);
         StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
 
         sm.getExtendedState().getVariables().put("operacion", operacion);
@@ -194,8 +207,7 @@ public class OperacionServiceImpl implements OperacionService {
     @Transactional
     @Override
     public Operacion cancelar(Long nroOperacion) {
-        Operacion operacion = this.operacionRepository.findById(nroOperacion)
-                .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + nroOperacion));
+        Operacion operacion = this.findById(nroOperacion);
         StateMachine<EstadoOperacion, EventoOperacion> sm = this.stateMachineService.build(nroOperacion);
 
         this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.CANCEL);
@@ -204,6 +216,11 @@ public class OperacionServiceImpl implements OperacionService {
 
     private Double calcularTotal(Double total, Double subTotal) {
         return total + subTotal;
+    }
+
+    private Operacion findById(Long id) {
+        return this.operacionRepository.findById(id)
+                .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + id));
     }
 
     @Transactional
