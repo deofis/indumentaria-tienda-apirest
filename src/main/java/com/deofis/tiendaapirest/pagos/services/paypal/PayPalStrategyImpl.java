@@ -139,6 +139,21 @@ public class PayPalStrategyImpl implements PayPalStrategy {
         atributosPago.put("orderId", UUID.randomUUID().toString());
         atributosPago.put("status", "CREATED");
         atributosPago.put("approveUrl", "https://www.google.com");
+        atributosPago.put("amount", null);
+        atributosPago.put("payer", null);
+
+        return OperacionPagoInfoFactory
+                .getOperacionPagoInfo(String.valueOf(operacion.getMedioPago().getNombre()), atributosPago);
+    }
+
+    @Override
+    public OperacionPagoInfo completarPago(Operacion operacion) {
+        log.info("Pago completado con éxito");
+        Map<String, Object> atributosPago = new HashMap<>();
+
+        atributosPago.put("orderId", operacion.getPago().getId());
+        atributosPago.put("status", "COMPLETED");
+        atributosPago.put("approveUrl", "Approve URL caducado");
         atributosPago.put("amount", AmountPayload.builder()
                 .totalBruto(String.valueOf(10.00))
                 .totalNeto(String.valueOf(9.75))
@@ -150,11 +165,5 @@ public class PayPalStrategyImpl implements PayPalStrategy {
 
         return OperacionPagoInfoFactory
                 .getOperacionPagoInfo(String.valueOf(operacion.getMedioPago().getNombre()), atributosPago);
-    }
-
-    @Override
-    public OperacionPagoInfo completarPago(String pagoId) {
-        log.info("Pago completado con éxito");
-        return null;
     }
 }

@@ -41,4 +41,11 @@ public interface OperacionService extends CrudService<Operacion, Long> {
      * @param nroOperacion Long nro de operacion a cancelar.
      */
     Operacion cancelar(Long nroOperacion);
+
+    /**
+     * Obtiene una {@link Operacion} a través de su número de operación.
+     * @param nroOperacion Long nro de operación.
+     * @return Operacion.
+     */
+    Operacion findById(Long nroOperacion);
 }

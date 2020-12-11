@@ -21,8 +21,8 @@ public interface PagoStrategy {
     /**
      * Toma el pago de la operación solicitada, y se completa el pago de la misma, en caso
      * de que el usuario lo desee así.
-     * @param pagoId String id del pago a completar.
+     * @param operacion operación a completar el pago.
      * @return OperacionPagoInfo con la información del pago completado.
      */
-    OperacionPagoInfo completarPago(String pagoId);
+    OperacionPagoInfo completarPago(Operacion operacion);
 }

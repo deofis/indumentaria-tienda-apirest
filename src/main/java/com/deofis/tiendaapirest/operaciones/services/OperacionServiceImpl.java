@@ -218,7 +218,9 @@ public class OperacionServiceImpl implements OperacionService {
         return total + subTotal;
     }
 
-    private Operacion findById(Long id) {
+    @Transactional(readOnly = true)
+    @Override
+    public Operacion findById(Long id) {
         return this.operacionRepository.findById(id)
                 .orElseThrow(() -> new OperacionException("No existe la operacion con numero: " + id));
     }

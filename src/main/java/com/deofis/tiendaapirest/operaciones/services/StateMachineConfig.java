@@ -3,6 +3,10 @@ package com.deofis.tiendaapirest.operaciones.services;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.services.strategy.OperacionPagoMapping;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.StateMachine;
@@ -17,8 +21,13 @@ import java.util.EnumSet;
 
 @Slf4j
 @EnableStateMachineFactory
+@AllArgsConstructor
 @Configuration
 public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOperacion, EventoOperacion> {
+
+    private final PagoStrategy pagoStrategy;
+
+    private final OperacionPagoMapping operacionPagoMapping;
 
     @Override
     public void configure(StateMachineStateConfigurer<EstadoOperacion, EventoOperacion> states) throws Exception {
@@ -48,7 +57,16 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
     }
 
     private Action<EstadoOperacion, EventoOperacion> completarPago() {
-        return null;
+        return  stateContext -> {
+            StateMachine<EstadoOperacion, EventoOperacion> sm = stateContext.getStateMachine();
+            Operacion operacion = sm.getExtendedState().get("operacion", Operacion.class);
+
+            OperacionPagoInfo pagoInfo = this.pagoStrategy.completarPago(operacion);
+            operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
+            operacion.getPago().setFechaPagado(new Date());
+
+            sm.getExtendedState().getVariables().put("pagoInfo", pagoInfo);
+        };
     }
 
     public Action<EstadoOperacion, EventoOperacion> enviar() {
