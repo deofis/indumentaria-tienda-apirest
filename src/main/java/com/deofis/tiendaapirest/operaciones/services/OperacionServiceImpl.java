@@ -128,7 +128,6 @@ public class OperacionServiceImpl implements OperacionService {
         // Persistir el pago creado y pendiente de pagar asociado a la operación recientemente registrada.
         this.guardarOperacionPago(nuevaOperacion, operacionPagoInfo);
 
-        log.info(String.valueOf(nuevaOperacion));
         return operacionPagoInfo;
     }
 

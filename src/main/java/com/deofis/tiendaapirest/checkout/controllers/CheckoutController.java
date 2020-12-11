@@ -1,12 +1,50 @@
 package com.deofis.tiendaapirest.checkout.controllers;
 
+import com.deofis.tiendaapirest.checkout.services.CheckoutService;
+import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
+import com.deofis.tiendaapirest.pagos.PaymentException;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
 public class CheckoutController {
+
+    private final CheckoutService checkoutService;
+
+    /**
+     * Completa el pago (checkout) para una operación requerida.
+     * URL: ~/api/checkout/completar/pago
+     * HttpMethod: POST
+     * HttpStatus: CREATED
+     * @param nroOperacion RequestParam Long con el número de operación requerido a hacer el checkout.
+     * @return ResponseEntity con la información del pago completado.
+     */
+    @PostMapping("/checkout/completar/pago")
+    public ResponseEntity<?> ejecutarCheckoutOperacion(@RequestParam Long nroOperacion) {
+        Map<String, Object> response = new HashMap<>();
+        OperacionPagoInfo pagoInfo;
+
+        try {
+            pagoInfo = this.checkoutService.ejecutarCheckout(nroOperacion);
+        } catch (OperacionException | PaymentException e) {
+            response.put("mensaje", "Error al completar el pago para la operación");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("pago", pagoInfo);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
 }

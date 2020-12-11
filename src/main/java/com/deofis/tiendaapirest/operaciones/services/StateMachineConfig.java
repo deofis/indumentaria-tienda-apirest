@@ -60,9 +60,17 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
         return  stateContext -> {
             StateMachine<EstadoOperacion, EventoOperacion> sm = stateContext.getStateMachine();
             Operacion operacion = sm.getExtendedState().get("operacion", Operacion.class);
+            //Creemos fecha creacion con los datos para no perderla al asignarle el nuevo objeto de pago.
+            // (que es sobreescribo por un nuevo objeto de pago creado por la implementación de cada strategy
+            // de pago.
+            Date fechaCreacion = operacion.getPago().getFechaCreacion();
 
             OperacionPagoInfo pagoInfo = this.pagoStrategy.completarPago(operacion);
             operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
+            // Seteamos la vieja fecha de creación para no perder referencia
+            operacion.getPago().setFechaCreacion(fechaCreacion);
+
+            // Seteamos la fecha de pago al momento actual.
             operacion.getPago().setFechaPagado(new Date());
 
             sm.getExtendedState().getVariables().put("pagoInfo", pagoInfo);
