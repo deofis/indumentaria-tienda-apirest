@@ -17,6 +17,11 @@ public class EfectivoPagoInfo extends OperacionPagoInfo {
     }
 
     @Override
+    public Long getNroOperacion() {
+        return null;
+    }
+
+    @Override
     public String getStatus() {
         return null;
     }

@@ -19,6 +19,8 @@ public abstract class OperacionPagoInfo {
 
     public abstract String getId();
 
+    public abstract Long getNroOperacion();
+
     public abstract String getStatus();
 
     public abstract String getApproveUrl();

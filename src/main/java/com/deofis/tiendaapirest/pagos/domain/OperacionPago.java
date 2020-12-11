@@ -22,6 +22,8 @@ public class OperacionPago implements Serializable {
     @Id
     private String id;
 
+    private Long nroOperacion;
+
     private String status;
 
     @Temporal(TemporalType.TIMESTAMP)

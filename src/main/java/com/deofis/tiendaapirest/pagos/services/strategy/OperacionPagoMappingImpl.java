@@ -32,6 +32,7 @@ public class OperacionPagoMappingImpl implements OperacionPagoMapping {
 
         return OperacionPago.builder()
                 .id(pagoInfo.getId())
+                .nroOperacion(pagoInfo.getNroOperacion())
                 .status(pagoInfo.getStatus())
                 .approveUrl(pagoInfo.getApproveUrl())
                 .totalBruto(totalBruto)

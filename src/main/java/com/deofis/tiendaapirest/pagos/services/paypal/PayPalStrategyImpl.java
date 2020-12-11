@@ -96,6 +96,7 @@ public class PayPalStrategyImpl implements PayPalStrategy {
 
             // Completamos los datos para nuestra clase de pago.
             atributosPago.put("orderId", order.id());
+            atributosPago.put("nroOperacion", operacion.getNroOperacion());
             atributosPago.put("status", order.status());
             atributosPago.put("approveUrl", approveUrl);
             atributosPago.put("amount", null);
@@ -142,6 +143,7 @@ public class PayPalStrategyImpl implements PayPalStrategy {
             // Completamos los datos de los atributos para nuestro pago
 
             atributosPago.put("orderId", order.id());
+            atributosPago.put("nroOperacion", operacion.getNroOperacion());
             atributosPago.put("status", order.status());
             atributosPago.put("amount", amount);
             atributosPago.put("payer", payer);

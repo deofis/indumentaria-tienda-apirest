@@ -19,6 +19,11 @@ public class PayPalPagoInfo extends OperacionPagoInfo {
     }
 
     @Override
+    public Long getNroOperacion() {
+        return (Long) atributos.get("nroOperacion");
+    }
+
+    @Override
     public String getStatus() {
         return (String) atributos.get("status");
     }
