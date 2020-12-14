@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.pagos.PaymentException;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
+@Slf4j
 public class CheckoutController {
 
     private final CheckoutService checkoutService;
@@ -40,6 +42,12 @@ public class CheckoutController {
         } catch (OperacionException | PaymentException e) {
             response.put("mensaje", "Error al completar el pago para la operación");
             response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (pagoInfo == null) {
+            response.put("mensaje", "Error al completar el pago para la operación");
+            response.put("error", "El pago debe ser aprobado por el cliene antes de completarlo");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

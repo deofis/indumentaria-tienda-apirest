@@ -1,9 +1,9 @@
 package com.deofis.tiendaapirest.operaciones.services;
 
 import com.deofis.tiendaapirest.autenticacion.dto.UsuarioDTO;
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
-import com.deofis.tiendaapirest.clientes.repositories.ClienteRepository;
 import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 import com.deofis.tiendaapirest.emails.services.MailService;
 import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
@@ -13,10 +13,13 @@ import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.pagos.domain.MedioPago;
+import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
 import com.deofis.tiendaapirest.pagos.repositories.MedioPagoRepository;
-import com.deofis.tiendaapirest.pagos.services.strategy.OperacionPagoMapping;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyName;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.services.AdministradorService;
 import com.deofis.tiendaapirest.perfiles.services.PerfilService;
@@ -46,16 +49,21 @@ public class OperacionServiceImpl implements OperacionService {
     private final OperacionRepository operacionRepository;
     private final MedioPagoRepository medioPagoRepository;
     private final SkuService skuService;
-    private final ClienteRepository clienteRepository;
     private final PerfilService perfilService;
-    private final PagoStrategy pagoStrategy;
+
+    private final PagoStrategyFactory pagoStrategyFactory;
     private final OperacionPagoMapping operacionPagoMapping;
 
     @Transactional
     @Override
     public OperacionPagoInfo registrarNuevaOperacion(Operacion operacion) {
-        Cliente cliente;
 
+        if (!this.autenticacionService.estaLogueado())
+            throw new AutenticacionException("Usuario no logueado en el sistema");
+
+        Cliente cliente = this.perfilService.obtenerDatosCliente();
+        /*
+        AHORA EL SISTEMA REQUIERE AUTENTICACIÓN SIEMPRE ANTES DE COMPLETAR COMPRAS
         if (this.autenticacionService.estaLogueado()) {
             cliente = this.perfilService.obtenerPerfil().getCliente();
         } else {
@@ -63,6 +71,7 @@ public class OperacionServiceImpl implements OperacionService {
                     .orElseThrow(() -> new OperacionException("El cliente seleccionado debe estar cargado " +
                             "en la base de datos."));
         }
+         */
 
         MedioPago medioPago = this.medioPagoRepository.findById(operacion.getMedioPago().getId())
                 .orElseThrow(() -> new OperacionException("Medio de pago no encontrado en el sistema"));
@@ -112,18 +121,28 @@ public class OperacionServiceImpl implements OperacionService {
 
         this.save(nuevaOperacion);
 
-        if (this.autenticacionService.estaLogueado()) {
-            Perfil perfil = this.perfilService.obtenerPerfil();
+        // Agregar nueva operación (COMPRA) al array de compras del perfil del usuario.
+        Perfil perfil = this.perfilService.obtenerPerfil();
+        perfil.getCompras().add(nuevaOperacion);
+        this.perfilService.vaciarCarrito();
+        this.perfilService.save(perfil);
 
-            perfil.getCompras().add(nuevaOperacion);
-            this.perfilService.vaciarCarrito();
-            this.perfilService.save(perfil);
-        }
-
+        // Llamamos a los métodos para enviar mails al usuario final, y todos los admins del sistema.
         this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
         this.enviarEmailsAdmins(nuevaOperacion);
 
-        OperacionPagoInfo operacionPagoInfo = this.pagoStrategy.crearPago(nuevaOperacion);
+        // Delegar la creación del PAGO de operación al PagoStrategy correspondiente.
+        PagoStrategy pagoStrategy;
+        if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+        else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+        else pagoStrategy = null;
+
+        OperacionPagoInfo operacionPagoInfo = null;
+        if (pagoStrategy != null) {
+            operacionPagoInfo = pagoStrategy.crearPago(nuevaOperacion);
+        }
 
         // Persistir el pago creado y pendiente de pagar asociado a la operación recientemente registrada.
         this.guardarOperacionPago(nuevaOperacion, operacionPagoInfo);

@@ -4,7 +4,7 @@ import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
-import com.deofis.tiendaapirest.pagos.services.strategy.OperacionPagoMapping;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

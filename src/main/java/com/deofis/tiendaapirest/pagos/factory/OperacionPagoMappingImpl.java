@@ -1,7 +1,6 @@
-package com.deofis.tiendaapirest.pagos.services.strategy;
+package com.deofis.tiendaapirest.pagos.factory;
 
 import com.deofis.tiendaapirest.pagos.domain.OperacionPago;
-import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
