@@ -132,70 +132,12 @@ public class OperacionServiceImpl implements OperacionService {
         this.enviarEmailsAdmins(nuevaOperacion);
 
         // Delegar la creación del PAGO de operación al PagoStrategy correspondiente.
-        PagoStrategy pagoStrategy;
-        if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
-        else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
-            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
-        else pagoStrategy = null;
-
-        OperacionPagoInfo operacionPagoInfo = null;
-        if (pagoStrategy != null) {
-            operacionPagoInfo = pagoStrategy.crearPago(nuevaOperacion);
-        }
+        OperacionPagoInfo operacionPagoInfo = this.crearPago(nuevaOperacion);
 
         // Persistir el pago creado y pendiente de pagar asociado a la operación recientemente registrada.
         this.guardarOperacionPago(nuevaOperacion, operacionPagoInfo);
 
         return operacionPagoInfo;
-    }
-
-    private void guardarOperacionPago(Operacion nuevaOperacion, OperacionPagoInfo operacionPagoInfo) {
-        nuevaOperacion.setPago(this.operacionPagoMapping.mapToOperacionPago(operacionPagoInfo));
-        nuevaOperacion.getPago().setFechaCreacion(new Date());
-        this.save(nuevaOperacion);
-    }
-
-    private Double calcularPrecioVenta(Sku sku) {
-        if (sku.getPromocion() != null && sku.getPromocion().getEstaVigente())
-            return sku.getPromocion().getPrecioOferta();
-
-        return sku.getPrecio();
-    }
-
-    private void enviarEmailsAdmins(Operacion operacion) {
-        List<UsuarioDTO> admins = this.administradorService.obtenerAdministradores();
-
-        for (UsuarioDTO admin: admins) {
-            NotificationEmail notificationEmail = new NotificationEmail();
-            String body = "Se ha registrado una nueva venta en el sistema. Revisar la venta con " +
-                    "número de operacion: " + operacion.getNroOperacion() +
-                    " para realizar la facturación correspondiente al cliente: " +
-                    operacion.getCliente().getNombre() + ", " + operacion.getCliente().getApellido();
-
-            notificationEmail.setBody(body);
-            notificationEmail.setSubject("Nueva venta registrada :: Deofis");
-
-            notificationEmail.setRecipient(admin.getEmail());
-            this.mailService.sendEmail(notificationEmail);
-
-            log.info(admin.getEmail());
-        }
-    }
-
-    private void enviarEmailUsuario(Operacion operacion, String emailUsuario) {
-        NotificationEmail notificationEmail = new NotificationEmail();
-        String body = "Gracias por realizar la compra! En la brevedad recibirá a su correo la facturación " +
-                "realizada por la tienda.\n" +
-                "Número de compra: " + operacion.getNroOperacion() + "\n" +
-                "\nPorfavor, revise los datos de la compra en su perfil de usuario!";
-        notificationEmail.setBody(body);
-        notificationEmail.setRecipient(emailUsuario);
-        notificationEmail.setSubject("Nueva compra registrada");
-
-        log.info(emailUsuario);
-
-        this.mailService.sendEmail(notificationEmail);
     }
 
     @Transactional
@@ -247,5 +189,65 @@ public class OperacionServiceImpl implements OperacionService {
     @Override
     public Operacion save(Operacion object) {
         return this.operacionRepository.save(object);
+    }
+
+    private OperacionPagoInfo crearPago(Operacion nuevaOperacion) {
+        PagoStrategy pagoStrategy;
+
+        if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+        else if (nuevaOperacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+        else pagoStrategy = null;
+
+        return pagoStrategy != null ? pagoStrategy.crearPago(nuevaOperacion) : null;
+    }
+
+    private void guardarOperacionPago(Operacion nuevaOperacion, OperacionPagoInfo operacionPagoInfo) {
+        nuevaOperacion.setPago(this.operacionPagoMapping.mapToOperacionPago(operacionPagoInfo));
+        nuevaOperacion.getPago().setFechaCreacion(new Date());
+        this.save(nuevaOperacion);
+    }
+
+    private Double calcularPrecioVenta(Sku sku) {
+        if (sku.getPromocion() != null && sku.getPromocion().getEstaVigente())
+            return sku.getPromocion().getPrecioOferta();
+
+        return sku.getPrecio();
+    }
+
+    private void enviarEmailsAdmins(Operacion operacion) {
+        List<UsuarioDTO> admins = this.administradorService.obtenerAdministradores();
+
+        for (UsuarioDTO admin: admins) {
+            NotificationEmail notificationEmail = new NotificationEmail();
+            String body = "Se ha registrado una nueva venta en el sistema. Revisar la venta con " +
+                    "número de operacion: " + operacion.getNroOperacion() +
+                    " para realizar la facturación correspondiente al cliente: " +
+                    operacion.getCliente().getNombre() + ", " + operacion.getCliente().getApellido();
+
+            notificationEmail.setBody(body);
+            notificationEmail.setSubject("Nueva venta registrada :: Deofis");
+
+            notificationEmail.setRecipient(admin.getEmail());
+            this.mailService.sendEmail(notificationEmail);
+
+            log.info(admin.getEmail());
+        }
+    }
+
+    private void enviarEmailUsuario(Operacion operacion, String emailUsuario) {
+        NotificationEmail notificationEmail = new NotificationEmail();
+        String body = "Gracias por realizar la compra! En la brevedad recibirá a su correo la facturación " +
+                "realizada por la tienda.\n" +
+                "Número de compra: " + operacion.getNroOperacion() + "\n" +
+                "\nPorfavor, revise los datos de la compra en su perfil de usuario!";
+        notificationEmail.setBody(body);
+        notificationEmail.setRecipient(emailUsuario);
+        notificationEmail.setSubject("Nueva compra registrada");
+
+        log.info(emailUsuario);
+
+        this.mailService.sendEmail(notificationEmail);
     }
 }

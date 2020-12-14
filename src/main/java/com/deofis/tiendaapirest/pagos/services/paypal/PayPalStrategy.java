@@ -24,7 +24,6 @@ import java.util.Map;
  * Implementación de {@link com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy} que realiza el pago
  * conectandose con la API de PayPal, para crear la orden y capturarla al completar el checkout.
  */
-
 @Service
 @AllArgsConstructor
 @Slf4j
