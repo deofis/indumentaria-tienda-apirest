@@ -3,9 +3,12 @@ package com.deofis.tiendaapirest.operaciones.services;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
+import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyName;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +28,7 @@ import java.util.EnumSet;
 @Configuration
 public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOperacion, EventoOperacion> {
 
-    private final PagoStrategy pagoStrategy;
+    private final PagoStrategyFactory pagoStrategyFactory;
 
     private final OperacionPagoMapping operacionPagoMapping;
 
@@ -65,7 +68,16 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
             // de pago.
             Date fechaCreacion = operacion.getPago().getFechaCreacion();
 
-            OperacionPagoInfo pagoInfo = this.pagoStrategy.completarPago(operacion);
+            // Delegamos el completar pago al strategy correspondiente.
+            PagoStrategy pagoStrategy;
+
+            if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
+                pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+            else if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
+                pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+            else pagoStrategy = null;
+
+            OperacionPagoInfo pagoInfo = pagoStrategy != null ? pagoStrategy.completarPago(operacion) : null;
             operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
             // Seteamos la vieja fecha de creación para no perder referencia
             operacion.getPago().setFechaCreacion(fechaCreacion);

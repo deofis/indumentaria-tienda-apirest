@@ -2,9 +2,11 @@ package com.deofis.tiendaapirest.pagos.factory;
 
 import com.deofis.tiendaapirest.pagos.dto.AmountPayload;
 import com.deofis.tiendaapirest.pagos.dto.PayerPayload;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Map;
 
+@JsonIgnoreProperties({"atributos"})
 public class EfectivoPagoInfo extends OperacionPagoInfo {
 
     public EfectivoPagoInfo(Map<String, Object> atributos) {
@@ -13,17 +15,17 @@ public class EfectivoPagoInfo extends OperacionPagoInfo {
 
     @Override
     public String getId() {
-        return null;
+        return (String) atributos.get("nroPago");
     }
 
     @Override
     public Long getNroOperacion() {
-        return null;
+        return (Long) atributos.get("nroOperacion");
     }
 
     @Override
     public String getStatus() {
-        return null;
+        return (String) atributos.get("estado");
     }
 
     @Override
@@ -33,11 +35,11 @@ public class EfectivoPagoInfo extends OperacionPagoInfo {
 
     @Override
     public AmountPayload getAmount() {
-        return null;
+        return (AmountPayload) atributos.get("monto");
     }
 
     @Override
     public PayerPayload getPayer() {
-        return null;
+        return (PayerPayload) atributos.get("pagador");
     }
 }
