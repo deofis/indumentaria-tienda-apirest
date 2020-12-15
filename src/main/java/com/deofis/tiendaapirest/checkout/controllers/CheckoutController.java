@@ -47,7 +47,7 @@ public class CheckoutController {
 
         if (pagoInfo == null) {
             response.put("mensaje", "Error al completar el pago para la operación");
-            response.put("error", "El pago debe ser aprobado por el cliene antes de completarlo");
+            response.put("error", "El pago debe ser aprobado por el cliente antes de completarlo");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
