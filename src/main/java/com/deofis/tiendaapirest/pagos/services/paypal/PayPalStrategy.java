@@ -13,6 +13,7 @@ import com.paypal.orders.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,8 +38,15 @@ public class PayPalStrategy implements PagoStrategy {
 
     @Override
     public OperacionPagoInfo crearPago(Operacion operacion) {
-        String CANCEL_REDIRECT_URL = this.clientUrl.concat("/paypal/redirect");
-        String APPROVED_REDIRECT_URL = this.clientUrl.concat("/paypal/redirect");
+        // Creamos las URIs de redirección
+        String targetCancelUrl = this.clientUrl.concat("/paypal/redirect/cancel");
+        String CANCEL_REDIRECT_URL = UriComponentsBuilder.fromUriString(targetCancelUrl)
+                .queryParam("nroOperacion", operacion.getNroOperacion()).build().toString();
+
+        String targetApprovedUri = this.clientUrl.concat("/paypal/redirect/approved");
+        String APPROVED_REDIRECT_URL = UriComponentsBuilder.fromUriString(targetApprovedUri)
+                .queryParam("nroOperacion", operacion.getNroOperacion()).build().toString();
+
         OrderRequest orderRequest = new OrderRequest();
 
         ApplicationContext context = new ApplicationContext()
