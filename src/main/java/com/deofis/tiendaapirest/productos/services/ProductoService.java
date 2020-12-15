@@ -1,7 +1,7 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.globalservices.CrudService;
 import com.deofis.tiendaapirest.productos.domain.*;
-import com.deofis.tiendaapirest.utils.CrudService;
 
 import java.util.List;
 

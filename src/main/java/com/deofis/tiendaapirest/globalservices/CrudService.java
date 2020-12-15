@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.utils;
+package com.deofis.tiendaapirest.globalservices;
 
 public interface CrudService<T, ID> {
 

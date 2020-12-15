@@ -2,11 +2,11 @@ package com.deofis.tiendaapirest.perfiles.services;
 
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.globalservices.CrudService;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.Favorito;
 import com.deofis.tiendaapirest.perfiles.domain.Perfil;
 import com.deofis.tiendaapirest.perfiles.dto.PerfilDTO;
-import com.deofis.tiendaapirest.utils.CrudService;
 
 public interface PerfilService extends CrudService<Perfil, Long> {
 
