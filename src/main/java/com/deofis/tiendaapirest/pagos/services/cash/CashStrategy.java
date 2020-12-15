@@ -50,7 +50,7 @@ public class CashStrategy implements PagoStrategy {
 
         atributosPago.put("nroPago", operacion.getPago().getId());
         atributosPago.put("nroOperacion", operacion.getNroOperacion());
-        atributosPago.put("estado", "COMPLETADA");
+        atributosPago.put("estado", "COMPLETED");
         atributosPago.put("monto", amount);
         atributosPago.put("pagador", payer);
 
