@@ -3,12 +3,8 @@ package com.deofis.tiendaapirest.operaciones.services;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
-import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
-import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyName;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +40,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
     @Override
     public void configure(StateMachineTransitionConfigurer<EstadoOperacion, EventoOperacion> transitions) throws Exception {
         transitions
-                .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.PAYMENT_DONE).event(EventoOperacion.COMPLETE_PAYMENT).action(completarPago())
+                .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.PAYMENT_DONE).event(EventoOperacion.COMPLETE_PAYMENT)
                 .and()
                 .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.CANCELLED).event(EventoOperacion.CANCEL).action(cancelarOperacion())
                 .and()
@@ -57,36 +53,6 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
 
     private Action<EstadoOperacion, EventoOperacion> cancelarOperacion() {
         return null;
-    }
-
-    private Action<EstadoOperacion, EventoOperacion> completarPago() {
-        return  stateContext -> {
-            StateMachine<EstadoOperacion, EventoOperacion> sm = stateContext.getStateMachine();
-            Operacion operacion = sm.getExtendedState().get("operacion", Operacion.class);
-            //Creemos fecha creacion con los datos para no perderla al asignarle el nuevo objeto de pago.
-            // (que es sobreescribo por un nuevo objeto de pago creado por la implementación de cada strategy
-            // de pago.
-            Date fechaCreacion = operacion.getPago().getFechaCreacion();
-
-            // Delegamos el completar pago al strategy correspondiente.
-            PagoStrategy pagoStrategy;
-
-            if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.PAYPAL))
-                pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
-            else if (operacion.getMedioPago().getNombre().equals(MedioPagoEnum.EFECTIVO))
-                pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
-            else pagoStrategy = null;
-
-            OperacionPagoInfo pagoInfo = pagoStrategy != null ? pagoStrategy.completarPago(operacion) : null;
-            operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
-            // Seteamos la vieja fecha de creación para no perder referencia
-            operacion.getPago().setFechaCreacion(fechaCreacion);
-
-            // Seteamos la fecha de pago al momento actual.
-            operacion.getPago().setFechaPagado(new Date());
-
-            sm.getExtendedState().getVariables().put("pagoInfo", pagoInfo);
-        };
     }
 
     public Action<EstadoOperacion, EventoOperacion> enviar() {

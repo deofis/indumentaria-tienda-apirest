@@ -6,12 +6,19 @@ import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.services.OperacionService;
 import com.deofis.tiendaapirest.operaciones.services.StateMachineService;
 import com.deofis.tiendaapirest.pagos.PaymentException;
+import com.deofis.tiendaapirest.pagos.domain.MedioPagoEnum;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
+import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
+import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyName;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +27,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private final OperacionService operacionService;
     private final StateMachineService stateMachineService;
+
+    private final PagoStrategyFactory pagoStrategyFactory;
+    private final OperacionPagoMapping operacionPagoMapping;
 
     @Transactional
     @Override
@@ -31,12 +41,30 @@ public class CheckoutServiceImpl implements CheckoutService {
         if (operacion.getPago().getStatus().equalsIgnoreCase("completed"))
             throw new PaymentException("El pago para esta operación ya fue completado");
 
-        // Delegamos el completar pago al State Machine que se encargará de transicionar, al recibir
-        // el evento COMPLETE_PAYMENT, y de ejecutar la lógica de negocio correspondiente (completar pago)
-        sm.getExtendedState().getVariables().put("operacion", operacion);
+        // Obtenemos esta fecha para asignarsela luego de completar el pago, para
+        // que no se pierda al momento de crear el nuevo objeto de pago (son objetos distintos).
+        Date fechaCreacionPago = operacion.getPago().getFechaCreacion();
 
-        this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.COMPLETE_PAYMENT);
+        // Delegamos el completar pago al strategy correspondiente
+        PagoStrategy pagoStrategy;
+        MedioPagoEnum medioPagoNombre = operacion.getMedioPago().getNombre();
+
+        if (medioPagoNombre.equals(MedioPagoEnum.EFECTIVO))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.cashStrategy));
+        else if (medioPagoNombre.equals(MedioPagoEnum.PAYPAL))
+            pagoStrategy = this.pagoStrategyFactory.get(String.valueOf(PagoStrategyName.payPalStrategy));
+        else pagoStrategy = null;
+
+        OperacionPagoInfo pagoInfo = pagoStrategy != null ? pagoStrategy.completarPago(operacion) : null;
+        operacion.setPago(this.operacionPagoMapping.mapToOperacionPago(pagoInfo));
+
+        // Seteamos la fecha de creación guardada para no perder referencia
+        operacion.getPago().setFechaCreacion(fechaCreacionPago);
+        // Seteamos la fecha de pago al momento actual
+        operacion.getPago().setFechaPagado(new Date());
+
+        // Por último, guardamos la operación actualizada y devolvemos el objeto con la info del pago (DTO).
         this.operacionService.save(operacion);
-        return sm.getExtendedState().get("pagoInfo", OperacionPagoInfo.class);
+        return pagoInfo;
     }
 }
