@@ -1,17 +1,18 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.globalservices.CrudService;
 import com.deofis.tiendaapirest.productos.domain.Marca;
 
 import java.util.List;
 
-public interface MarcaService {
+public interface MarcaService extends CrudService<Marca, Long> {
 
     /**
      * Método para registrar una nueva marca.
      * @param marca Marca a guardar.
      * @return Marca guardada en la BD.
      */
-    Marca crear(Marca marca);
+    Marca crearMarca(Marca marca);
 
     /**
      * Método para obtener todas las marcas ordenadas por nombre asc.
@@ -33,4 +34,17 @@ public interface MarcaService {
      * @return Marca actualizada.
      */
     Marca actualizar(Marca marca, Long id);
+
+    /**
+     * Elimina una {@link Marca} en caso de que no exista ninguna referencia a la misma.
+     * @param marca Marca a eliminar.
+     */
+    void eliminarMarca(Marca marca);
+
+    /**
+     * Elimina una {@link Marca}, a través de su id, en caso de que no existe ninguna
+     * referencia a la misma.
+     * @param marcaId Long id de la marca a eliminar.
+     */
+    void eliminarMarca(Long marcaId);
 }

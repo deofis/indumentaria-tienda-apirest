@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -258,9 +259,29 @@ public class PerfilServiceImpl implements PerfilService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
+    @Override
+    public List<Perfil> findAll() {
+        return null;
+    }
+
+    @Override
+    public Perfil findById(Long aLong) {
+        return null;
+    }
+
     @Transactional
     @Override
     public Perfil save(Perfil object) {
         return this.perfilRepository.save(object);
+    }
+
+    @Override
+    public void delete(Perfil object) {
+
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+
     }
 }

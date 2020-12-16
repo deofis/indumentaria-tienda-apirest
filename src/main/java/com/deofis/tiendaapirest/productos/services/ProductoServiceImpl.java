@@ -205,9 +205,29 @@ public class ProductoServiceImpl implements ProductoService {
         return this.productoRepository.findAllBySubcategoria(subcategoria);
     }
 
+    @Override
+    public List<Producto> findAll() {
+        return null;
+    }
+
+    @Override
+    public Producto findById(Long aLong) {
+        return null;
+    }
+
     @Transactional
     @Override
     public Producto save(Producto object) {
         return this.productoRepository.save(object);
+    }
+
+    @Override
+    public void delete(Producto object) {
+
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+
     }
 }

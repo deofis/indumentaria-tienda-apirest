@@ -122,9 +122,29 @@ public class SkuServiceImpl implements SkuService {
                 .orElseThrow(() -> new ProductoException("No existe el valor de propiedad"));
     }
 
+    @Override
+    public List<Sku> findAll() {
+        return null;
+    }
+
+    @Override
+    public Sku findById(Long aLong) {
+        return null;
+    }
+
     @Transactional
     @Override
     public Sku save(Sku object) {
         return this.skuRepository.save(object);
+    }
+
+    @Override
+    public void delete(Sku object) {
+
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+
     }
 }

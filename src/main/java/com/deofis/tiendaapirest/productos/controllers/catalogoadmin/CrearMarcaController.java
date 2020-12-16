@@ -27,13 +27,13 @@ public class CrearMarcaController {
 
     /**
      * Registrar nueva marca.
-     * URL: ~/api/productos/marcas/nueva
+     * URL: ~/api/productos/marcas
      * HttpMethod: POST
      * HttpStatus: CREATED
      * @param marca Marca a crear.
      * @return Marca registrada.
      */
-    @PostMapping("/productos/marcas/nueva")
+    @PostMapping("/productos/marcas")
     public ResponseEntity<?> crear(@Valid @RequestBody Marca marca, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         Marca nuevaMarca;
@@ -49,7 +49,7 @@ public class CrearMarcaController {
         }
 
         try {
-            nuevaMarca = this.marcaService.crear(marca);
+            nuevaMarca = this.marcaService.crearMarca(marca);
         } catch (ProductoException e) {
             response.put("mensaje", "Error al registrar la nueva marca");
             response.put("error", e.getMessage());

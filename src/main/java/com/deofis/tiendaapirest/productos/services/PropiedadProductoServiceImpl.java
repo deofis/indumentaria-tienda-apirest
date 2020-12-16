@@ -121,4 +121,29 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
         if (!existeValor) throw new ProductoException("No existe el valor con id: '"
                 .concat(String.valueOf(valorId)).concat("' para la propiedad: '".concat(propiedad.getNombre())));
     }
+
+    @Override
+    public List<PropiedadProducto> findAll() {
+        return null;
+    }
+
+    @Override
+    public PropiedadProducto findById(Long aLong) {
+        return null;
+    }
+
+    @Override
+    public PropiedadProducto save(PropiedadProducto object) {
+        return null;
+    }
+
+    @Override
+    public void delete(PropiedadProducto object) {
+
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+
+    }
 }

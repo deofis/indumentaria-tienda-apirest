@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.globalservices.CrudService;
 import com.deofis.tiendaapirest.productos.domain.PropiedadProducto;
 import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * los mismos.
  */
 
-public interface PropiedadProductoService {
+public interface PropiedadProductoService extends CrudService<PropiedadProducto, Long> {
 
     /**
      * Crea una nueva propiedad de producto.

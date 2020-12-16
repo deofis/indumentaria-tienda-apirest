@@ -178,6 +178,11 @@ public class OperacionServiceImpl implements OperacionService {
         return total + subTotal;
     }
 
+    @Override
+    public List<Operacion> findAll() {
+        return null;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Operacion findById(Long id) {
@@ -189,6 +194,16 @@ public class OperacionServiceImpl implements OperacionService {
     @Override
     public Operacion save(Operacion object) {
         return this.operacionRepository.save(object);
+    }
+
+    @Override
+    public void delete(Operacion object) {
+
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+
     }
 
     private OperacionPagoInfo crearPago(Operacion nuevaOperacion) {
