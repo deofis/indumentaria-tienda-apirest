@@ -9,6 +9,7 @@ import com.deofis.tiendaapirest.productos.repositories.SkuRepository;
 import com.deofis.tiendaapirest.productos.repositories.ValorPropiedadProductoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,9 +61,13 @@ public class SkuServiceImpl implements SkuService {
         Map<String, Object> map = new HashMap<>();
         int cantCombinacionesGeneradas = this.generadorSkus.generarSkusProducto(producto);
 
+        if (cantCombinacionesGeneradas == 0)
+            throw new SkuException("No se generaron combinaciones: Ya existían todas las combinaciones" +
+                    " posibles");
+
         if (cantCombinacionesGeneradas == -1) {
             throw new SkuException("No se generaron combinaciones: El producto seleccionado" +
-                    " no posee propiedades.");
+                    " no posee propiedades");
         }
 
         if (cantCombinacionesGeneradas == -2) {
@@ -78,8 +83,7 @@ public class SkuServiceImpl implements SkuService {
     @Transactional(readOnly = true)
     @Override
     public Sku obtenerSku(Long skuId) {
-        return this.skuRepository.findById(skuId)
-                .orElseThrow(() -> new SkuException("No existe el SKU con id: " + skuId));
+        return this.findById(skuId);
     }
 
     @Transactional
@@ -122,14 +126,17 @@ public class SkuServiceImpl implements SkuService {
                 .orElseThrow(() -> new ProductoException("No existe el valor de propiedad"));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Sku> findAll() {
-        return null;
+        return this.skuRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Sku findById(Long aLong) {
-        return null;
+        return this.skuRepository.findById(aLong)
+                .orElseThrow(() -> new SkuException("No existe el sku con id: " + aLong));
     }
 
     @Transactional
@@ -138,13 +145,23 @@ public class SkuServiceImpl implements SkuService {
         return this.skuRepository.save(object);
     }
 
+    @Transactional
     @Override
     public void delete(Sku object) {
-
+        this.deleteById(object.getId());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long aLong) {
+        if (this.skuRepository.findById(aLong).isEmpty())
+            throw new SkuException("No existe el sku con id: " + aLong);
 
+        try {
+            this.skuRepository.deleteById(aLong);
+        } catch (DataAccessException e) {
+            throw new SkuException("No se pudo eliminar el sku con id: " + aLong + " porque" +
+                    " tiene referencias con otros objetos : " + e.getMessage());
+        }
     }
 }
