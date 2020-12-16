@@ -73,28 +73,25 @@ public class DataLoaderProductos implements CommandLineRunner {
 
         }
 
-        if (this.marcaRepository.findByNombre("Samsung").isEmpty()) {
+        if (this.marcaRepository.findAll().size() == 0) {
+            List<Marca> marcas = new ArrayList<>();
+
             Marca samsung = Marca.builder()
                     .nombre("Samsung")
                     .build();
+            marcas.add(samsung);
 
-            this.marcaRepository.save(samsung);
-        }
-
-        if (this.marcaRepository.findByNombre("Apple").isEmpty()) {
             Marca apple = Marca.builder()
                     .nombre("Apple")
                     .build();
+            marcas.add(apple);
 
-            this.marcaRepository.save(apple);
-        }
-
-        if (this.marcaRepository.findByNombre("Stanley").isEmpty()) {
             Marca stanley = Marca.builder()
                     .nombre("Stanley")
                     .build();
+            marcas.add(stanley);
 
-            this.marcaRepository.save(stanley);
+            this.marcaRepository.saveAll(marcas);
         }
 
         if (this.medioPagoRepository.findByNombre(MedioPagoEnum.EFECTIVO).isEmpty()) {
