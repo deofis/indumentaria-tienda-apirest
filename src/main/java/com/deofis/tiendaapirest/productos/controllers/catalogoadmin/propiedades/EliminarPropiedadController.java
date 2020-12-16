@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.productos.controllers.catalogoadmin.propiedades
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CatalogoAdminService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class EliminarPropiedadController {
 
         try {
             this.catalogoAdminService.eliminarPropiedadProducto(propiedadId);
-        } catch (ProductoException e) {
+        } catch (ProductoException | DataAccessException e) {
             response.put("mensaje", "Error al eliminar la propiedad producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
