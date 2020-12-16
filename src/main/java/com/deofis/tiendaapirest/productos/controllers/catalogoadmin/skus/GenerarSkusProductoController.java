@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
+package com.deofis.tiendaapirest.productos.controllers.catalogoadmin.skus;
 
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.exceptions.SkuException;

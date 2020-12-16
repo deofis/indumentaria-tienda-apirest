@@ -12,8 +12,9 @@ import java.util.Map;
  * subcategorias, skus, propiedades de producto y valores.
  *
  * Es el servicio que une toda la logica de negocio acerca de los productos y lo que deriva de los mismos.
+ *
+ * TODO --> Desasignar PROPIEDADES PRODUCTO de productos y/o subcategorías, en caso de quererlo.
  */
-
 public interface CatalogoAdminService {
 
     /**
@@ -123,6 +124,12 @@ public interface CatalogoAdminService {
      * @return PropiedadProducto creada, guardada y asignada a la subcategoría correspondiente.
      */
     PropiedadProducto crearPropiedadProductoSubcategoria(Long subcategoriaId, PropiedadProducto propiedad);
+
+    /**
+     * Elimina, si no tiene referencias con otros objetos, una propiedad producto existente (desasociada).
+     * @param propiedadId Long id de la propiedad a eliminar.
+     */
+    void eliminarPropiedadProducto(Long propiedadId);
 
     /**
      * Crea un nuevo {@link ValorPropiedadProducto} que pertenecerá a una {@link PropiedadProducto} requerida.

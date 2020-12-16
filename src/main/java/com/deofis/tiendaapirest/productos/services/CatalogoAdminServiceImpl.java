@@ -190,6 +190,12 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
 
     @Transactional
     @Override
+    public void eliminarPropiedadProducto(Long propiedadId) {
+        this.propiedadProductoService.eliminarPropiedadProducto(propiedadId);
+    }
+
+    @Transactional
+    @Override
     public PropiedadProducto crearValorPropiedad(Long propiedadId, ValorPropiedadProducto valor) {
         return this.propiedadProductoService.crearValorPropiedad(propiedadId, valor);
     }

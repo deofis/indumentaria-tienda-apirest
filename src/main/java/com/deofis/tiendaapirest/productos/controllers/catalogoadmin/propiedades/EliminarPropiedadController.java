@@ -1,4 +1,4 @@
-package com.deofis.tiendaapirest.productos.controllers.catalogoadmin;
+package com.deofis.tiendaapirest.productos.controllers.catalogoadmin.propiedades;
 
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.services.CatalogoAdminService;
@@ -16,33 +16,31 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class EliminarSkuController {
+public class EliminarPropiedadController {
 
     private final CatalogoAdminService catalogoAdminService;
 
     /**
-     * Elimina un Sku (combinación de valores de producto).
-     * URL: ~/api/productos/skus/1
+     * Elimina, si es posible, una propiedad producto des-referenciada del sistema.
+     * URL: ~/api/productos/propiedades/1
      * HttpMethod: DELETE
      * HttpStatus: OK
-     * @param skuId PathVariable Long id del sku a eliminar.
-     * @return ResponseEntity con mensaje de éxito/error al eliminar sku.
+     * @param propiedadId PathVariable Long id de la propiedad a eliminar.
+     * @return ResponseEntity mensaje eliminación/error.
      */
-    @DeleteMapping("/productos/skus/{skuId}")
-    public ResponseEntity<?> eliminarSkuProducto(@PathVariable Long skuId) {
+    @DeleteMapping("/productos/propiedades/{propiedadId}")
+    public ResponseEntity<?> eliminarPropiedadProducto(@PathVariable Long propiedadId) {
         Map<String, Object> response = new HashMap<>();
-        String msg;
 
         try {
-            this.catalogoAdminService.eliminarSku(skuId);
-            msg = "Sku de producto eliminado con éxito";
+            this.catalogoAdminService.eliminarPropiedadProducto(propiedadId);
         } catch (ProductoException e) {
-            response.put("mensaje", "Error al eliminar sku de producto");
+            response.put("mensaje", "Error al eliminar la propiedad producto");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        response.put("mensaje", msg);
+        response.put("mensaje", "Propiedad producto eliminada con éxito");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

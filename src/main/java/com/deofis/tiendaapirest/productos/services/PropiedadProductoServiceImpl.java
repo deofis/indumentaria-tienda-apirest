@@ -8,6 +8,7 @@ import com.deofis.tiendaapirest.productos.repositories.ValorPropiedadProductoRep
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
 
         if (CollectionUtils.isNotEmpty(propiedadProducto.getValores())) valores.addAll(propiedadProducto.getValores());
 
-        return this.propiedadProductoRepository.save(PropiedadProducto.builder()
+        return this.save(PropiedadProducto.builder()
                 .nombre(propiedadProducto.getNombre())
                 .variable(propiedadProducto.isVariable())
                 .valores(valores).build());
@@ -38,14 +39,13 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
     @Transactional(readOnly = true)
     @Override
     public List<PropiedadProducto> obtenerPropiedadesProducto() {
-        return this.propiedadProductoRepository.findAll();
+        return this.findAll();
     }
 
     @Transactional(readOnly = true)
     @Override
     public PropiedadProducto obtenerPropiedadProducto(Long propiedadId) {
-        return this.propiedadProductoRepository.findById(propiedadId)
-                .orElseThrow(() -> new ProductoException("No se encontró la propiedad con id: " + propiedadId));
+        return this.findById(propiedadId);
     }
 
     @Transactional
@@ -55,13 +55,13 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
 
         propiedadActual.setNombre(propiedadProducto.getNombre());
         propiedadActual.setVariable(propiedadProducto.isVariable());
-        return this.propiedadProductoRepository.save(propiedadActual);
+        return this.save(propiedadActual);
     }
 
     @Transactional
     @Override
     public void eliminarPropiedadProducto(Long propiedadId) {
-        this.propiedadProductoRepository.deleteById(propiedadId);
+        this.deleteById(propiedadId);
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
                 .valor(valor.getValor()).build();
 
         propiedad.getValores().add(nuevoValor);
-        return this.propiedadProductoRepository.save(propiedad);
+        return this.save(propiedad);
     }
 
     @Transactional(readOnly = true)
@@ -101,7 +101,7 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
         if (!existeValor) throw new ProductoException("No existe el valor: '".concat(valor.getValor())
                 .concat("' para la propiedad: '".concat(propiedad.getNombre())));
 
-        return this.propiedadProductoRepository.save(propiedad);
+        return this.save(propiedad);
     }
 
     @Transactional
@@ -122,28 +122,42 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
                 .concat(String.valueOf(valorId)).concat("' para la propiedad: '".concat(propiedad.getNombre())));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<PropiedadProducto> findAll() {
-        return null;
+        return this.propiedadProductoRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public PropiedadProducto findById(Long aLong) {
-        return null;
+        return this.propiedadProductoRepository.findById(aLong)
+                .orElseThrow(() -> new ProductoException("No existe la propiedad producto con id: " + aLong));
     }
 
+    @Transactional
     @Override
     public PropiedadProducto save(PropiedadProducto object) {
-        return null;
+        return this.propiedadProductoRepository.save(object);
     }
 
+    @Transactional
     @Override
     public void delete(PropiedadProducto object) {
-
+        this.deleteById(object.getId());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long aLong) {
+        if (this.propiedadProductoRepository.findById(aLong).isEmpty())
+            throw new ProductoException("No existe la propiedad producto con id: " + aLong);
 
+        try {
+            this.propiedadProductoRepository.deleteById(aLong);
+        } catch (DataIntegrityViolationException e) {
+            throw new ProductoException("No se pudo eliminar la propiedad con id ".concat(String.valueOf(aLong)) +
+                    " ya que tiene referencias con otros objetos : " + e.getMessage());
+        }
     }
 }
