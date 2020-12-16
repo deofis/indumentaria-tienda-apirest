@@ -28,6 +28,9 @@ public class ProductoServiceImpl implements ProductoService {
 
         if (CollectionUtils.isNotEmpty(producto.getPropiedades())) propiedades.addAll(producto.getPropiedades());
 
+        if (producto.getDisponibilidadGeneral() < 0)
+            throw new ProductoException("La disponibilidad no puede ser menor a 0");
+
         Producto nuevoProducto = Producto.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())

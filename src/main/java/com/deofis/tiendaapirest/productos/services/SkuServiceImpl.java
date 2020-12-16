@@ -28,6 +28,9 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public Sku crearNuevoSku(Sku sku, Producto producto) {
 
+        if (sku.getDisponibilidad() < 0)
+            throw new SkuException("La disponibilidad no puede ser menor a 0");
+
         Sku nuevoSku = Sku.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
