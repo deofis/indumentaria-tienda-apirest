@@ -259,9 +259,10 @@ public class PerfilServiceImpl implements PerfilService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Perfil> findAll() {
-        return null;
+        return this.perfilRepository.findAll();
     }
 
     @Override

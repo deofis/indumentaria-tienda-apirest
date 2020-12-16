@@ -178,9 +178,10 @@ public class OperacionServiceImpl implements OperacionService {
         return total + subTotal;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Operacion> findAll() {
-        return null;
+        return this.operacionRepository.findAll();
     }
 
     @Transactional(readOnly = true)
