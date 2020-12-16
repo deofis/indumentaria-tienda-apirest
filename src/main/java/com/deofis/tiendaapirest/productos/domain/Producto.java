@@ -30,6 +30,7 @@ public class Producto implements Serializable {
     private String nombre;
 
     @NotNull(message = "La descripción del producto es obligatoria.")
+    @Column(columnDefinition = "LONGTEXT", length = 3000)
     private String descripcion;
 
     @NotNull(message = "El precio del producto es obligatorio.")
