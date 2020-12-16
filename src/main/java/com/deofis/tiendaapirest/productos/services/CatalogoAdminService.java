@@ -53,6 +53,16 @@ public interface CatalogoAdminService {
     void eliminarFotoPpalProducto(Long productoId);
 
     /**
+     * Cancela la creación de un producto en caso de que se desee, provocando su
+     * eliminación completa del sistema.
+     * <br>
+     * NOTA**: SOLO SE PUEDE CANCELAR/ELIMINAR EN CASO DE NO CONTINUAR CON LA CREACIÓN DEL
+     * PRODUCTO, Y EN NINGÚN OTRO LUGAR.
+     * @param productoId Long id del producto a cancelar su creación.
+     */
+    void cancelarCreacionProducto(Long productoId);
+
+    /**
      * Crea un nuevo {@link Sku} de un {@link Producto}.
      * @param productoId Long id del producto al que se requiere crear el Sku.
      * @param sku Sku nuevo.

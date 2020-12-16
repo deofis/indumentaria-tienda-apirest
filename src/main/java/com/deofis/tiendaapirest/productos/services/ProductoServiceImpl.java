@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
 import com.deofis.tiendaapirest.productos.repositories.UnidadMedidaRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,8 +69,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional(readOnly = true)
     public Producto obtenerProducto(Long id) {
-        return this.productoRepository.findById(id)
-                .orElseThrow(() -> new ProductoException("Producto no existente con ID: " + id));
+        return this.findById(id);
     }
 
     @Override
@@ -205,14 +205,17 @@ public class ProductoServiceImpl implements ProductoService {
         return this.productoRepository.findAllBySubcategoria(subcategoria);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Producto> findAll() {
-        return null;
+        return this.productoRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Producto findById(Long aLong) {
-        return null;
+        return this.productoRepository.findById(aLong)
+                .orElseThrow(() -> new ProductoException("No existe el producto con id: " + aLong));
     }
 
     @Transactional
@@ -221,13 +224,23 @@ public class ProductoServiceImpl implements ProductoService {
         return this.productoRepository.save(object);
     }
 
+    @Transactional
     @Override
     public void delete(Producto object) {
-
+        this.deleteById(object.getId());
     }
 
+    @Transactional
     @Override
     public void deleteById(Long aLong) {
+        if (this.productoRepository.findById(aLong).isEmpty())
+            throw new ProductoException("No existe el producto con id: " + aLong);
 
+        try {
+            this.productoRepository.deleteById(aLong);
+        } catch (DataAccessException e) {
+            throw new ProductoException("No se pudo eliminar el producto " + aLong + "ya que posee referencias" +
+                    " con otros objetos del sistema : " + e.getMessage());
+        }
     }
 }

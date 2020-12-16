@@ -84,6 +84,11 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         this.imageService.eliminarImagen(fotoProducto);
     }
 
+    @Override
+    public void cancelarCreacionProducto(Long productoId) {
+        this.productoService.deleteById(productoId);
+    }
+
     @Transactional
     @Override
     public Sku crearSku(Long productoId, Sku sku) {
