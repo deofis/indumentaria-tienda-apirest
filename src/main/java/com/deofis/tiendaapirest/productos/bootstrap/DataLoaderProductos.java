@@ -108,7 +108,8 @@ public class DataLoaderProductos implements CommandLineRunner {
             this.medioPagoRepository.save(paypal);
         }
 
-        // CARGA DE PROPIEDADES Y VALORES (PREVIO A CARGA SUB Y PROD)
+        // CREACIÓN DE PROPIEDADES Y VALORES (PREVIO A CARGA SUB Y PROD)
+        // CELULARES
         PropiedadProducto color = PropiedadProducto.builder()
                 .nombre("Color").variable(true).valores(new ArrayList<>()).build();
         ValorPropiedadProducto negro = ValorPropiedadProducto.builder()
@@ -127,16 +128,149 @@ public class DataLoaderProductos implements CommandLineRunner {
         memoria.getValores().add(gb32);
         memoria.getValores().add(gb64);
 
+        PropiedadProducto ram = PropiedadProducto.builder()
+                .nombre("RAM").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto gb1 = ValorPropiedadProducto.builder().valor("1 GB").build();
+        ValorPropiedadProducto gb2 = ValorPropiedadProducto.builder().valor("2 GB").build();
+        ValorPropiedadProducto gb3 = ValorPropiedadProducto.builder().valor("3 GB").build();
+        ValorPropiedadProducto gb4 = ValorPropiedadProducto.builder().valor("4 GB").build();
+        ram.getValores().add(gb1);
+        ram.getValores().add(gb2);
+        ram.getValores().add(gb3);
+        ram.getValores().add(gb4);
+
+
+        //TARJETAS DE VIDEO
+        PropiedadProducto vram = PropiedadProducto.builder()
+                .nombre("VRAM").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto gb1vram = ValorPropiedadProducto.builder().valor("1 GB").build();
+        ValorPropiedadProducto gb2vram = ValorPropiedadProducto.builder().valor("2 GB").build();
+        ValorPropiedadProducto gb3vram = ValorPropiedadProducto.builder().valor("3 GB").build();
+        ValorPropiedadProducto gb4vram = ValorPropiedadProducto.builder().valor("4 GB").build();
+        ValorPropiedadProducto gb8vram = ValorPropiedadProducto.builder().valor("8 GB").build();
+        vram.getValores().add(gb1vram);
+        vram.getValores().add(gb2vram);
+        vram.getValores().add(gb3vram);
+        vram.getValores().add(gb4vram);
+        vram.getValores().add(gb8vram);
+
+        PropiedadProducto gpuEdicion = PropiedadProducto.builder()
+                .nombre("Edición").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto gpuEstandar = ValorPropiedadProducto.builder().valor("Standar").build();
+        ValorPropiedadProducto gpuOC = ValorPropiedadProducto.builder().valor("OC Edition").build();
+        gpuEdicion.getValores().add(gpuEstandar);
+        gpuEdicion.getValores().add(gpuOC);
+
+
+        // MICROPROCESADORES
+        PropiedadProducto cpuEdicion = PropiedadProducto.builder()
+                .nombre("Edición").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto cpuEstandar = ValorPropiedadProducto.builder().valor("Standar").build();
+        ValorPropiedadProducto cpuOC = ValorPropiedadProducto.builder().valor("OC Edition").build();
+        cpuEdicion.getValores().add(cpuEstandar);
+        cpuEdicion.getValores().add(cpuOC);
+
+
+        // PERFUMES
+        PropiedadProducto volumenPerfume = PropiedadProducto.builder()
+                .nombre("Volúmen").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto mL100 = ValorPropiedadProducto.builder()
+                .valor("100 mL").build();
+        ValorPropiedadProducto mL200 = ValorPropiedadProducto.builder()
+                .valor("200 mL").build();
+        volumenPerfume.getValores().add(mL100);
+        volumenPerfume.getValores().add(mL200);
+
+
+        // MAQUILLAJE
+        // Skus de maquillaje? Oyes lo loco que suena eso?
+
+
+        // ROPA
+        List<PropiedadProducto> propiedadesRemera = new ArrayList<>();
+        PropiedadProducto colorRemera = PropiedadProducto.builder()
+                .nombre("Color de remera").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto remeraNegra = ValorPropiedadProducto.builder().valor("Negra").build();
+        ValorPropiedadProducto remeraRoja = ValorPropiedadProducto.builder().valor("Roja").build();
+        ValorPropiedadProducto remeraVerde = ValorPropiedadProducto.builder().valor("Verde").build();
+        ValorPropiedadProducto remeraGris = ValorPropiedadProducto.builder().valor("Gris").build();
+        colorRemera.getValores().add(remeraNegra);
+        colorRemera.getValores().add(remeraRoja);
+        colorRemera.getValores().add(remeraVerde);
+        colorRemera.getValores().add(remeraGris);
+        propiedadesRemera.add(colorRemera);
+
+        PropiedadProducto tipoRemera = PropiedadProducto.builder()
+                .nombre("Tipo").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto cuelloV = ValorPropiedadProducto.builder().valor("Cuello en V").build();
+        ValorPropiedadProducto cuelloRedondo = ValorPropiedadProducto.builder().valor("Cuello redondo").build();
+        tipoRemera.getValores().add(cuelloV);
+        tipoRemera.getValores().add(cuelloRedondo);
+        propiedadesRemera.add(tipoRemera);
+
+        PropiedadProducto disenoTelaRemera = PropiedadProducto.builder()
+                .nombre("Diseño de tela").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto remLiso = ValorPropiedadProducto.builder().valor("Liso").build();
+        ValorPropiedadProducto remEstampado = ValorPropiedadProducto.builder().valor("Estampado").build();
+        disenoTelaRemera.getValores().add(remLiso);
+        disenoTelaRemera.getValores().add(remEstampado);
+        propiedadesRemera.add(disenoTelaRemera);
+
+        PropiedadProducto tipoMangaRemera = PropiedadProducto.builder()
+                .nombre("Tipo de manga").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto remCorta = ValorPropiedadProducto.builder().valor("Manga corta").build();
+        ValorPropiedadProducto remLarga = ValorPropiedadProducto.builder().valor("Manga larga").build();
+        tipoMangaRemera.getValores().add(remCorta);
+        tipoMangaRemera.getValores().add(remLarga);
+        propiedadesRemera.add(tipoMangaRemera);
+
+
+        // TERMOS
+        PropiedadProducto colorTermo = PropiedadProducto.builder()
+                .nombre("Color de termo").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto termoVerde = ValorPropiedadProducto.builder().valor("Verde").build();
+        ValorPropiedadProducto termoGris = ValorPropiedadProducto.builder().valor("Gris").build();
+        colorTermo.getValores().add(termoVerde);
+        colorTermo.getValores().add(termoGris);
+
+
+        // SISTEMAS OPERATIVOS
+        PropiedadProducto arquitecturaSO = PropiedadProducto.builder()
+                .nombre("Arquitectura").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto bits32 = ValorPropiedadProducto.builder().valor("32 bits").build();
+        ValorPropiedadProducto bits64 = ValorPropiedadProducto.builder().valor("64 bits").build();
+        arquitecturaSO.getValores().add(bits32);
+        arquitecturaSO.getValores().add(bits64);
+
+        // TELEVISORES SMART
+        PropiedadProducto pulgadas = PropiedadProducto.builder()
+                .nombre("Pulgadas").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto pulg32 = ValorPropiedadProducto.builder().valor("32\"").build();
+        ValorPropiedadProducto pulg42 = ValorPropiedadProducto.builder().valor("42\"").build();
+        ValorPropiedadProducto pulg50 = ValorPropiedadProducto.builder().valor("50\"").build();
+        pulgadas.getValores().add(pulg32);
+        pulgadas.getValores().add(pulg42);
+        pulgadas.getValores().add(pulg50);
+
+        PropiedadProducto resolucion = PropiedadProducto.builder()
+                .nombre("Resolución").variable(true).valores(new ArrayList<>()).build();
+        ValorPropiedadProducto res1080 = ValorPropiedadProducto.builder().valor("1080P").build();
+        ValorPropiedadProducto res4K = ValorPropiedadProducto.builder().valor("4K").build();
+        ValorPropiedadProducto res8K = ValorPropiedadProducto.builder().valor("8K").build();
+        resolucion.getValores().add(res1080);
+        resolucion.getValores().add(res4K);
+        resolucion.getValores().add(res8K);
+
         // CARGA DE CATEGORIAS Y SUBCATEGORIAS
         List<Categoria> categorias = new ArrayList<>();
 
         if (this.categoriaRepository.findByNombre("Tecnología").isEmpty()) {
             Subcategoria celulares;
 
-
             celulares = Subcategoria.builder().nombre("Celulares").propiedades(new ArrayList<>()).codigo("CEL").build();
             celulares.getPropiedades().add(memoria);
             celulares.getPropiedades().add(color);
+            celulares.getPropiedades().add(ram);
 
             Categoria tecnologia = Categoria.builder()
                     .nombre("Tecnología")
@@ -154,11 +288,14 @@ public class DataLoaderProductos implements CommandLineRunner {
                     .codigo("WOM")
                     .propiedades(new ArrayList<>())
                     .build();
+            mujeres.getPropiedades().addAll(propiedadesRemera);
+
             Subcategoria hombres = Subcategoria.builder()
                     .nombre("Hombres")
                     .codigo("MAN")
                     .propiedades(new ArrayList<>())
                     .build();
+            hombres.getPropiedades().addAll(propiedadesRemera);
 
             Categoria ropa = Categoria.builder()
                     .nombre("Ropa y Moda")
@@ -174,7 +311,9 @@ public class DataLoaderProductos implements CommandLineRunner {
             Subcategoria acero = Subcategoria.builder()
                     .nombre("Acero")
                     .codigo("ACE")
+                    .propiedades(new ArrayList<>())
                     .build();
+            acero.getPropiedades().add(colorTermo);
 
             Categoria termos = Categoria.builder()
                     .nombre("Termos")
@@ -189,11 +328,14 @@ public class DataLoaderProductos implements CommandLineRunner {
             Subcategoria perfumes = Subcategoria.builder()
                     .nombre("Perfumes")
                     .codigo("PER")
+                    .propiedades(new ArrayList<>())
                     .build();
+            perfumes.getPropiedades().add(volumenPerfume);
 
             Subcategoria maquillaje = Subcategoria.builder()
                     .nombre("maquillaje")
                     .codigo("MAQ")
+                    .propiedades(new ArrayList<>())
                     .build();
 
             Categoria cuidadoPersonal = Categoria.builder()
@@ -210,7 +352,9 @@ public class DataLoaderProductos implements CommandLineRunner {
             Subcategoria SO = Subcategoria.builder()
                     .nombre("Sistemas Operativos")
                     .codigo("SO")
+                    .propiedades(new ArrayList<>())
                     .build();
+            SO.getPropiedades().add(arquitecturaSO);
 
             Categoria servicios = Categoria.builder()
                     .nombre("Servicios y Software")
@@ -225,12 +369,17 @@ public class DataLoaderProductos implements CommandLineRunner {
             Subcategoria cpu = Subcategoria.builder()
                     .nombre("Microprocesadores")
                     .codigo("CPU")
+                    .propiedades(new ArrayList<>())
                     .build();
+            cpu.getPropiedades().add(cpuEdicion);
 
             Subcategoria gpu = Subcategoria.builder()
                     .nombre("Tarjetas de video")
                     .codigo("GPU")
+                    .propiedades(new ArrayList<>())
                     .build();
+            gpu.getPropiedades().add(vram);
+            gpu.getPropiedades().add(gpuEdicion);
 
             Categoria componentesPC = Categoria.builder()
                     .nombre("Componentes de PC")
@@ -273,7 +422,10 @@ public class DataLoaderProductos implements CommandLineRunner {
             Subcategoria smart = Subcategoria.builder()
                     .nombre("SMART TV's")
                     .codigo("SMART")
+                    .propiedades(new ArrayList<>())
                     .build();
+            smart.getPropiedades().add(pulgadas);
+            smart.getPropiedades().add(resolucion);
 
             Categoria tvs = Categoria.builder()
                     .nombre("Televisores")
