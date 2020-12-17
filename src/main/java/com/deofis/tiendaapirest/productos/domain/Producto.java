@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +30,8 @@ public class Producto implements Serializable {
     @NotNull(message = "El nombre del producto es obligatorio.")
     private String nombre;
 
-    @NotNull(message = "La descripción del producto es obligatoria.")
-    @Column(columnDefinition = "LONGTEXT", length = 3000)
+    @Nullable
+    @Lob
     private String descripcion;
 
     @NotNull(message = "El precio del producto es obligatorio.")

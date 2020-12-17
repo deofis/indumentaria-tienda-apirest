@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.productos.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.Nullable;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,8 @@ public class Sku implements Serializable {
 
     private String nombre;
 
+    @Nullable
+    @Lob
     private String descripcion;
 
     @NotNull(message = "El precio del Sku es obligatorio")
