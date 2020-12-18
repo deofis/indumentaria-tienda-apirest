@@ -193,6 +193,11 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
         return propiedadNueva;
     }
 
+    @Override
+    public PropiedadProducto actualizarPropiedadProducto(Long propiedadId, PropiedadProducto propiedadActualizada) {
+        return this.propiedadProductoService.actualizarPropiedadProducto(propiedadId, propiedadActualizada);
+    }
+
     @Transactional
     @Override
     public void eliminarPropiedadProducto(Long propiedadId) {
@@ -203,6 +208,16 @@ public class CatalogoAdminServiceImpl implements CatalogoAdminService {
     @Override
     public PropiedadProducto crearValorPropiedad(Long propiedadId, ValorPropiedadProducto valor) {
         return this.propiedadProductoService.crearValorPropiedad(propiedadId, valor);
+    }
+
+    @Override
+    public PropiedadProducto actualizarValorPropiedad(Long propiedadId, Long valorId, ValorPropiedadProducto valor) {
+        return this.propiedadProductoService.actualizarValorPropiedad(propiedadId, valorId, valor);
+    }
+
+    @Override
+    public void eliminarValorPropiedad(Long propiedadId, Long valorId) {
+        this.propiedadProductoService.eliminarValorPropiedad(propiedadId, valorId);
     }
 
     @Transactional

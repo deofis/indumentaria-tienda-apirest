@@ -136,6 +136,14 @@ public interface CatalogoAdminService {
     PropiedadProducto crearPropiedadProductoSubcategoria(Long subcategoriaId, PropiedadProducto propiedad);
 
     /**
+     * Modifica los datos de una {@link PropiedadProducto} y devuelve el objeto actualizado.
+     * @param propiedadId Long id de la propiedad a modifcar sus datos.
+     * @param propiedadActualizada propiedad con los datos actualizados.
+     * @return {@link PropiedadProducto} actualizada y guardada.
+     */
+    PropiedadProducto actualizarPropiedadProducto(Long propiedadId, PropiedadProducto propiedadActualizada);
+
+    /**
      * Elimina, si no tiene referencias con otros objetos, una propiedad producto existente (desasociada).
      * @param propiedadId Long id de la propiedad a eliminar.
      */
@@ -148,6 +156,22 @@ public interface CatalogoAdminService {
      * @return ValorPropiedadProducto creado, guardado y asignado a la propiedad correspondiente.
      */
     PropiedadProducto crearValorPropiedad(Long propiedadId, ValorPropiedadProducto valor);
+
+    /**
+     * Actualiza un valor de propiedad existente de una propiedad.
+     * @param propiedadId Long id de la propiedad.
+     * @param valorId Long id del valor a modificar datos.
+     * @param valor ValorPropiedadProducto con los datos actualizados.
+     * @return {@link ValorPropiedadProducto} actualizado y guardado en la base de datos.
+     */
+    PropiedadProducto actualizarValorPropiedad(Long propiedadId, Long valorId, ValorPropiedadProducto valor);
+
+    /**
+     * Elimina un valor de propiedad en caso de que no tenga referencia con otros objetos.
+     * @param propiedadId Long id de la propiedad a la que pertenece el valor.
+     * @param valorId Long id del valor a eliminar.
+     */
+    void eliminarValorPropiedad(Long propiedadId, Long valorId);
 
     /**
      * Genera un listado de {@link Sku} a partir de un {@link Producto} requerido. Por cada propiedad

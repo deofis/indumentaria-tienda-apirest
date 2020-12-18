@@ -52,9 +52,19 @@ public class PropiedadProductoServiceImpl implements PropiedadProductoService {
     @Override
     public PropiedadProducto actualizarPropiedadProducto(Long propiedadId, PropiedadProducto propiedadProducto) {
         PropiedadProducto propiedadActual = this.obtenerPropiedadProducto(propiedadId);
+        List<ValorPropiedadProducto> valores = propiedadActual.getValores();
+
+        // Verificar que no se agreguen/quitar valores.
+        if (propiedadProducto.getValores().size() != valores.size())
+            throw new ProductoException("No se pueden eliminar/quitar valores aquí. Usar endpoint" +
+                    " correspondiente");
 
         propiedadActual.setNombre(propiedadProducto.getNombre());
-        propiedadActual.setVariable(propiedadProducto.isVariable());
+
+        if (propiedadProducto.getValores() != null) {
+            valores = propiedadProducto.getValores();
+        }
+        propiedadActual.setValores(valores);
         return this.save(propiedadActual);
     }
 
