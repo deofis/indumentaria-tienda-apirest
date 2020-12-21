@@ -92,6 +92,8 @@ public class OperacionServiceImpl implements OperacionService {
         boolean hayDisponibilidad = true;
         for (DetalleOperacion item: operacion.getItems()) {
             Sku sku = this.skuService.obtenerSku(item.getSku().getId());
+            // Seteamos el SKU completo al item (lo que esta guardado en la BD).
+            item.setSku(sku);
 
             if (sku.getDisponibilidad() - item.getCantidad() < 0) {
                 hayDisponibilidad = false;

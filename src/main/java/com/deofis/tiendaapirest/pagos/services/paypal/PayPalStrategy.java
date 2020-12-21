@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.pagos.services.paypal;
 
+import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.pagos.PaymentException;
 import com.deofis.tiendaapirest.pagos.dto.AmountPayload;
@@ -7,6 +8,7 @@ import com.deofis.tiendaapirest.pagos.dto.PayerPayload;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfoFactory;
 import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategy;
+import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
@@ -38,39 +40,8 @@ public class PayPalStrategy implements PagoStrategy {
 
     @Override
     public OperacionPagoInfo crearPago(Operacion operacion) {
-        // Creamos las URIs de redirección
-        String targetCancelUrl = this.clientUrl.concat("/paypal/redirect/cancel");
-        String CANCEL_REDIRECT_URL = UriComponentsBuilder.fromUriString(targetCancelUrl)
-                .queryParam("nroOperacion", operacion.getNroOperacion()).build().toString();
-
-        String targetApprovedUri = this.clientUrl.concat("/paypal/redirect/approved");
-        String APPROVED_REDIRECT_URL = UriComponentsBuilder.fromUriString(targetApprovedUri)
-                .queryParam("nroOperacion", operacion.getNroOperacion()).build().toString();
-
-        OrderRequest orderRequest = new OrderRequest();
-
-        ApplicationContext context = new ApplicationContext()
-                .landingPage("BILLING")
-                .cancelUrl(CANCEL_REDIRECT_URL).userAction("CANCEL")
-                .returnUrl(APPROVED_REDIRECT_URL).userAction("CONTINUE");
-
-        orderRequest.checkoutPaymentIntent(INTENT);
-        orderRequest.applicationContext(context);
-
-        List<PurchaseUnitRequest> purchaseUnitRequests = new ArrayList<>();
-
-        PurchaseUnitRequest unitRequest = new PurchaseUnitRequest();
-
-        AmountWithBreakdown amount = new AmountWithBreakdown();
-        String total = String.valueOf(operacion.getTotal());
-        amount.currencyCode(CURRENCY);
-        amount.value(total);
-
-        unitRequest.amountWithBreakdown(amount);
-        purchaseUnitRequests.add(unitRequest);
-        orderRequest.purchaseUnits(purchaseUnitRequests);
-        OrdersCreateRequest request = new OrdersCreateRequest().requestBody(orderRequest);
-
+        // Creamos la request con el body de acuerdo a la operación.
+        OrdersCreateRequest request = new OrdersCreateRequest().requestBody(this.buildOrderRequestBody(operacion));
         // Atributos para nuestra clase OperacionPagoInfo
         Map<String, Object> atributosPago = new HashMap<>();
 
@@ -151,5 +122,72 @@ public class PayPalStrategy implements PagoStrategy {
         log.info("Pago completado con éxito");
         return OperacionPagoInfoFactory
                 .getOperacionPagoInfo(String.valueOf(operacion.getMedioPago().getNombre()), atributosPago);
+    }
+
+    /**
+     * Método que se encarga de armar el body de la order, recibiendo la operación como parámetro para completar
+     * los datos de la PayPal order.
+     * @param operacion Operacion a crear pago.
+     * @return OrderRequest creado.
+     */
+    private OrderRequest buildOrderRequestBody(Operacion operacion) {
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.checkoutPaymentIntent(INTENT);
+
+        // Creamos las URIs de redirección
+        String targetCancelUrl = this.clientUrl.concat("/paypal/redirect/cancel");
+        String CANCEL_REDIRECT_URL = UriComponentsBuilder.fromUriString(targetCancelUrl)
+                .queryParam("nroOperacion", operacion.getNroOperacion()).build().toString();
+
+        String targetApprovedUri = this.clientUrl.concat("/paypal/redirect/approved");
+        String APPROVED_REDIRECT_URL = UriComponentsBuilder.fromUriString(targetApprovedUri)
+                .queryParam("nroOperacion", operacion.getNroOperacion()).build().toString();
+
+        ApplicationContext context = new ApplicationContext()
+                .landingPage("BILLING")
+                .cancelUrl(CANCEL_REDIRECT_URL).userAction("CANCEL")
+                .returnUrl(APPROVED_REDIRECT_URL).userAction("CONTINUE");
+
+        orderRequest.applicationContext(context);
+
+        List<PurchaseUnitRequest> purchaseUnitRequests = new ArrayList<>();
+
+        PurchaseUnitRequest unitRequest = new PurchaseUnitRequest();
+
+        AmountWithBreakdown amount = new AmountWithBreakdown()
+                .currencyCode(CURRENCY)
+                .value(String.valueOf(operacion.getTotal()))
+                .amountBreakdown(new AmountBreakdown()
+                        .itemTotal(new Money().currencyCode(CURRENCY).value(String.valueOf(operacion.getTotal()))));
+
+        List<Item> items = this.agregarItems(operacion);
+
+        unitRequest.amountWithBreakdown(amount).items(items);
+
+        purchaseUnitRequests.add(unitRequest);
+        orderRequest.purchaseUnits(purchaseUnitRequests);
+
+        return orderRequest;
+    }
+
+    private List<Item> agregarItems(Operacion operacion) {
+        List<Item> items = new ArrayList<>();
+
+        for (DetalleOperacion item: operacion.getItems()) {
+            Sku sku = item.getSku();
+            String descripcion = sku.getDescripcion();
+
+            if (descripcion.length() > 100)
+                descripcion = descripcion.substring(0, 100);
+
+            items.add(new Item()
+                    .name(sku.getNombre())
+                    .description(descripcion)
+                    .unitAmount(new Money().currencyCode(CURRENCY).value(String.valueOf(item.getPrecioVenta())))
+                    .quantity(String.valueOf(item.getCantidad()))
+                    .category("PHYSICAL_GOODS"));
+        }
+
+        return items;
     }
 }
