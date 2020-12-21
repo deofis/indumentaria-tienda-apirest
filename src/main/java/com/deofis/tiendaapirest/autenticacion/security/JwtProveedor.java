@@ -32,12 +32,21 @@ public class JwtProveedor {
     public void init() {
         try {
             keyStore = KeyStore.getInstance("JKS");
-            InputStream resourceAsStream = getClass().getResourceAsStream("/springblog.jks");
-            keyStore.load(resourceAsStream, "secret".toCharArray());
+            InputStream resourceAsStream = getClass().getResourceAsStream("/deofis.jks");
+            keyStore.load(resourceAsStream, "deofis1224".toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
-            throw new TokenException("Excepción al cargar el keystore");
+            throw new TokenException("Excepción al cargar el keystore : " + e.getMessage());
         }
     }
+
+    /**
+     * Genera un JWT para el usuario que se está autenticando en el sistema (iniciando
+     * sesión), seteando distintos atributos para el mismo: subject, authorities,
+     * key de firmado y fecha de expiración.
+     * @param authentication Authentication: objeto que contiene el usuario que se está
+     *                       autenticando en el sistema.
+     * @return String con el token generado.
+     */
     public String generateToken(Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
@@ -49,8 +58,13 @@ public class JwtProveedor {
                 .compact();
     }
 
-    // Se necesita generar el token sólo con el nombre de usuario (email) en el caso de que
-    // en lugar de iniciar sesión, se esté extendiendo la sesión mediante el refresh token.
+    /**
+     * Genera el token (JWT) sólo con el nombre de usuario (email) en el caso de que,
+     * en lugar de iniciar sesión, se necesite extender la sesión mediante el
+     * refresh token.
+     * @param userEmail String email del usuario a generar token.
+     * @return String del JWT generado.
+     */
     public String generateTokenWithUsername(String userEmail) {
         return Jwts.builder()
                 .setSubject(userEmail)
@@ -59,11 +73,21 @@ public class JwtProveedor {
                 .compact();
     }
 
+    /**
+     * Valida que el token sea válido, a través de la PUBLIC KEY del certificado.
+     * @param jwt String con el token a validar.
+     * @return boolean si fue o no validado.
+     */
     public boolean validateToken(String jwt) {
         parser().setSigningKey(getPublicKey()).parseClaimsJws(jwt);
         return true;
     }
 
+    /**
+     * Obtiene el nombre de usuario (email) a partir de un token requerido.
+     * @param jwt String JWT a obtener su usuario.
+     * @return String email del usuario.
+     */
     public String getUsernameFromJwt(String jwt) {
         Claims claims = parser()
                 .setSigningKey(getPublicKey())
@@ -73,24 +97,37 @@ public class JwtProveedor {
         return claims.getSubject();
     }
 
+    /**
+     * Obtiene la PRIVATE KEY a partir del archivo certificado guardado en key store.
+     * @return PrivateKey.
+     */
     private PrivateKey getPrivateKey() {
 
         try {
-            return (PrivateKey) keyStore.getKey("springblog", "secret".toCharArray());
+            return (PrivateKey) keyStore.getKey("deofis", "deofis1224".toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
-            throw new TokenException("Error al obtener private key del keystore");
+            throw new TokenException("Error al obtener private key del keystore : " + e.getMessage());
         }
     }
 
+    /**
+     * Obtiene la PUBLIC KEY a partir del archivo certificado guardado en key store.
+     * @return PublicKey.
+     */
     private PublicKey getPublicKey() {
 
         try {
-            return keyStore.getCertificate("springblog").getPublicKey();
+            return keyStore.getCertificate("deofis").getPublicKey();
         } catch (KeyStoreException e) {
             throw new TokenException("Excepción al obtener public key del keystore");
         }
     }
 
+    /**
+     * Obtiene el tiempo de expiración del JWT en milisegundos. Este valor se establece
+     * en las propiedades de la aplicación.
+     * @return Long tiempo de expiración en milisegundos.
+     */
     public Long getExpirationInMillis() {
         return this.expirationInMillis;
     }

@@ -56,7 +56,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                     "Si no activó su cuenta, porfavor revise su bandeja de entradas.");
         }
 
-        if (signupRequest.getPassword().length() <= 8) {
+        if (signupRequest.getPassword().length() < 8) {
             throw new PasswordException("La contraseña debe tener al menos 8 caracteres.");
         }
 
