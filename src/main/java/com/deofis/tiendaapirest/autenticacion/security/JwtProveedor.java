@@ -28,12 +28,14 @@ public class JwtProveedor {
 
     private Long expirationInMillis;
 
+    private String secretKey;
+
     @PostConstruct
     public void init() {
         try {
             keyStore = KeyStore.getInstance("JKS");
             InputStream resourceAsStream = getClass().getResourceAsStream("/deofis.jks");
-            keyStore.load(resourceAsStream, "deofis1224".toCharArray());
+            keyStore.load(resourceAsStream, this.secretKey.toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
             throw new TokenException("Excepción al cargar el keystore : " + e.getMessage());
         }
@@ -104,7 +106,7 @@ public class JwtProveedor {
     private PrivateKey getPrivateKey() {
 
         try {
-            return (PrivateKey) keyStore.getKey("deofis", "deofis1224".toCharArray());
+            return (PrivateKey) keyStore.getKey("deofis", this.secretKey.toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new TokenException("Error al obtener private key del keystore : " + e.getMessage());
         }
@@ -130,5 +132,13 @@ public class JwtProveedor {
      */
     public Long getExpirationInMillis() {
         return this.expirationInMillis;
+    }
+
+    /**
+     * Obtiene la SECRET KEY para el certificado al firmar JWT.
+     * @return String secret key.
+     */
+    public String getSecretKey() {
+        return this.secretKey;
     }
 }

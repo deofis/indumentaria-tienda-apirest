@@ -50,6 +50,9 @@ paypal:
   clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
   clientSecret: EFoADORBnsYEkgM6YNfTU_pfHu0D8Npi2W8ZFASWysDKWnicY0OQX2sYCyCQs8H7RU9w5bnleMcUP5JP
 
+jwt:
+  secretKey: ENC(TKNxJDVZ/6OhE46W6xSXrZskdhO7B8bT)
+
 jasypt:
   encryptor:
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
