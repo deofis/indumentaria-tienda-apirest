@@ -240,7 +240,7 @@ public class CategoriasController {
         Imagen fotoCategoria;
 
         try {
-            fotoCategoria = this.subcategoriaService.subirFotoSubcategoria(categoriaId, foto);
+            fotoCategoria = this.categoriaService.subirFotoCategoria(categoriaId, foto);
         } catch (CategoriaException | FileException | AmazonS3Exception e) {
             response.put("mensaje", "Error al subir foto de categoría");
             response.put("error", e.getMessage());
