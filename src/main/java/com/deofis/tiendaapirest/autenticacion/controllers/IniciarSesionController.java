@@ -58,7 +58,7 @@ public class IniciarSesionController {
 
         try {
             authResponse = this.autenticacionService.iniciarSesion(iniciarSesionRequest);
-        } catch (TokenException e) {
+        } catch (TokenException | AutenticacionException e) {
             response.put("mensaje", "Error al iniciar sesión");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

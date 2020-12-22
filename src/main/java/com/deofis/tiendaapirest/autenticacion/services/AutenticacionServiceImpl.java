@@ -104,17 +104,19 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     @Transactional
     @Override
     public AuthResponse iniciarSesion(IniciarSesionRequest iniciarSesionRequest) {
-        Authentication authenticate = this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(iniciarSesionRequest.getEmail(),
-                        iniciarSesionRequest.getPassword()));
-
         Usuario usuario = this.usuarioRepository.findByEmail(iniciarSesionRequest.getEmail())
                 .orElseThrow(() -> new AutenticacionException("Usuario no encontrado"));
 
         if (usuario.getAuthProvider() != AuthProvider.local) {
-            throw new AutenticacionException("El email que estas intentando usar está registrado como una cuenta de: " + usuario.getAuthProvider() +
-                    ".Porfavor, inicie sesión con la cuenta que se registró inicialmente.");
+            throw new AutenticacionException("El email que estas intentando usar está registrado como una cuenta de: "
+                    + usuario.getAuthProvider().toString().toUpperCase() +
+                    ". Porfavor, inicie sesión con la cuenta que se registró inicialmente : " +
+                    usuario.getAuthProvider().toString().toUpperCase());
         }
+
+        Authentication authenticate = this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(iniciarSesionRequest.getEmail(),
+                        iniciarSesionRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String jwtToken = this.jwtProveedor.generateToken(authenticate);
