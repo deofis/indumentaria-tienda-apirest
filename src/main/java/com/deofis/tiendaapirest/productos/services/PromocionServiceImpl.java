@@ -33,18 +33,29 @@ public class PromocionServiceImpl implements PromocionService {
         // con datos que ya NO sirven.
         if (promoActual != null) this.promocionRepository.deleteById(promoActual.getId());
 
+        // Si no se manda porcentaje y el producto tiene SKUS adicionales, se tira excepción al cargar promoción.
+        if (promocion.getPorcentaje() == null && !producto.isVendibleSinPropiedades())
+            throw new PromocionException("No se puede cargar promoción: No se puede asignar un precio fijo al producto" +
+                    " porque posee skus adicionales");
+
         if (promocion.getPorcentaje() != null)
             promocion.setPrecioOferta(this.calcularPrecioOferta(promocion.getPorcentaje(),
                     producto.getPrecio()));
-        if (promocion.getPrecioOferta() != null)
-            promocion.setPorcentaje(this.calcularPorcentajeOferta(promocion.getPrecioOferta(),
-                    producto.getPrecio()));
+        else if (promocion.getPrecioOferta() != null)
+            promocion.setPorcentaje(this.calcularPorcentajeOferta(promocion.getPrecioOferta(), producto.getPrecio()));
 
         Promocion nuevaPromocion = Promocion.builder()
                 .fechaDesde(promocion.getFechaDesde())
                 .fechaHasta(promocion.getFechaHasta())
                 .precioOferta(promocion.getPrecioOferta())
                 .porcentaje(promocion.getPorcentaje()).build();
+
+        for (Sku sku: producto.getSkus()) {
+            if (sku.getPromocion() != null)
+                this.promocionRepository.deleteById(sku.getPromocion().getId());
+
+            sku.setPromocion(nuevaPromocion);
+        }
 
         producto.setPromocion(nuevaPromocion);
         producto.getDefaultSku().setPromocion(nuevaPromocion);
