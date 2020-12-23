@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.operaciones.services.OperacionService;
 import com.deofis.tiendaapirest.pagos.factory.OperacionPagoInfo;
 import com.deofis.tiendaapirest.perfiles.exceptions.PerfilesException;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
+import com.deofis.tiendaapirest.productos.exceptions.SkuException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class RegistrarOperacionController {
 
         try {
             pagoInfo = this.operacionService.registrarNuevaOperacion(operacion);
-        } catch (OperacionException | ProductoException | PerfilesException e) {
+        } catch (OperacionException | ProductoException | PerfilesException | SkuException e) {
             response.put("mensaje", "Error al registrar la nueva compra");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

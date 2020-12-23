@@ -90,6 +90,7 @@ public class OperacionServiceImpl implements OperacionService {
                 .build();
 
         boolean hayDisponibilidad = true;
+        boolean hayItemSinCantidad = false;
         for (DetalleOperacion item: operacion.getItems()) {
             Sku sku = this.skuService.obtenerSku(item.getSku().getId());
             // Seteamos el SKU completo al item (lo que esta guardado en la BD).
@@ -97,6 +98,11 @@ public class OperacionServiceImpl implements OperacionService {
 
             if (sku.getDisponibilidad() - item.getCantidad() < 0) {
                 hayDisponibilidad = false;
+                break;
+            }
+
+            if (item.getCantidad() <= 0) {
+                hayItemSinCantidad = true;
                 break;
             }
 
@@ -120,6 +126,10 @@ public class OperacionServiceImpl implements OperacionService {
         // Si no hay disponibilidad de un producto, se cancela la operación y tira excepción informando.
         if (!hayDisponibilidad) throw new OperacionException("Error al completar la compra: " +
                 "La cantidad de productos vendidos no puede ser menor a la disponibilidad actual");
+
+        if (hayItemSinCantidad)
+            throw new OperacionException("Error al completar la compra: La cantidad de productos no puede ser" +
+                    " menor o igual que 0");
 
         this.save(nuevaOperacion);
 

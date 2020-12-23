@@ -63,6 +63,9 @@ public class CheckoutServiceImpl implements CheckoutService {
         // Seteamos la fecha de pago al momento actual
         operacion.getPago().setFechaPagado(new Date());
 
+        // Enviamos el EVENTO para transicionar de ESTADO la operación
+        this.stateMachineService.enviarEvento(nroOperacion, sm, EventoOperacion.COMPLETE_PAYMENT);
+
         // Por último, guardamos la operación actualizada y devolvemos el objeto con la info del pago (DTO).
         this.operacionService.save(operacion);
         return pagoInfo;
