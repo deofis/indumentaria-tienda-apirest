@@ -69,6 +69,7 @@ public class VentasController {
      * @param estado RequestParam  String nombre del estado solicitado.
      * @return ResponseEntity con la lista de operaciones en el estado requerido.
      */
+    @Secured("ROLE_ADMIN")
     @GetMapping("/ventas/estados")
     public ResponseEntity<?> ventasEstado(@RequestParam(name = "estado") String estado) {
         Map<String, Object> response = new HashMap<>();
@@ -120,6 +121,7 @@ public class VentasController {
      * @param fechaHasta RequestParam Date fecha hasta.
      * @return ResponseEntity con el listado de operaciones que cumplen con las fechas requeridas.
      */
+    @Secured("ROLE_ADMIN")
     @GetMapping("/ventas/fechas")
     public ResponseEntity<?> ventasEnFecha(@RequestParam(name = "fechaDesde") Date fechaDesde,
                                            @RequestParam(name = "fechaHasta") Date fechaHasta) {
