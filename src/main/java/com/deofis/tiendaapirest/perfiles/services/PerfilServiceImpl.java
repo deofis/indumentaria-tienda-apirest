@@ -246,6 +246,9 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     private Usuario getUsuarioActual() {
+        if (!estaLogueado())
+            throw new AutenticacionException("Usuario no logueado en el sistema");
+
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return this.usuarioRepository.findByEmail(principal.getUsername())

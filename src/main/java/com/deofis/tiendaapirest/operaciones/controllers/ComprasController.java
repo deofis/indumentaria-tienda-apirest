@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.operaciones.controllers;
 
+import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
@@ -38,7 +39,7 @@ public class ComprasController {
 
         try {
             compras = this.compraService.historialCompras();
-        } catch (PerfilesException | ClienteException | OperacionException e) {
+        } catch (PerfilesException | AutenticacionException | ClienteException | OperacionException e) {
             response.put("mensaje", "Error al obtener el historial de compras del perfil");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,14 +62,14 @@ public class ComprasController {
      * @param nroOperacion @PathVariable Long numero de operación.
      * @return ResponseEntity Operacion seleccionada.
      */
-    @GetMapping("/perfil/compras/ver/{nroOperacion}")
+    @GetMapping("/perfil/compras/{nroOperacion}")
     public ResponseEntity<?> verCompra(@PathVariable Long nroOperacion) {
         Map<String, Object> response = new HashMap<>();
         Operacion compra;
 
         try {
             compra = this.compraService.verCompra(nroOperacion);
-        } catch (PerfilesException | ClienteException | OperacionException e) {
+        } catch (PerfilesException | AutenticacionException | ClienteException | OperacionException e) {
             response.put("mensaje", "Error al obtener la compra");
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
