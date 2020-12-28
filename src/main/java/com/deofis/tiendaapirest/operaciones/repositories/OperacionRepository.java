@@ -1,8 +1,10 @@
 package com.deofis.tiendaapirest.operaciones.repositories;
 
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +18,14 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     List<Operacion> findAllByClienteOrderByFechaOperacionAsc(Cliente cliente);
 
     Optional<Operacion> findByNroOperacionAndCliente(Long nroOperacion, Cliente cliente);
+
+    List<Operacion> findAllByEstadoAndCliente(EstadoOperacion estado, Cliente cliente);
+
+    @Query(value = "SELECT * FROM operaciones op WHERE cliente_id = ?1 AND YEAR(fecha_operacion) = ?2",
+            nativeQuery = true)
+    List<Operacion> operacionesByYear(Long clienteId, Integer year);
+
+    @Query(value = "SELECT * FROM operaciones op WHERE cliente_id = ?1 AND YEAR(fecha_operacion) = ?2 AND MONTH(fecha_operacion) = ?3",
+            nativeQuery = true)
+    List<Operacion> operacionesByMonth(Long clienteId, Integer year, Integer month);
 }
