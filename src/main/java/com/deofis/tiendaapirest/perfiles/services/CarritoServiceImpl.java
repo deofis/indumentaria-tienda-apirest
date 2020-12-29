@@ -60,16 +60,21 @@ public class CarritoServiceImpl implements CarritoService {
             throw new CarritoException("Carrito vacío.");
         }
 
+        boolean existeItem = false;
         for (DetalleCarrito item: carrito.getItems()) {
             if (item.getSku().equals(sku)) {
                 log.info("Existe item con sku en el carrito");
                 item.setCantidad(cantidad);
+                existeItem = true;
                 break;
-            } else {
-                log.info("No existe el item con sku en el carrito");
-                throw new CarritoException("Producto no agregado al carrito");
             }
         }
+
+        if (!existeItem) {
+            log.info("No existe el item con sku en el carrito");
+            throw new CarritoException("Producto no agregado al carrito");
+        }
+
         return this.carritoRepository.save(carrito);
     }
 
