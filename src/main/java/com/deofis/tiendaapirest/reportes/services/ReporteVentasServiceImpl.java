@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.operaciones.repositories.OperacionRepository;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ReporteVentasServiceImpl implements ReporteVentasService {
 
     private final OperacionRepository operacionRepository;
@@ -54,9 +56,34 @@ public class ReporteVentasServiceImpl implements ReporteVentasService {
     public Map<String, Object> generarReporteVentasSku(Long skuId, Date fechaDesde, Date fechaHasta) {
         Map<String, Object> reportData = new HashMap<>();
 
-        Sku sku = this.skuService.obtenerSku(skuId);
+        if (fechaHasta.before(fechaDesde))
+            throw new RuntimeException("La fecha hasta debe ser superior a la fecha desde");
 
-        List<Operacion> ventas = this.operacionRepository.findAll();
-        return null;
+        Sku sku = this.skuService.obtenerSku(skuId);
+        Integer vendidosTotal = 0;
+        Double montoTotal = 0.00;
+
+        List<Operacion> ventasFecha = this.operacionRepository.findAllByFechaOperacionBetween(fechaDesde, fechaHasta);
+
+        log.info("ventas fecha --> " + ventasFecha);
+        log.info("total -->" + ventasFecha.size());
+
+        for (Operacion venta: ventasFecha) {
+            List<DetalleOperacion> items = venta.getItems();
+
+            for (DetalleOperacion item: items) {
+                if (item.getSku().equals(sku)) {
+                    vendidosTotal += item.getCantidad();
+                    montoTotal += item.getSubtotal();
+                }
+            }
+        }
+
+        reportData.put("sku", sku);
+        reportData.put("fechaDesde", fechaDesde);
+        reportData.put("fechaHasta", fechaHasta);
+        reportData.put("vendidosTotal", vendidosTotal);
+        reportData.put("montoTotal", montoTotal);
+        return reportData;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Map;
 
 @SpringBootTest
@@ -21,6 +22,17 @@ class ReporteVentasServiceImplTest {
     @Test
     void generarReporteVentasSku() {
         Map<String, Object> reporteVentas = reporteVentasService.generarReporteVentasSku(1L);
+
+        log.info(String.valueOf(reporteVentas));
+    }
+
+    @Transactional
+    @Test
+    void testGenerarReporteVentasSku() {
+        Date fechaDesde = new Date(new Date().getTime() - 10000 * 10000);
+        Date fechaHasta = new Date(new Date().getTime() + 10000 * 10000);
+
+        Map<String, Object> reporteVentas = reporteVentasService.generarReporteVentasSku(1L, fechaDesde, fechaHasta);
 
         log.info(String.valueOf(reporteVentas));
     }

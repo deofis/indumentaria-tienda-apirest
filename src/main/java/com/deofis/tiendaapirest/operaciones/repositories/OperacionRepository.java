@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     Optional<Operacion> findByNroOperacionAndCliente(Long nroOperacion, Cliente cliente);
 
     List<Operacion> findAllByEstadoAndCliente(EstadoOperacion estado, Cliente cliente);
+
+    List<Operacion> findAllByFechaOperacionBetween(Date date1, Date date2);
 
     @Query(value = "SELECT * FROM operaciones op WHERE cliente_id = ?1 AND YEAR(fecha_operacion) = ?2",
             nativeQuery = true)
