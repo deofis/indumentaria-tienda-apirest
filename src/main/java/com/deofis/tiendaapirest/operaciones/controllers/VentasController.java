@@ -34,7 +34,7 @@ public class VentasController {
                                           @RequestParam(name = "fechaDesde", required = false) Date fechaDesde,
                                           @RequestParam(name = "fechaHasta", required = false) Date fechaHasta) {
         Map<String, Object> response = new HashMap<>();
-        List<Operacion> ventas;
+        List<Operacion> ventas = null;
         Double montoTotal;
 
         log.info(estado);
@@ -53,17 +53,17 @@ public class VentasController {
                     ventas = this.ventaService.ventasRecibidas();
                 else if (estado.equalsIgnoreCase(String.valueOf(EstadoOperacion.CANCELLED)))
                     ventas = this.ventaService.ventasCanceladas();
-                else
-                    ventas = null;
             } catch (OperacionException e) {
                 response.put("mensaje", "Error al obtener el listado de ventas");
                 response.put("error", e.getMessage());
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } else if (fechaDesde != null) {
+        }
+
+        if (fechaDesde != null) {
             if (fechaHasta == null) {
                 response.put("mensaje", "Error al obtener el listado de ventas");
-                response.put("error", "Debe ingresar las fechas");
+                response.put("error", "Debe ingresar ambas fechas");
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
@@ -74,8 +74,13 @@ public class VentasController {
                 response.put("error", e.getMessage());
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        } else if (fechaHasta != null) {
+            response.put("mensaje", "Error al obtener el listado de ventas");
+            response.put("error", "Debe ingresar ambas fechas");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        } else {
+        if (estado == null && fechaDesde == null) {
             try {
                 ventas = this.ventaService.listarVentas();
             } catch (OperacionException e) {
@@ -91,7 +96,7 @@ public class VentasController {
 
         if (ventas == null) {
             response.put("mensaje", "Error al obtener el listado de ventas");
-            response.put("error", "El estado solicitado no existe, oha sido tipeado de manera equivocada");
+            response.put("error", "El estado solicitado no existe, o ha sido tipeado de manera equivocada");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
