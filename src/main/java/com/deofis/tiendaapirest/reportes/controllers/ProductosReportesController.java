@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.reportes.controllers;
 
-import com.deofis.tiendaapirest.reportes.services.ProductoReportService;
+import com.deofis.tiendaapirest.reportes.services.ExportProductoReporteService;
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.core.io.InputStreamResource;
@@ -20,7 +20,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ProductosReportesController {
 
-    private final ProductoReportService productoReportService;
+    private final ExportProductoReporteService exportProductoReporteService;
 
     @GetMapping("/reportes/productos/productos.excel")
     public ResponseEntity<?> generarReporteListaProductosExcel() {
@@ -28,7 +28,7 @@ public class ProductosReportesController {
         ByteArrayInputStream stream;
 
         try {
-            stream = this.productoReportService.generarReporteExcel();
+            stream = this.exportProductoReporteService.generarReporteExcel();
         } catch (IOException | JRException e) {
             response.put("mensaje", "Error al generar el reporte del listado de productos en Excel");
             response.put("error", e.getMessage());

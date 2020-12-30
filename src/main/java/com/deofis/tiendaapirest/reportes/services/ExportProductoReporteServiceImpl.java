@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ProductoReportServiceImpl implements ProductoReportService {
+public class ExportProductoReporteServiceImpl implements ExportProductoReporteService {
 
     private final ProductoRepository productoRepository;
 

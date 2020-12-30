@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public interface OperacionReportService {
+public interface ExportOperacionReporteService {
 
     byte[] generarReportPDF() throws FileNotFoundException, JRException;
 

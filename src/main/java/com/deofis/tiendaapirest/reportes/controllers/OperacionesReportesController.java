@@ -1,6 +1,6 @@
 package com.deofis.tiendaapirest.reportes.controllers;
 
-import com.deofis.tiendaapirest.reportes.services.OperacionReportService;
+import com.deofis.tiendaapirest.reportes.services.ExportOperacionReporteService;
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.core.io.InputStreamResource;
@@ -21,7 +21,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class OperacionesReportesController {
 
-    private final OperacionReportService operacionReportService;
+    private final ExportOperacionReporteService exportOperacionReporteService;
 
     @GetMapping("/reportes/operaciones/operaciones.pdf")
     public ResponseEntity<?> generarReportePDF() {
@@ -29,7 +29,7 @@ public class OperacionesReportesController {
         byte[] bytes;
 
         try {
-            bytes = this.operacionReportService.generarReportPDF();
+            bytes = this.exportOperacionReporteService.generarReportPDF();
         } catch (FileNotFoundException | JRException e) {
             response.put("mensaje", "Error al generar el reporte en PDF");
             response.put("error", e.getMessage());
@@ -49,7 +49,7 @@ public class OperacionesReportesController {
         ByteArrayInputStream bytes;
 
         try {
-            bytes = this.operacionReportService.generarReportEXCEL();
+            bytes = this.exportOperacionReporteService.generarReportEXCEL();
         } catch (IOException | JRException e) {
             response.put("mensaje", "Error al generar el reporte en EXCEL");
             response.put("error", e.getMessage());
