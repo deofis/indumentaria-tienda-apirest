@@ -49,7 +49,7 @@ public interface VentaService {
     List<Operacion> ventasCanceladas();
 
     /**
-     * Obtiene las todas las ventas que se encuentren en dentro de las fechas requeridas.
+     * Obtiene todas las ventas que se encuentren dentro de las fechas requeridas.
      * @param fechaDesde Date fecha inicio.
      * @param fechaHasta Date fecha fin.
      * @return List operaciones en la fechas requeridas.

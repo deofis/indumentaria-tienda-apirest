@@ -5,19 +5,18 @@ import com.deofis.tiendaapirest.operaciones.domain.Operacion;
 import com.deofis.tiendaapirest.operaciones.exceptions.OperacionException;
 import com.deofis.tiendaapirest.operaciones.services.VentaService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
+@Slf4j
 public class VentasController {
 
     private final VentaService ventaService;
@@ -31,22 +30,69 @@ public class VentasController {
      */
     @Secured("ROLE_ADMIN")
     @GetMapping("/ventas")
-    public ResponseEntity<?> listarVentas() {
+    public ResponseEntity<?> listarVentas(@RequestParam(name = "estado", required = false) String estado,
+                                          @RequestParam(name = "fechaDesde", required = false) Date fechaDesde,
+                                          @RequestParam(name = "fechaHasta", required = false) Date fechaHasta) {
         Map<String, Object> response = new HashMap<>();
         List<Operacion> ventas;
         Double montoTotal;
 
-        try {
-            ventas = this.ventaService.listarVentas();
-        } catch (OperacionException e) {
-            response.put("mensaje", "Error al obtener el listado de ventas");
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        log.info(estado);
+        log.info(String.valueOf(fechaDesde));
+        log.info(String.valueOf(fechaHasta));
+
+        if (estado != null) {
+            try {
+                if (estado.equalsIgnoreCase(String.valueOf(EstadoOperacion.PAYMENT_PENDING)))
+                    ventas = this.ventaService.ventasPendientePago();
+                else if (estado.equalsIgnoreCase(String.valueOf(EstadoOperacion.PAYMENT_DONE)))
+                    ventas = this.ventaService.ventasCompletadoPago();
+                else if (estado.equalsIgnoreCase(String.valueOf(EstadoOperacion.SENT)))
+                    ventas = this.ventaService.ventasEnviadas();
+                else if (estado.equalsIgnoreCase(String.valueOf(EstadoOperacion.RECEIVED)))
+                    ventas = this.ventaService.ventasRecibidas();
+                else if (estado.equalsIgnoreCase(String.valueOf(EstadoOperacion.CANCELLED)))
+                    ventas = this.ventaService.ventasCanceladas();
+                else
+                    ventas = null;
+            } catch (OperacionException e) {
+                response.put("mensaje", "Error al obtener el listado de ventas");
+                response.put("error", e.getMessage());
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else if (fechaDesde != null) {
+            if (fechaHasta == null) {
+                response.put("mensaje", "Error al obtener el listado de ventas");
+                response.put("error", "Debe ingresar las fechas");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            try {
+                ventas = this.ventaService.ventasFecha(fechaDesde, fechaHasta);
+            } catch (OperacionException e) {
+                response.put("mensaje", "Error al obtener el listado de ventas");
+                response.put("error", e.getMessage());
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        } else {
+            try {
+                ventas = this.ventaService.listarVentas();
+            } catch (OperacionException e) {
+                response.put("mensaje", "Error al obtener el listado de ventas");
+                response.put("error", e.getMessage());
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
 
-        if (ventas.size() == 0) {
-            response.put("error", "No existen ventas registradas hasta la fecha");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        if (estado != null && fechaDesde != null) {
+            ventas = new ArrayList<>();
+        }
+
+        if (ventas == null) {
+            response.put("mensaje", "Error al obtener el listado de ventas");
+            response.put("error", "El estado solicitado no existe, oha sido tipeado de manera equivocada");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         montoTotal = 0.00;
