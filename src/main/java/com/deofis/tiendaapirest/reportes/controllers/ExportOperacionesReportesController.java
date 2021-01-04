@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class OperacionesReportesController {
+public class ExportOperacionesReportesController {
 
     private final ExportOperacionReporteService exportOperacionReporteService;
 

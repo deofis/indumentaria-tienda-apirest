@@ -10,10 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 @Service
 @AllArgsConstructor
@@ -84,6 +82,23 @@ public class ReporteVentasServiceImpl implements ReporteVentasService {
         reportData.put("fechaHasta", fechaHasta);
         reportData.put("vendidosTotal", vendidosTotal);
         reportData.put("montoTotal", montoTotal);
+        return reportData;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Map<String, Object> generarReporteVentasSkusTotales(Date fechaDesde, Date fechaHasta) {
+        Map<String, Object> reportData = new HashMap<>();
+        List<Operacion> ventasFecha = this.operacionRepository.findAllByFechaOperacionBetween(fechaDesde,
+                fechaHasta);
+
+        List<DetalleOperacion> items = new ArrayList<>();
+
+        for (Operacion venta: ventasFecha) {
+            items.addAll(venta.getItems());
+        }
+
+        reportData.put("items", items);
         return reportData;
     }
 }

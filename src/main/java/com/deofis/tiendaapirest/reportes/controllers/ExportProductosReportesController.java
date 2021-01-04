@@ -18,7 +18,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class ProductosReportesController {
+@Deprecated
+public class ExportProductosReportesController {
 
     private final ExportProductoReporteService exportProductoReporteService;
 
