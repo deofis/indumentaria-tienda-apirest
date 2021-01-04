@@ -11,7 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -91,7 +94,7 @@ public class VentasController {
         }
 
         if (estado != null && fechaDesde != null) {
-            ventas = new ArrayList<>();
+            ventas = this.ventaService.ventasFechaYEstado(estado, fechaDesde, fechaHasta);
         }
 
         if (ventas == null) {
@@ -107,6 +110,9 @@ public class VentasController {
 
         response.put("totalVentas", ventas.size());
         response.put("montoTotal", montoTotal);
+        response.put("estado", estado);
+        response.put("fechaDesde", fechaDesde);
+        response.put("fechaHasta", fechaHasta);
         response.put("ventas", ventas);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

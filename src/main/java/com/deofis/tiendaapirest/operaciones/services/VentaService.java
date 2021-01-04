@@ -56,6 +56,8 @@ public interface VentaService {
      */
     List<Operacion> ventasFecha(Date fechaDesde, Date fechaHasta);
 
+    List<Operacion> ventasFechaYEstado(String estado, Date fechaDesde, Date fechaHasta);
+
     /**
      * Como administrador quiero ver una venta en particular.
      * @param nroOperacion Long numero de operacion correspondiente a ver.

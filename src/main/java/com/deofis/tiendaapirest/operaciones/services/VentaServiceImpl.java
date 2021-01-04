@@ -110,6 +110,21 @@ public class VentaServiceImpl implements VentaService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<Operacion> ventasFechaYEstado(String estado, Date fechaDesde, Date fechaHasta) {
+        List<Operacion> ventasFecha = this.operacionRepository.findAllByFechaOperacionBetween(fechaDesde, fechaHasta);
+        List<Operacion> ventasTotales = new ArrayList<>();
+
+        for (Operacion op: ventasFecha) {
+            if (estado.equalsIgnoreCase(String.valueOf(op.getEstado()))) {
+                ventasTotales.add(op);
+            }
+        }
+
+        return ventasTotales;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Operacion obtenerVenta(Long nroOperacion) {
         return this.operacionRepository.findById(nroOperacion)
                 .orElseThrow(() -> new OperacionException("No existe la operación con id: " + nroOperacion));
