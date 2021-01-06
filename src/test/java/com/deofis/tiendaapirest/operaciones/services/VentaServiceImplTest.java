@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 @SpringBootTest
 @ActiveProfiles("dev")
 @Slf4j
@@ -27,7 +25,7 @@ class VentaServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        assertNotEquals(operacionRepository.findAll().size(), 0);
+
     }
 
     @Transactional
