@@ -8,6 +8,7 @@ import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,8 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class DataLoaderProductos implements CommandLineRunner {
+@Profile("prod")
+public class DataLoaderProductosMix implements CommandLineRunner {
 
     private final UnidadMedidaRepository unidadMedidaRepository;
     private final MarcaRepository marcaRepository;

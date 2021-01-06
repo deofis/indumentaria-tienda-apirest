@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class OperacionReportServiceImpl implements OperacionReportService {
+public class ExportOperacionReporteServiceImpl implements ExportOperacionReporteService {
 
     private final OperacionRepository operacionRepository;
 
