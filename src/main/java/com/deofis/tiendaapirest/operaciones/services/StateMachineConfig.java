@@ -3,8 +3,6 @@ package com.deofis.tiendaapirest.operaciones.services;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.Operacion;
-import com.deofis.tiendaapirest.pagos.factory.OperacionPagoMapping;
-import com.deofis.tiendaapirest.pagos.services.strategy.PagoStrategyFactory;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +22,6 @@ import java.util.EnumSet;
 @Configuration
 public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOperacion, EventoOperacion> {
 
-    private final PagoStrategyFactory pagoStrategyFactory;
-
-    private final OperacionPagoMapping operacionPagoMapping;
-
     @Override
     public void configure(StateMachineStateConfigurer<EstadoOperacion, EventoOperacion> states) throws Exception {
         states.withStates()
@@ -44,7 +38,9 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
                 .and()
                 .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.CANCELLED).event(EventoOperacion.CANCEL).action(cancelarOperacion())
                 .and()
-                .withExternal().source(EstadoOperacion.PAYMENT_PENDING).target(EstadoOperacion.SENT).event(EventoOperacion.SEND).action(enviar())
+                .withExternal().source(EstadoOperacion.PAYMENT_DONE).target(EstadoOperacion.SENT).event(EventoOperacion.SEND).action(enviar())
+                .and()
+                .withExternal().source(EstadoOperacion.PAYMENT_DONE).target(EstadoOperacion.CANCELLED).event(EventoOperacion.CANCEL).action(cancelarOperacion())
                 .and()
                 .withExternal().source(EstadoOperacion.SENT).target(EstadoOperacion.RECEIVED).event(EventoOperacion.RECEIVE).action(recibir())
                 .and()
