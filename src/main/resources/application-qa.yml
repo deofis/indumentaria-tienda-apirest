@@ -30,7 +30,7 @@ spring:
 
 endpoints:
   baseUrl: https://api.deofisdev.online
-  clientUrl: http://localhost:4200
+  clientUrl: https://wantfrom-tienda.web.app
 
 amazon:
   s3:
