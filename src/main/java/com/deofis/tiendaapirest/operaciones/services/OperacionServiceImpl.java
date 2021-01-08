@@ -27,6 +27,7 @@ import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,10 +115,10 @@ public class OperacionServiceImpl implements OperacionService {
 
             // Calculamos y guardamos el subtotal del item.
             item.setSubtotal(item.getPrecioVenta() * item.getCantidad().doubleValue());
-
             // Calculamos dentro del ciclo el TOTAL de la operación, para evitarnos calcularlo fuera y volverlo
-            // a recorrer.
-            nuevaOperacion.setTotal(this.calcularTotal(nuevaOperacion.getTotal(), item.getSubtotal()));
+            // a recorrer. Redondeamos el total y guardamos.
+            nuevaOperacion.setTotal(this.round(this.calcularTotal(nuevaOperacion.getTotal(),
+                    item.getSubtotal())));
 
             // Se guarda el SKU con la disponibilidad actualizada.
             this.skuService.save(sku);
@@ -143,6 +144,7 @@ public class OperacionServiceImpl implements OperacionService {
         this.enviarEmailUsuario(nuevaOperacion, cliente.getEmail());
         this.enviarEmailsAdmins(nuevaOperacion);
 
+        log.info("total guardado -> " + nuevaOperacion.getTotal());
         // Delegar la creación del PAGO de operación al PagoStrategy correspondiente.
         OperacionPagoInfo operacionPagoInfo = this.crearPago(nuevaOperacion);
 
@@ -277,5 +279,9 @@ public class OperacionServiceImpl implements OperacionService {
         log.info(emailUsuario);
 
         this.mailService.sendEmail(notificationEmail);
+    }
+
+    private Double round(Double precio) {
+        return Precision.round(precio, 2);
     }
 }
