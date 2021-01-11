@@ -48,7 +48,9 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<EstadoOper
     }
 
     private Action<EstadoOperacion, EventoOperacion> cancelarOperacion() {
-        return null;
+        return stateContext -> {
+            // TODO --> Diseñar e implementar lógica de cancelación de operaciones. Tener en cuenta el pago.
+        };
     }
 
     public Action<EstadoOperacion, EventoOperacion> enviar() {
