@@ -170,6 +170,12 @@
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>3.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>3.11.09</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

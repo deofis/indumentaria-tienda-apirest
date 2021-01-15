@@ -12,8 +12,4 @@ public class Notificacion {
     private String categoria;
     private String url;
     private Usuario usuario;
-
-    public Notificacion() {
-
-    }
 }

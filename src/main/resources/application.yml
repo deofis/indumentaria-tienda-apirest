@@ -57,6 +57,10 @@ paypal:
 jwt:
   secretKey: ENC(TKNxJDVZ/6OhE46W6xSXrZskdhO7B8bT)
 
+magicbell:
+  apiKey: fe895cc2053486135913f5557c5fae1ca049a04e
+  apiSecret: c7d010e7def46aec61c8524f85371103a1e48fb0
+
 jasypt:
   encryptor:
     iv-generator-classname: org.jasypt.iv.NoIvGenerator

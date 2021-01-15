@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 import com.deofis.tiendaapirest.emails.services.MailService;
+import com.deofis.tiendaapirest.notificaciones.services.NotificacionService;
 import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EventoOperacion;
@@ -54,6 +55,8 @@ public class OperacionServiceImpl implements OperacionService {
 
     private final PagoStrategyFactory pagoStrategyFactory;
     private final OperacionPagoMapping operacionPagoMapping;
+
+    private final NotificacionService notificacionService;
 
     @Transactional
     @Override
@@ -151,6 +154,8 @@ public class OperacionServiceImpl implements OperacionService {
         // Persistir el pago creado y pendiente de pagar asociado a la operación recientemente registrada.
         this.guardarOperacionPago(nuevaOperacion, operacionPagoInfo);
 
+        // Enviar la notificación al usuario que realizó la compra
+        this.notificacionService.enviarNotificacion(nuevaOperacion, nuevaOperacion.getCliente().getEmail());
         return operacionPagoInfo;
     }
 
