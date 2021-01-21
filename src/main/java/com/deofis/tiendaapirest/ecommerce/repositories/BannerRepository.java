@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BannerRepository extends JpaRepository<Banner, Long> {
 
+    boolean existsByOrden(Integer orden);
+
 }

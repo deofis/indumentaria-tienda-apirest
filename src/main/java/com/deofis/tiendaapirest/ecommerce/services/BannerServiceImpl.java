@@ -29,11 +29,17 @@ public class BannerServiceImpl implements BannerService {
 
         // Mantenemos referencia de cuantos banners existen para no superar el número
         // máximo.
-        int cantBanners = this.findAll().size();
-
-        if (cantBanners > 5)
+        if (this.validarCantBanners())
             throw new BannerException("Ya existen 4 Banners en la aplicación cargados. Porfavor, " +
                     "actualice un banner existente");
+
+        // Si un Banner ya tiene el número de orden que se desea asociar, se lanza
+        // excepción.
+        if (this.existeOrden(orden))
+            throw new BannerException("Ya existe un Banner con N° de Orden: " + orden);
+
+        if (orden > 4 || orden <= 0)
+            throw new BannerException("El N° de orden debe ser un número entre 1 y 4");
 
         Imagen imagenBanner = this.imageService.subirImagen(imagen);
 
@@ -43,6 +49,14 @@ public class BannerServiceImpl implements BannerService {
                 .orden(orden).build();
 
         return this.save(banner);
+    }
+
+    private boolean existeOrden(Integer orden) {
+        return this.bannerRepository.existsByOrden(orden);
+    }
+
+    private boolean validarCantBanners() {
+        return this.bannerRepository.findAll().size() > 3;
     }
 
     @Override
