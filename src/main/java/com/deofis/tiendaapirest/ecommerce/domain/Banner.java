@@ -3,6 +3,7 @@ package com.deofis.tiendaapirest.ecommerce.domain;
 import com.deofis.tiendaapirest.productos.domain.Imagen;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Banner implements Serializable {
     private static final long serialVersionUID = 1L;
 

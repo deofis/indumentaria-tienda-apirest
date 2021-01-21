@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/config")
 @AllArgsConstructor
 public class EcommerceConfigController {
 
     private final EcommerceConfigService ecommerceConfigService;
 
-    @PostMapping("/configuracion/color-nav")
+    @PostMapping("/color-nav")
     public ResponseEntity<String> cambiarColorNav(@RequestParam String color) {
         this.ecommerceConfigService.cambiarColorNav(color);
         return new ResponseEntity<>("Color del nav cambiado", HttpStatus.OK);
     }
 
-    @PostMapping("/configuracion/color-fondo")
+    @PostMapping("/color-fondo")
     public ResponseEntity<String> cambiarColorFondo(@RequestParam String color) {
         this.ecommerceConfigService.cambiarColorFondo(color);
         return new ResponseEntity<>("Color de fondo cambiado", HttpStatus.OK);

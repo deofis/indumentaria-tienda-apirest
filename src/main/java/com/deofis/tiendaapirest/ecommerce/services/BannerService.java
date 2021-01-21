@@ -20,10 +20,12 @@ public interface BannerService extends CrudService<Banner, Long> {
      *                  - BannerConfig no posee más de 4 Banners
      *                  - Si BannerConfig.banners > 4 se larga excepción para
      *                  sugerir utilizar el servicio de actualizar banner
+     * @param actionUrl String action url.
+     * @param orden Integer orden del banner.
      * @param imagen MultipartFile con la imagen a cargar en el banner.
      * @return {@link Banner} creado, con su imagen subida y guardado en la base de datos.
      */
-    Banner subirBanner(MultipartFile imagen);
+    Banner subirBanner(String actionUrl, Integer orden, MultipartFile imagen);
 
     /**
      * Actualiza la imagen que posee un banner ya creado.
