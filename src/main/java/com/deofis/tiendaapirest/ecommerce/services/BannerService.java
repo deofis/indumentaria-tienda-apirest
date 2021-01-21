@@ -36,12 +36,19 @@ public interface BannerService extends CrudService<Banner, Long> {
     Banner actualizarImagenBanner(MultipartFile imagen, Long bannerId);
 
     /**
-     * Actualiza los datos del banner: action url / orden.
+     * Actualiza los el action url del banner.
+     * @param bannerId Long id del Banner.
      * @param actionUrl String nuevo action url asociado al banner.
-     * @param orden Integer nuevo orden del banner.
      * @return {@link Banner} actualizado y guardado en la base de datos.
      */
-    Banner actualizarDatosBanner(String actionUrl, Integer orden);
+    Banner actualizarActionUrl(Long bannerId, String actionUrl);
+
+    /**
+     * Intercambia el orden de dos Banners entre sí.
+     * @param bannerId1 Long id del banner 1.
+     * @param bannerId2 Long id del banner 2.
+     */
+    void cambiarOrdenbanners(Long bannerId1, Long bannerId2);
 
     /**
      * Obtiene todos los banners creados.

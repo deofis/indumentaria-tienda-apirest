@@ -51,22 +51,26 @@ public class BannerServiceImpl implements BannerService {
         return this.save(banner);
     }
 
-    private boolean existeOrden(Integer orden) {
-        return this.bannerRepository.existsByOrden(orden);
-    }
-
-    private boolean validarCantBanners() {
-        return this.bannerRepository.findAll().size() > 3;
-    }
-
     @Override
     public Banner actualizarImagenBanner(MultipartFile imagen, Long bannerId) {
-        return null;
+        Banner banner = this.findById(bannerId);
+        this.eliminarFotoBanner(banner);
+
+        Imagen nuevaImagen = this.imageService.subirImagen(imagen);
+        banner.setImagen(nuevaImagen);
+        return this.save(banner);
     }
 
     @Override
-    public Banner actualizarDatosBanner(String actionUrl, Integer orden) {
-        return null;
+    public Banner actualizarActionUrl(Long bannerId, String actionUrl) {
+        Banner banner = this.findById(bannerId);
+        banner.setActionUrl(actionUrl);
+        return this.save(banner);
+    }
+
+    @Override
+    public void cambiarOrdenbanners(Long bannerId1, Long bannerId2) {
+        log.info("Por implementar...");
     }
 
     @Override
@@ -113,5 +117,19 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public void deleteById(Long aLong) {
         this.bannerRepository.deleteById(aLong);
+    }
+
+    private boolean existeOrden(Integer orden) {
+        return this.bannerRepository.existsByOrden(orden);
+    }
+
+    private boolean validarCantBanners() {
+        return this.bannerRepository.findAll().size() > 3;
+    }
+
+    private void eliminarFotoBanner(Banner banner) {
+        Imagen imagenBanner = banner.getImagen();
+        banner.setImagen(null);
+        this.imageService.eliminarImagen(imagenBanner);
     }
 }
