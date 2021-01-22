@@ -6,6 +6,7 @@ import com.deofis.tiendaapirest.autenticacion.services.AutenticacionService;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
 import com.deofis.tiendaapirest.emails.dto.NotificationEmail;
 import com.deofis.tiendaapirest.emails.services.MailService;
+import com.deofis.tiendaapirest.globalservices.RoundService;
 import com.deofis.tiendaapirest.notificaciones.services.NotificacionService;
 import com.deofis.tiendaapirest.operaciones.domain.DetalleOperacion;
 import com.deofis.tiendaapirest.operaciones.domain.EstadoOperacion;
@@ -28,7 +29,6 @@ import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.services.SkuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.math3.util.Precision;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +55,7 @@ public class OperacionServiceImpl implements OperacionService {
 
     private final PagoStrategyFactory pagoStrategyFactory;
     private final OperacionPagoMapping operacionPagoMapping;
+    private final RoundService roundService;
 
     private final NotificacionService notificacionService;
 
@@ -120,7 +121,7 @@ public class OperacionServiceImpl implements OperacionService {
             item.setSubtotal(item.getPrecioVenta() * item.getCantidad().doubleValue());
             // Calculamos dentro del ciclo el TOTAL de la operación, para evitarnos calcularlo fuera y volverlo
             // a recorrer. Redondeamos el total y guardamos.
-            nuevaOperacion.setTotal(this.round(this.calcularTotal(nuevaOperacion.getTotal(),
+            nuevaOperacion.setTotal(this.roundService.round(this.calcularTotal(nuevaOperacion.getTotal(),
                     item.getSubtotal())));
 
             // Se guarda el SKU con la disponibilidad actualizada.
@@ -284,9 +285,5 @@ public class OperacionServiceImpl implements OperacionService {
         log.info(emailUsuario);
 
         this.mailService.sendEmail(notificationEmail);
-    }
-
-    private Double round(Double precio) {
-        return Precision.round(precio, 2);
     }
 }

@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.globalservices.RoundService;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.Promocion;
 import com.deofis.tiendaapirest.productos.domain.Sku;
@@ -22,6 +23,8 @@ public class PromocionServiceImpl implements PromocionService {
     private final SkuService skuService;
     private final SubcategoriaService subcategoriaService;
     private final PromocionRepository promocionRepository;
+
+    private final RoundService roundService;
 
     @Transactional
     @Override
@@ -47,7 +50,7 @@ public class PromocionServiceImpl implements PromocionService {
         Promocion nuevaPromocion = Promocion.builder()
                 .fechaDesde(promocion.getFechaDesde())
                 .fechaHasta(promocion.getFechaHasta())
-                .precioOferta(promocion.getPrecioOferta())
+                .precioOferta(this.roundService.truncate(promocion.getPrecioOferta()))
                 .porcentaje(promocion.getPorcentaje()).build();
 
         for (Sku sku: producto.getSkus()) {
@@ -80,7 +83,7 @@ public class PromocionServiceImpl implements PromocionService {
         Promocion nuevaPromocion = Promocion.builder()
                 .fechaDesde(promocion.getFechaDesde())
                 .fechaHasta(promocion.getFechaHasta())
-                .precioOferta(promocion.getPrecioOferta())
+                .precioOferta(this.roundService.truncate(promocion.getPrecioOferta()))
                 .porcentaje(promocion.getPorcentaje()).build();
 
         sku.setPromocion(nuevaPromocion);
@@ -108,8 +111,8 @@ public class PromocionServiceImpl implements PromocionService {
                     .fechaDesde(promocion.getFechaDesde())
                     .fechaHasta(promocion.getFechaHasta())
                     .porcentaje(promocion.getPorcentaje())
-                    .precioOferta(this.calcularPrecioOferta(promocion.getPorcentaje(),
-                            producto.getPrecio())).build();
+                    .precioOferta(this.roundService.truncate(this.calcularPrecioOferta(promocion.getPorcentaje(),
+                            producto.getPrecio()))).build();
 
             producto.setPromocion(promoProducto);
             producto.getDefaultSku().setPromocion(promoProducto);
