@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -109,6 +110,55 @@ public class BannerController {
         }
 
         response.put("banner", bannerActualizado);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * API que obtiene todos los Banners disponibles en la App.
+     * URL: ~/api/banners
+     * HttpMethods: GET
+     * HttpStatus: OK
+     * @return ResponseEntity con el List de Banners.
+     */
+    @GetMapping("/banners")
+    public ResponseEntity<?> obtenerBanners() {
+        Map<String, Object> response = new HashMap<>();
+        List<Banner> banners;
+
+        try {
+            banners = this.bannerService.obtenerBanners();
+        } catch (BannerException e) {
+            response.put("mensaje", "Error al obtener los Banners");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("banners", banners);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * API que obtiene un banner requerido a través de su id.
+     * URL: ~/api/banners/1
+     * HttpMethod: GET
+     * HttpStatus: OK
+     * @param bannerId Long id del Banner a obtener.
+     * @return ResponseEntity con el Banner.
+     */
+    @GetMapping("/banners/{bannerId}")
+    public ResponseEntity<?> obtenerBanner(@PathVariable Long bannerId) {
+        Map<String, Object> response = new HashMap<>();
+        Banner banner;
+
+        try {
+            banner = this.bannerService.obtenerBanner(bannerId);
+        } catch (BannerException e) {
+            response.put("mensaje", "Error al obtener el Banner");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("banner", banner);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

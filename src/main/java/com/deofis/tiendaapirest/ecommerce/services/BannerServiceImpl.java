@@ -78,12 +78,12 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public List<Banner> obtenerBanners() {
-        return null;
+        return this.findAll();
     }
 
     @Override
     public Banner obtenerBanner(Long bannerId) {
-        return null;
+        return this.findById(bannerId);
     }
 
     @Override
