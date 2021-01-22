@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.globalservices.RoundService;
 import com.deofis.tiendaapirest.productos.domain.*;
 import com.deofis.tiendaapirest.productos.exceptions.ProductoException;
 import com.deofis.tiendaapirest.productos.repositories.ProductoRepository;
@@ -21,6 +22,8 @@ public class ProductoServiceImpl implements ProductoService {
     private final ProductoRepository productoRepository;
     private final UnidadMedidaRepository unidadMedidaRepository;
 
+    private final RoundService roundService;
+
     @Override
     @Transactional
     public Producto crearProducto(Producto producto) {
@@ -34,7 +37,7 @@ public class ProductoServiceImpl implements ProductoService {
         Producto nuevoProducto = Producto.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
-                .precio(producto.getPrecio())
+                .precio(this.roundService.truncate(producto.getPrecio()))
                 .fechaCreacion(new Date())
                 .foto(null)
                 .imagenes(new ArrayList<>())
@@ -106,7 +109,7 @@ public class ProductoServiceImpl implements ProductoService {
     public Producto actualizarPrecioBaseProducto(Double precio, Long productoId) {
         Producto productoActual = this.obtenerProducto(productoId);
 
-        productoActual.setPrecio(precio);
+        productoActual.setPrecio(this.roundService.truncate(precio));
         productoActual.getDefaultSku().setPrecio(precio);
 
         return this.save(productoActual);

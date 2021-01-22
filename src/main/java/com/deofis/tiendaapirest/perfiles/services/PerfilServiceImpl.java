@@ -5,6 +5,7 @@ import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.autenticacion.repositories.UsuarioRepository;
 import com.deofis.tiendaapirest.autenticacion.security.UserPrincipal;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.clientes.domain.Direccion;
 import com.deofis.tiendaapirest.clientes.services.ClienteService;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.DetalleCarrito;
@@ -163,6 +164,12 @@ public class PerfilServiceImpl implements PerfilService {
 
 
         return this.clienteService.obtenerCliente(perfil.getCliente().getId());
+    }
+
+    @Override
+    public Cliente actualizarDireccionCliente(Direccion direccion) {
+        Cliente clienteActual = this.obtenerDatosCliente();
+        return this.clienteService.actualizarDireccion(clienteActual, direccion);
     }
 
     @Transactional(readOnly = true)

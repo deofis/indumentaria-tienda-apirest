@@ -1,5 +1,6 @@
 package com.deofis.tiendaapirest.productos.services;
 
+import com.deofis.tiendaapirest.globalservices.RoundService;
 import com.deofis.tiendaapirest.productos.domain.Producto;
 import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.ValorPropiedadProducto;
@@ -24,6 +25,8 @@ public class SkuServiceImpl implements SkuService {
     private final ValorPropiedadProductoRepository valorPropiedadProductoRepository;
     private final GeneradorSkus generadorSkus;
 
+    private final RoundService roundService;
+
     @Transactional
     @Override
     public Sku crearNuevoSku(Sku sku, Producto producto) {
@@ -34,7 +37,7 @@ public class SkuServiceImpl implements SkuService {
         Sku nuevoSku = Sku.builder()
                 .nombre(producto.getNombre())
                 .descripcion(producto.getDescripcion())
-                .precio(sku.getPrecio())
+                .precio(this.roundService.truncate(sku.getPrecio()))
                 .promocion(producto.getPromocion())
                 .disponibilidad(sku.getDisponibilidad())
                 .fechaCreacion(new Date())
@@ -96,7 +99,7 @@ public class SkuServiceImpl implements SkuService {
 
         skuActual.setNombre(sku.getNombre());
         skuActual.setDescripcion(sku.getDescripcion());
-        skuActual.setPrecio(sku.getPrecio());
+        skuActual.setPrecio(this.roundService.truncate(sku.getPrecio()));
         skuActual.setDisponibilidad(sku.getDisponibilidad());
         return this.save(skuActual);
     }
@@ -114,7 +117,7 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public Sku actualizarPrecio(Long skuId, Double precio) {
         Sku sku = this.obtenerSku(skuId);
-        sku.setPrecio(precio);
+        sku.setPrecio(this.roundService.truncate(precio));
         return this.save(sku);
     }
 

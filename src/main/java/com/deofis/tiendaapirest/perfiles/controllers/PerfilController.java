@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.perfiles.controllers;
 
 import com.deofis.tiendaapirest.autenticacion.exceptions.AutenticacionException;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.clientes.domain.Direccion;
 import com.deofis.tiendaapirest.clientes.exceptions.ClienteException;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.Favorito;
@@ -124,6 +125,32 @@ public class PerfilController {
 
         response.put("cliente", cliente);
         return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
+    /**
+     * API que actualiza la dirección de un cliente. Los datos del cliente se obtienen del perfil
+     * del usuario logueado en el sistema.
+     * URL: ~/api/perfil/cliente/direccion
+     * HttpMethod: PUT
+     * HttpStatus: OK
+     * @param direccion {@link Direccion} dirección del cliente actualizada.
+     * @return ResponseEntity con el {@link Cliente} actualizado.
+     */
+    @PutMapping("/perfil/cliente/direccion")
+    public ResponseEntity<?> actualizarDireccionCliente(@Valid @RequestBody Direccion direccion) {
+        Map<String, Object> response = new HashMap<>();
+        Cliente clienteActualizado;
+
+        try {
+            clienteActualizado = this.perfilService.actualizarDireccionCliente(direccion);
+        } catch (PerfilesException | ClienteException e) {
+            response.put("mensaje", "Error al actualizar la dirección del cliente");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("cliente", clienteActualizado);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
