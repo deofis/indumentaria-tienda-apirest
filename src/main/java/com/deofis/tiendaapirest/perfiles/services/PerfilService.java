@@ -2,6 +2,7 @@ package com.deofis.tiendaapirest.perfiles.services;
 
 import com.deofis.tiendaapirest.autenticacion.domain.Usuario;
 import com.deofis.tiendaapirest.clientes.domain.Cliente;
+import com.deofis.tiendaapirest.clientes.domain.Direccion;
 import com.deofis.tiendaapirest.globalservices.CrudService;
 import com.deofis.tiendaapirest.perfiles.domain.Carrito;
 import com.deofis.tiendaapirest.perfiles.domain.Favorito;
@@ -52,6 +53,14 @@ public interface PerfilService extends CrudService<Perfil, Long> {
      * @return Cliente datos del cliente del usuario logueado.
      */
     Cliente obtenerDatosCliente();
+
+    /**
+     * Servicio que actualiza la dirección del cliente, para el usuario logueado
+     * en el sistema actualmente.
+     * @param direccion {@link Direccion} nueva dirección.
+     * @return {@link Cliente} cliente con la dirección actualizada.
+     */
+    Cliente actualizarDireccionCliente(Direccion direccion);
 
     /**
      * Obtiene el carrito del perfil actual.
