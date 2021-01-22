@@ -24,8 +24,10 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente crear(Cliente cliente) {
         Cliente nuevoCliente = Cliente.builder()
+                .dni(cliente.getDni())
                 .nombre(cliente.getNombre())
                 .apellido(cliente.getApellido())
+                .fechaNacimiento(cliente.getFechaNacimiento())
                 .telefono(cliente.getTelefono())
                 .email(cliente.getEmail())
                 .direccion(cliente.getDireccion())
