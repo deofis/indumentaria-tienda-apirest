@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.ecommerce.services;
 
 import com.deofis.tiendaapirest.ecommerce.domain.Banner;
+import com.deofis.tiendaapirest.ecommerce.dto.BannerDto;
 import com.deofis.tiendaapirest.globalservices.CrudService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,12 +21,12 @@ public interface BannerService extends CrudService<Banner, Long> {
      *                  - BannerConfig no posee más de 4 Banners
      *                  - Si BannerConfig.banners > 4 se larga excepción para
      *                  sugerir utilizar el servicio de actualizar banner
-     * @param actionUrl String action url.
-     * @param orden Integer orden del banner.
+     * @param bannerDto {@link BannerDto} a mapear que contiene los datos de action url
+     *                                   y orden del banner.
      * @param imagen MultipartFile con la imagen a cargar en el banner.
      * @return {@link Banner} creado, con su imagen subida y guardado en la base de datos.
      */
-    Banner subirBanner(String actionUrl, Integer orden, MultipartFile imagen);
+    Banner subirBanner(BannerDto bannerDto, MultipartFile imagen);
 
     /**
      * Actualiza la imagen que posee un banner ya creado.

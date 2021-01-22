@@ -1,10 +1,13 @@
 package com.deofis.tiendaapirest.ecommerce.controllers;
 
 import com.deofis.tiendaapirest.ecommerce.domain.Banner;
+import com.deofis.tiendaapirest.ecommerce.dto.BannerDto;
 import com.deofis.tiendaapirest.ecommerce.exceptions.BannerException;
 import com.deofis.tiendaapirest.ecommerce.services.BannerService;
+import com.deofis.tiendaapirest.ecommerce.services.JsonBannerConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import java.util.Map;
 public class BannerController {
 
     private final BannerService bannerService;
+    private final JsonBannerConverter jsonBannerConverter;
 
     /**
      * API que se encarga de crear un nuevo banner con sus datos correspondientes:
@@ -27,20 +31,23 @@ public class BannerController {
      * URL: ~/api/banners
      * HttpMethod: POST
      * HettpStatus: CREATED
-     * @param actionUrl String action url.
-     * @param orden Integer orden.
+     * @param bannerDto String del banner dto a convertir en JSON, que contiene los datos
+     *                  para el nuevo banner.
      * @param foto MultipartFile con el archivo imagen a subir para el nuevo Banner.
      * @return ResponseEntity<Map<String, Object>> con la response: el Banner creado.
      */
-    @PostMapping("/banners")
-    public ResponseEntity<?> crearNuevoBanner(@RequestParam String actionUrl,
-                                              @RequestParam Integer orden,
+    @PostMapping(value = "/banners", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
+    public ResponseEntity<?> crearNuevoBanner(@RequestPart String bannerDto,
                                               @RequestParam(name = "foto") MultipartFile foto) {
         Map<String, Object> response = new HashMap<>();
         Banner nuevoBanner;
 
         try {
-            nuevoBanner = this.bannerService.subirBanner(actionUrl, orden, foto);
+            BannerDto banner = this.jsonBannerConverter.getJsonFromDto(bannerDto);
+            nuevoBanner = this.bannerService.subirBanner(banner, foto);
         } catch (BannerException e) {
             response.put("mensaje", "Error al crear el nuevo banner");
             response.put("error", e.getMessage());
@@ -102,6 +109,29 @@ public class BannerController {
         }
 
         response.put("banner", bannerActualizado);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * API que elimina un Banner requerido.
+     * URL: ~/api/banners/1
+     * HttpMethod: DELETE
+     * HttpStatus: OK
+     * @param bannerId Long id del banner a eliminar.
+     * @return ResponseEntity con mensaje éxito.
+     */
+    @DeleteMapping("/banners/{bannerId}")
+    public ResponseEntity<?> eliminarBanner(@PathVariable Long bannerId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            this.bannerService.eliminarBanner(bannerId);
+        } catch (BannerException e) {
+            response.put("mensaje", "Error al eliminar el banner");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "Banner eliminado con éxito");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

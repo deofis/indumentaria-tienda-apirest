@@ -1,6 +1,7 @@
 package com.deofis.tiendaapirest.ecommerce.services;
 
 import com.deofis.tiendaapirest.ecommerce.domain.Banner;
+import com.deofis.tiendaapirest.ecommerce.dto.BannerDto;
 import com.deofis.tiendaapirest.ecommerce.exceptions.BannerException;
 import com.deofis.tiendaapirest.ecommerce.repositories.BannerRepository;
 import com.deofis.tiendaapirest.productos.domain.Imagen;
@@ -25,7 +26,9 @@ public class BannerServiceImpl implements BannerService {
     private final String clientUrl;
 
     @Override
-    public Banner subirBanner(String actionUrl, Integer orden, MultipartFile imagen) {
+    public Banner subirBanner(BannerDto bannerDto, MultipartFile imagen) {
+
+        int orden = bannerDto.getOrden();
 
         // Mantenemos referencia de cuantos banners existen para no superar el número
         // máximo.
@@ -35,7 +38,7 @@ public class BannerServiceImpl implements BannerService {
 
         // Si un Banner ya tiene el número de orden que se desea asociar, se lanza
         // excepción.
-        if (this.existeOrden(orden))
+        if (this.existeOrden(bannerDto.getOrden()))
             throw new BannerException("Ya existe un Banner con N° de Orden: " + orden);
 
         if (orden > 4 || orden <= 0)
@@ -45,8 +48,8 @@ public class BannerServiceImpl implements BannerService {
 
         Banner banner = Banner.builder()
                 .imagen(imagenBanner)
-                .actionUrl(this.clientUrl.concat("/" + actionUrl))
-                .orden(orden).build();
+                .actionUrl(this.clientUrl.concat("/" + bannerDto.getActionUrl()))
+                .orden(bannerDto.getOrden()).build();
 
         return this.save(banner);
     }
@@ -85,7 +88,12 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public void eliminarBanner(Long bannerId) {
+        Banner banner = this.findById(bannerId);
+        Imagen imagenBanner = banner.getImagen();
+        banner.setImagen(null);
 
+        this.imageService.eliminarImagen(imagenBanner);
+        this.delete(banner);
     }
 
     @Transactional(readOnly = true)
