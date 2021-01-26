@@ -33,14 +33,13 @@ public class CarritoServiceImpl implements CarritoService {
             if (item.getSku().equals(sku)) {
                 existeItem = true;
                 item.setCantidad(item.getCantidad() + 1);
-                log.info("Ya existe item con sku. Sumar cantidad");
-            } else {
-                existeItem = false;
-                log.info("No existe item con sku. agregar nuevo detalle");
+                log.info("Ya existe item con sku (" + sku.getId() + "). Sumar cantidad");
+                break;
             }
         }
 
         if (!existeItem) {
+            log.info("No existe item con sku (" + sku.getId() + "). agregar nuevo detalle");
             DetalleCarrito detalleCarrito = new DetalleCarrito();
             detalleCarrito.setSku(sku);
             detalleCarrito.setCantidad(1);
