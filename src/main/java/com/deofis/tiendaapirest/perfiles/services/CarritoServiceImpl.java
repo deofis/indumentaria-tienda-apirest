@@ -24,7 +24,7 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Transactional
     @Override
-    public Carrito agregarItem(Long skuId) {
+    public Carrito agregarItem(Long skuId, Integer cantidad) {
         boolean existeItem = false;
         Carrito carrito = this.perfilService.obtenerCarrito();
         Sku sku = this.skuService.obtenerSku(skuId);
@@ -32,7 +32,7 @@ public class CarritoServiceImpl implements CarritoService {
         for (DetalleCarrito item: carrito.getItems()) {
             if (item.getSku().equals(sku)) {
                 existeItem = true;
-                item.setCantidad(item.getCantidad() + 1);
+                item.setCantidad(item.getCantidad() + cantidad);
                 log.info("Ya existe item con sku (" + sku.getId() + "). Sumar cantidad");
                 break;
             }
@@ -42,7 +42,7 @@ public class CarritoServiceImpl implements CarritoService {
             log.info("No existe item con sku (" + sku.getId() + "). agregar nuevo detalle");
             DetalleCarrito detalleCarrito = new DetalleCarrito();
             detalleCarrito.setSku(sku);
-            detalleCarrito.setCantidad(1);
+            detalleCarrito.setCantidad(cantidad);
             carrito.getItems().add(detalleCarrito);
         }
 
