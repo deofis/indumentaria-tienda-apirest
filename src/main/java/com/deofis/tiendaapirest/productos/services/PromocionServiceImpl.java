@@ -40,7 +40,10 @@ public class PromocionServiceImpl implements PromocionService {
 
         // Eliminamos de la base de datos la promoción anterior, para no cargar la base de datos
         // con datos que ya NO sirven.
-        if (promoActual != null) this.promocionRepository.deleteById(promoActual.getId());
+        if (promoActual != null) {
+            this.promocionRepository.deleteById(promoActual.getId());
+            producto.setPromocion(null);
+        }
 
         // Si no se manda porcentaje y el producto tiene SKUS adicionales, se tira excepción al cargar promoción.
         if (promocion.getPorcentaje() == null && !producto.isVendibleSinPropiedades())
@@ -57,8 +60,10 @@ public class PromocionServiceImpl implements PromocionService {
                 .porcentaje(promocion.getPorcentaje()).build();
 
         for (Sku sku: producto.getSkus()) {
-            if (sku.getPromocion() != null)
+            if (sku.getPromocion() != null) {
                 this.promocionRepository.deleteById(sku.getPromocion().getId());
+                sku.setPromocion(null);
+            }
 
             // Seteamos el precio de oferta/porcentaje adecuado al SKU actual en la iteración.
             this.setearPreciosYPorcentajes(promocion, sku.getPrecio());
@@ -96,7 +101,10 @@ public class PromocionServiceImpl implements PromocionService {
         Sku sku = this.skuService.obtenerSku(skuId);
         Promocion promoActual = sku.getPromocion();
 
-        if (promoActual != null) this.promocionRepository.deleteById(promoActual.getId());
+        if (promoActual != null) {
+            this.promocionRepository.deleteById(promoActual.getId());
+            sku.setPromocion(null);
+        }
 
         this.setearPreciosYPorcentajes(promocion, sku.getPrecio());
 
