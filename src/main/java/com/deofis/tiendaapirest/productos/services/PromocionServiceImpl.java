@@ -7,24 +7,30 @@ import com.deofis.tiendaapirest.productos.domain.Sku;
 import com.deofis.tiendaapirest.productos.domain.Subcategoria;
 import com.deofis.tiendaapirest.productos.exceptions.PromocionException;
 import com.deofis.tiendaapirest.productos.repositories.PromocionRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Slf4j
 public class PromocionServiceImpl implements PromocionService {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PromocionServiceImpl.class);
     private final ProductoService productoService;
     private final SkuService skuService;
     private final SubcategoriaService subcategoriaService;
     private final PromocionRepository promocionRepository;
 
     private final RoundService roundService;
+
+    public PromocionServiceImpl(ProductoService productoService, SkuService skuService, SubcategoriaService subcategoriaService, PromocionRepository promocionRepository, RoundService roundService) {
+        this.productoService = productoService;
+        this.skuService = skuService;
+        this.subcategoriaService = subcategoriaService;
+        this.promocionRepository = promocionRepository;
+        this.roundService = roundService;
+    }
 
     @Transactional
     @Override
@@ -41,13 +47,10 @@ public class PromocionServiceImpl implements PromocionService {
             throw new PromocionException("No se puede cargar promoción: No se puede asignar un precio fijo al producto" +
                     " porque posee skus adicionales");
 
-        if (promocion.getPorcentaje() != null)
-            promocion.setPrecioOferta(this.calcularPrecioOferta(promocion.getPorcentaje(),
-                    producto.getPrecio()));
-        else if (promocion.getPrecioOferta() != null)
-            promocion.setPorcentaje(this.calcularPorcentajeOferta(promocion.getPrecioOferta(), producto.getPrecio()));
+        // Seteamos el precio de oferta/porcentaje adecuado al PRODUCTO.
+        this.setearPreciosYPorcentajes(promocion, producto.getPrecio());
 
-        Promocion nuevaPromocion = Promocion.builder()
+        Promocion promoProducto = Promocion.builder()
                 .fechaDesde(promocion.getFechaDesde())
                 .fechaHasta(promocion.getFechaHasta())
                 .precioOferta(this.roundService.truncate(promocion.getPrecioOferta()))
@@ -57,12 +60,34 @@ public class PromocionServiceImpl implements PromocionService {
             if (sku.getPromocion() != null)
                 this.promocionRepository.deleteById(sku.getPromocion().getId());
 
-            sku.setPromocion(nuevaPromocion);
+            // Seteamos el precio de oferta/porcentaje adecuado al SKU actual en la iteración.
+            this.setearPreciosYPorcentajes(promocion, sku.getPrecio());
+
+            Promocion promoSku = Promocion.builder()
+                    .fechaDesde(promocion.getFechaDesde())
+                    .fechaHasta(promocion.getFechaHasta())
+                    .precioOferta(this.roundService.truncate(promocion.getPrecioOferta()))
+                    .porcentaje(promocion.getPorcentaje()).build();
+
+            sku.setPromocion(promoSku);
         }
 
-        producto.setPromocion(nuevaPromocion);
-        producto.getDefaultSku().setPromocion(nuevaPromocion);
+        producto.setPromocion(promoProducto);
+        producto.getDefaultSku().setPromocion(promoProducto);
         return this.productoService.save(producto);
+    }
+
+    /**
+     * Método que setea el precio o porcentaje de acuerdo a lo que llega de la promoción.
+     * @param promocion {@link Promocion} promoción recibida a setear su precio o porcentaje.
+     * @param precio Double precio a utilizar como base.
+     */
+    private void setearPreciosYPorcentajes(Promocion promocion, Double precio) {
+        if (promocion.getPorcentaje() != null)
+            promocion.setPrecioOferta(this.calcularPrecioOferta(promocion.getPorcentaje(),
+                    precio));
+        else if (promocion.getPrecioOferta() != null)
+            promocion.setPorcentaje(this.calcularPorcentajeOferta(promocion.getPrecioOferta(), precio));
     }
 
     @Transactional
@@ -73,12 +98,7 @@ public class PromocionServiceImpl implements PromocionService {
 
         if (promoActual != null) this.promocionRepository.deleteById(promoActual.getId());
 
-        if (promocion.getPorcentaje() != null)
-            promocion.setPrecioOferta(this.calcularPrecioOferta(promocion.getPorcentaje(),
-                    sku.getPrecio()));
-        if (promocion.getPrecioOferta() != null)
-            promocion.setPorcentaje(this.calcularPorcentajeOferta(promocion.getPrecioOferta(),
-                    sku.getPrecio()));
+        this.setearPreciosYPorcentajes(promocion, sku.getPrecio());
 
         Promocion nuevaPromocion = Promocion.builder()
                 .fechaDesde(promocion.getFechaDesde())
@@ -104,6 +124,10 @@ public class PromocionServiceImpl implements PromocionService {
                 " promoción es requerido para aplicar la promoción");
 
         for (Producto producto: productosDeSubcategoria) {
+            // Lógica llamando a programar oferta producto por cada producto del array list.
+            this.programarOfertaProducto(producto.getId(), promocion);
+
+            /* LÓGICA PROPIA DEL METODO
             if (producto.getPromocion() != null) this.promocionRepository
                     .deleteById(producto.getPromocion().getId());
 
@@ -132,6 +156,8 @@ public class PromocionServiceImpl implements PromocionService {
             }
 
             this.productoService.save(producto);
+
+             */
         }
 
         return productosPromocionados;
@@ -158,4 +184,5 @@ public class PromocionServiceImpl implements PromocionService {
                 " no puede ser mayor al del precio base del producto");
         return (precioBase - precioOferta) / precioBase;
     }
+
 }
