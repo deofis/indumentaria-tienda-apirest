@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://deofis.c0j3cq5bdbwq.eu-west-2.rds.amazonaws.com/deofis_qa
+    url: jdbc:mysql://deofis.c0j3cq5bdbwq.eu-west-2.rds.amazonaws.com/deofis_tienda_demo
     username: user_qa
     password: ENC(2ns5ABYULg5Mg6srSA5tefYRlkqAebbl)
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -29,8 +29,8 @@ spring:
             auth: true
 
 endpoints:
-  baseUrl: https://api.deofisdev.online
-  clientUrl: https://wantfrom-tienda.web.app
+  baseUrl: https://indumentaria.deofisdev.online
+  clientUrl: https://indumentaria-online-demo.web.app
 
 amazon:
   s3:

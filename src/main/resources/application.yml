@@ -46,9 +46,7 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:4200/oauth2/redirect
-      - https://tienda-frontend.web.app/oauth2/redirect
-      - https://wantfrom-tienda.web.app/oauth2/redirect
-      - https://deofisdev.online/oauth2/redirect
+      - https://indumentaria-online-demo.web.app/oauth2/redirect
 
 paypal:
   clientId: AULkwIac0isgBpdaemBxUi7VABSAksciHwhnwbJHh-Och2Kf8qAJ0cwFbYrouVgA5Mqo9fHonoyof3EJ
